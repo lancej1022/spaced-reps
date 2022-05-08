@@ -1,0 +1,10 @@
+{
+  "name": "Spaced Reps",
+  "description": "A spaced reptition tool built to help you master challenging questions.",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "permissions": ["storage", "activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
