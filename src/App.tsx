@@ -14,7 +14,7 @@ const PAGES = {
 const fakeProps = {
   questionName: 'Reverse Linked List',
   lastAttempted: new Date(), // will be a JS Date
-  lcDifficultyLevel: 'easy', // TODO: make this only accept 1-10
+  lcDifficultyLevel: 'easy' as const, // TODO: make this only accept 1-10
   userDefinedDifficulty: 2, // TODO: make this only accept 1-10
   timesSolved: 0,
   timesAttempted: 1,
@@ -28,6 +28,7 @@ const App: Component = () => {
     <main class={styles.app}>
       {currentPage() === PAGES.root && (
         <>
+          {/* TODO: use the SolidJS equivalent of context so the SearchField can encapsulate its own search logic */}
           <SearchField />
           <QuestionCard {...fakeProps} />
         </>

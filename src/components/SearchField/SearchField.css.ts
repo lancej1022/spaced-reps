@@ -20,7 +20,7 @@ export const input = style({
   borderBottom: '1px solid #5a5a5a',
   border: 0,
   borderRadius: '8px',
-  '::placeholder': { color: '#fff' },
+  '::placeholder': { color: '#fff', opacity: 0.6 },
 });
 
 export const searchIcon = style({
