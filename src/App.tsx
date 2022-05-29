@@ -1,4 +1,4 @@
-import { Component, createSignal, lazy } from 'solid-js';
+import { Component, createSignal, lazy, onMount } from 'solid-js';
 // import { Routes, Route } from 'solid-app-router';
 
 import * as styles from './App.css';
@@ -23,6 +23,14 @@ const fakeProps = {
 
 const App: Component = () => {
   const [currentPage, setCurrentPage] = createSignal(PAGES.root);
+  const [url, setUrl] = createSignal<string>();
+
+  onMount(() => {
+    chrome.tabs?.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      const url = tabs[0]?.url;
+      setUrl(url);
+    });
+  });
 
   return (
     <main class={styles.app}>
@@ -31,6 +39,7 @@ const App: Component = () => {
           {/* TODO: use the SolidJS equivalent of context so the SearchField can encapsulate its own search logic */}
           <SearchField />
           <QuestionCard {...fakeProps} />
+          <p>{url()}</p>
         </>
       )}
       {/* <Routes>

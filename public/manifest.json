@@ -5,7 +5,7 @@
   "manifest_version": 3,
   "permissions": ["storage", "activeTab", "tabs", "webNavigation", "scripting"],
   "action": {
-    "default_popup": "popup.html"
+    "default_title": "Click to show an alert"
   },
   "background": {
     "service_worker": "background.js"

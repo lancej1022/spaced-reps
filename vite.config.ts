@@ -10,11 +10,16 @@ export default defineConfig({
       '~': path.resolve(__dirname, 'src'),
     },
   },
-  // base: '/dist/',
   plugins: [solidPlugin(), vanillaExtractPlugin()],
   build: {
     rollupOptions: {
-      input: 'popup.html',
+      input: ['popup.html', 'src/content-script.tsx'],
+      // we manually specify this so that we DONT get hashed output
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+      },
     },
     target: 'esnext',
     polyfillDynamicImport: false,

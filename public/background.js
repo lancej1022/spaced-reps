@@ -20,6 +20,13 @@ async function getCurrentTab() {
 //     console.log('error!', error);
 //   });
 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['assets/content-script.js'],
+  });
+});
+
 chrome.webNavigation.onCompleted.addListener(
   getCurrentTab()
     .then((data) => {
