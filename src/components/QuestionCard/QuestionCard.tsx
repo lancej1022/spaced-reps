@@ -22,8 +22,6 @@ export default function QuestionCard(props: IQuestionCardProps) {
     leetCodeLink?.click();
   }
 
-  // console.log(props);
-
   return (
     <div class={styles.questionCardWrapper} onClick={handleCardClick}>
       <div class={styles.daysRemainingBubble}>{props.daysBeforeReminder}</div>

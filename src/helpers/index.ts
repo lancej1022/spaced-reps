@@ -7,7 +7,7 @@ export function parseUrl(url: string) {
   const pathParts = pathname.split('/');
   // TODO: rather than assign this to an empty string, we should probably throw an error or something
   let problemName = pathParts[2] ?? '';
-  let formattedTitle = problemName?.replace('-', ' ');
+  let formattedTitle = problemName?.replaceAll('-', ' ');
   formattedTitle = formattedTitle[0]?.toUpperCase() + formattedTitle.slice(1);
 
   return { pathname, hostname, unformattedTitle: problemName, formattedTitle };

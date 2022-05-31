@@ -6,8 +6,6 @@ import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
 import QuestionCard from './components/QuestionCard';
 import SearchField from './components/SearchField';
 import { parseUrl } from './helpers';
-// const LoginForm = lazy(() => import('./components/LoginForm'));
-// const History = lazy(() => import('./components/History'));
 
 const PAGES = {
   questionList: 'questionList',
@@ -44,6 +42,9 @@ const App: Component = () => {
         setUrl(tabs[0].url ?? '');
 
         loadAllResponses();
+        if (tabs[0].url.includes('/submissions')) {
+          setCurrentView(PAGES.saveReminderForm);
+        }
 
         console.log('tabs[0]', tabs[0]);
         /**
@@ -59,9 +60,6 @@ const App: Component = () => {
           // Callback executed when the content script sends a response
           (response: DOMMessageResponse) => {
             console.log('response in handleInitialPageLoad', response);
-            // if (tabs[0].url.includes('/submissions')) {
-            //   setCurrentView(PAGES.saveReminderForm);
-            // }
           }
         );
       }
@@ -111,7 +109,7 @@ const App: Component = () => {
       );
       testSize(itemsArr);
       setExistingReminders(itemsArr);
-      setCurrentView(PAGES.questionList);
+      // setCurrentView(PAGES.questionList);
     });
   }
 
@@ -167,7 +165,7 @@ const App: Component = () => {
       {currentView() === PAGES.saveReminderForm && (
         <>
           <h1>Save reminder for: {title()}</h1>
-          <form onSubmit={(event) => saveUserResponse(event)}>
+          <form onSubmit={saveUserResponse}>
             <label id="days-before-reminder-label">
               Enter the number of days (up to 100) until you are reminded to reattempt
               this problem. 0 means no reminder.
