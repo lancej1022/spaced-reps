@@ -8,7 +8,7 @@ export const app = style({
   width: '400px',
   height: '100%',
   fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
-  color: '#000000',
+  color: '#ffffff',
   padding: 24,
   backgroundColor: '#332436',
   // backgroundColor: vars.color.backgroundColor, TODO: why tf doesnt this work?

@@ -6,7 +6,8 @@
   "permissions": ["storage", "activeTab", "webNavigation"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Launch Spaced Reps"
+    "default_title": "Launch Spaced Reps",
+    "default_icon": "/assets/favicon.ico"
   },
   "background": {
     "service_worker": "background.js"
