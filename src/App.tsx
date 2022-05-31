@@ -26,15 +26,14 @@ const fakeProps = {
 const App: Component = () => {
   const [currentView, setCurrentView] = createSignal(PAGES.root);
   const [title, setTitle] = createSignal('');
+  const [unformattedTitle, setUnformattedTitle] = createSignal('');
   const [url, setUrl] = createSignal('');
   const [isAnswered, setIsAnswered] = createSignal(false);
   const [difficulty, setDifficulty] = createSignal<string | undefined>(undefined);
-  const [headlines, setHeadlines] = createSignal<string[]>([]);
-  const [formE, setFormE] = createSignal('');
 
   function getCurrentTab() {
     /**
-     * We can't use "chrome.runtime.sendMessage" for sending messages from Solid.
+     * We can't use "chrome.runtime.sendMessage" for sending messages from the `popup.html`.
      * For sending messages from Solid we need to specify which tab to send it to.
      */
     chrome.tabs?.query(
@@ -45,8 +44,10 @@ const App: Component = () => {
       (tabs) => {
         if (!tabs[0]) return;
 
-        const { pathname, hostname, formattedTitle } = parseUrl(tabs[0].url ?? '');
+        // TODO: manually saving this data in `useSignal` is pretty painful, we should extract this into some kind of solid-query thing
+        const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
         setTitle(formattedTitle);
+        setUnformattedTitle(unformattedTitle);
         setUrl(tabs[0].url ?? '');
         /**
          * Sends a single message to the content script(s) in the specified tab,
@@ -60,10 +61,8 @@ const App: Component = () => {
           { type: 'GET_DOM' } as DOMMessage, // Message type
           // Callback executed when the content script sends a response
           (response: DOMMessageResponse) => {
-            console.log('response in getCurrentTab', response);
-            setHeadlines(response.headlines);
+            // console.log('response in getCurrentTab', response);
             setDifficulty(response?.difficulty);
-            // TODO: we should check if we are on the `/submissions` page, which lets us know if its submitted or not
             setIsAnswered(Boolean(response?.isAnswered));
           }
         );
@@ -71,9 +70,7 @@ const App: Component = () => {
     );
   }
 
-  getCurrentTab();
-
-  function saveUserResponse(
+  async function saveUserResponse(
     formEvent: Event & {
       submitter: HTMLElement;
     } & {
@@ -84,11 +81,42 @@ const App: Component = () => {
     formEvent.preventDefault(); // avoid page reload
     const formData = new FormData(formEvent.target as HTMLFormElement); // TODO: this seems wrong
     const formElements = Object.fromEntries(formData);
-    console.log(formElements);
-    // chrome.storage.sync.set({ key: value }, function () {
-    //   console.log('Value is set to ' + value);
-    // });
+
+    const userResponse = {
+      difficulty: formElements.daysBeforReminder,
+      name: title(),
+      url: url(),
+    };
+
+    const key = unformattedTitle();
+    chrome.storage.sync.set({ [key]: userResponse }, function () {
+      // console.log('Value is set to ' + JSON.stringify(userResponse));
+      loadAllResponses();
+    });
   }
+
+  function loadAllResponses() {
+    chrome.storage.sync.get(null, (items) => {
+      console.log('Value returned from sync.get is ' + JSON.stringify(items));
+      // Pass any observed errors down the promise chain.
+      if (chrome.runtime.lastError) {
+        // return reject(chrome.runtime.lastError);
+      }
+      // Pass the data retrieved from storage down the promise chain.
+      // resolve(items);
+      testSize(items);
+    });
+  }
+
+  function testSize(obj) {
+    const size = new TextEncoder().encode(JSON.stringify(obj)).length;
+    const kiloBytes = size / 1024;
+    console.log('Size of all items in sync storage is ' + size);
+    return kiloBytes;
+  }
+
+  getCurrentTab();
+  loadAllResponses();
 
   return (
     <main class={styles.app}>
@@ -99,7 +127,7 @@ const App: Component = () => {
           <QuestionCard {...fakeProps} />
           <p>{title()}</p>
           <span>{url()}</span>
-          {headlines()}
+          {/* {headlines()} */}
         </>
       )}
       {isAnswered() === true && (
@@ -121,7 +149,6 @@ const App: Component = () => {
             </label>
             <button type="submit">Set reminder</button>
           </form>
-          {formE()}
         </>
       )}
     </main>
