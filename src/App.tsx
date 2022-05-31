@@ -1,4 +1,4 @@
-import { Component, createSignal, lazy } from 'solid-js';
+import { Component, createSignal, For, lazy } from 'solid-js';
 // import { Routes, Route } from 'solid-app-router';
 
 import * as styles from './App.css';
@@ -10,28 +10,20 @@ import { parseUrl } from './helpers';
 // const History = lazy(() => import('./components/History'));
 
 const PAGES = {
-  root: 'root',
-};
-
-const fakeProps = {
-  questionName: 'Reverse Linked List',
-  lastAttempted: new Date(), // will be a JS Date
-  lcDifficultyLevel: 'easy' as const, // TODO: make this only accept 1-10
-  userDefinedDifficulty: 2, // TODO: make this only accept 1-10
-  timesSolved: 0,
-  timesAttempted: 1,
-  url: 'https://leetcode.com/problems/reverse-linked-list/',
-};
+  questionList: 'questionList',
+  saveReminderForm: 'saveReminderForm',
+} as const;
 
 const App: Component = () => {
-  const [currentView, setCurrentView] = createSignal(PAGES.root);
+  const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(
+    PAGES.questionList
+  );
   const [title, setTitle] = createSignal('');
   const [unformattedTitle, setUnformattedTitle] = createSignal('');
   const [url, setUrl] = createSignal('');
-  const [isAnswered, setIsAnswered] = createSignal(false);
-  const [difficulty, setDifficulty] = createSignal<string | undefined>(undefined);
+  const [existingReminders, setExistingReminders] = createSignal<[string, any][]>([]);
 
-  function getCurrentTab() {
+  function handleInitialPageLoad() {
     /**
      * We can't use "chrome.runtime.sendMessage" for sending messages from the `popup.html`.
      * For sending messages from Solid we need to specify which tab to send it to.
@@ -43,12 +35,17 @@ const App: Component = () => {
       },
       (tabs) => {
         if (!tabs[0]) return;
+        console.log('tabs[0]', tabs[0]);
 
         // TODO: manually saving this data in `useSignal` is pretty painful, we should extract this into some kind of solid-query thing
         const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
         setTitle(formattedTitle);
         setUnformattedTitle(unformattedTitle);
         setUrl(tabs[0].url ?? '');
+
+        loadAllResponses();
+
+        console.log('tabs[0]', tabs[0]);
         /**
          * Sends a single message to the content script(s) in the specified tab,
          * with an optional callback to run when a response is sent back.
@@ -61,9 +58,10 @@ const App: Component = () => {
           { type: 'GET_DOM' } as DOMMessage, // Message type
           // Callback executed when the content script sends a response
           (response: DOMMessageResponse) => {
-            // console.log('response in getCurrentTab', response);
-            setDifficulty(response?.difficulty);
-            setIsAnswered(Boolean(response?.isAnswered));
+            console.log('response in handleInitialPageLoad', response);
+            // if (tabs[0].url.includes('/submissions')) {
+            //   setCurrentView(PAGES.saveReminderForm);
+            // }
           }
         );
       }
@@ -82,64 +80,100 @@ const App: Component = () => {
     const formData = new FormData(formEvent.target as HTMLFormElement); // TODO: this seems wrong
     const formElements = Object.fromEntries(formData);
 
+    // TODO: is this truly a desirable user flow?
+    // used to avoid creating duplicate entries
+    if (Number(formElements.daysBeforeReminder) === 0) {
+      return;
+    }
+
     const userResponse = {
-      difficulty: formElements.daysBeforReminder,
+      daysBeforeReminder: formElements.daysBeforeReminder,
       name: title(),
       url: url(),
     };
 
     const key = unformattedTitle();
     chrome.storage.sync.set({ [key]: userResponse }, function () {
-      // console.log('Value is set to ' + JSON.stringify(userResponse));
       loadAllResponses();
     });
   }
 
   function loadAllResponses() {
     chrome.storage.sync.get(null, (items) => {
-      console.log('Value returned from sync.get is ' + JSON.stringify(items));
       // Pass any observed errors down the promise chain.
-      if (chrome.runtime.lastError) {
-        // return reject(chrome.runtime.lastError);
-      }
-      // Pass the data retrieved from storage down the promise chain.
-      // resolve(items);
-      testSize(items);
+      // if (chrome.runtime.lastError) {
+      //   // return reject(chrome.runtime.lastError);
+      // }
+      const itemsArr = Object.entries(items);
+
+      itemsArr.sort(
+        (a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder)
+      );
+      testSize(itemsArr);
+      setExistingReminders(itemsArr);
+      setCurrentView(PAGES.questionList);
     });
   }
 
-  function testSize(obj) {
+  function testSize(obj: [string, any][]) {
     const size = new TextEncoder().encode(JSON.stringify(obj)).length;
     const kiloBytes = size / 1024;
-    console.log('Size of all items in sync storage is ' + size);
+    console.log(`Size of all items in sync storage is ${size} bytes.`);
     return kiloBytes;
   }
 
-  getCurrentTab();
-  loadAllResponses();
+  function handleViewChange(
+    event: MouseEvent & {
+      currentTarget: HTMLAnchorElement;
+      target: Element;
+    },
+    view: keyof typeof PAGES
+  ) {
+    event.preventDefault();
+    setCurrentView(view);
+  }
+
+  handleInitialPageLoad();
+
+  // DEBUGGING PURPOSES ONLY -- will wipe out the `sync.storage` on every render
+  // chrome.storage.sync.clear();
 
   return (
     <main class={styles.app}>
-      {currentView() === PAGES.root && (
+      <a
+        href="/questions-list"
+        onClick={(event) =>
+          handleViewChange(
+            event,
+            currentView() === PAGES.saveReminderForm
+              ? PAGES.questionList
+              : PAGES.saveReminderForm
+          )
+        }
+      >
+        Save a reminder for {title()}
+      </a>
+      {currentView() === PAGES.questionList && (
         <>
           {/* TODO: use the SolidJS equivalent of context so the SearchField can encapsulate its own search logic */}
           <SearchField />
-          <QuestionCard {...fakeProps} />
-          <p>{title()}</p>
-          <span>{url()}</span>
-          {/* {headlines()} */}
+          <For each={existingReminders()}>
+            {(item) => {
+              return <QuestionCard name={item[0]} {...item[1]} />;
+            }}
+          </For>
         </>
       )}
-      {isAnswered() === true && (
+      {currentView() === PAGES.saveReminderForm && (
         <>
-          <h1>{title()}</h1>
+          <h1>Save reminder for: {title()}</h1>
           <form onSubmit={(event) => saveUserResponse(event)}>
             <label id="days-before-reminder-label">
               Enter the number of days (up to 100) until you are reminded to reattempt
               this problem. 0 means no reminder.
               <input
                 required
-                name="daysBeforReminder"
+                name="daysBeforeReminder"
                 id="days-before-reminder"
                 type="number"
                 max={100}
