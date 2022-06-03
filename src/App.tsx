@@ -39,13 +39,19 @@ const App: Component = () => {
         const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
         setTitle(formattedTitle);
         setUnformattedTitle(unformattedTitle);
-        setUrl(tabs[0].url ?? '');
 
         loadAllResponses();
         if (tabs[0].url.includes('/submissions')) {
           setCurrentView(PAGES.saveReminderForm);
         }
 
+        let questionUrl = tabs[0].url ?? '';
+        console.log('questionUrl', questionUrl);
+        if (questionUrl.includes('/submissions')) {
+          questionUrl = questionUrl.replace('/submissions', '');
+          console.log('questionUrl after replacing submissions', questionUrl);
+        }
+        setUrl(questionUrl);
         console.log('tabs[0]', tabs[0]);
         /**
          * Sends a single message to the content script(s) in the specified tab,
@@ -88,12 +94,15 @@ const App: Component = () => {
       daysBeforeReminder: formElements.daysBeforeReminder,
       name: title(),
       url: url(),
+      timeStamp: new Date().toISOString(),
     };
-
     const key = unformattedTitle();
+
     chrome.storage.sync.set({ [key]: userResponse }, function () {
       loadAllResponses();
     });
+
+    setCurrentView(PAGES.questionList);
   }
 
   function loadAllResponses() {
@@ -107,6 +116,7 @@ const App: Component = () => {
       itemsArr.sort(
         (a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder)
       );
+      console.log(itemsArr);
       testSize(itemsArr);
       setExistingReminders(itemsArr);
       // setCurrentView(PAGES.questionList);

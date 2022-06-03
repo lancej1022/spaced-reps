@@ -5,6 +5,8 @@ import * as rootStyles from '~/styles/index.css';
 export interface IQuestionCardProps {
   name: string;
   daysBeforeReminder: string;
+  // timeStamp: "2022-06-03T05:14:27.047Z"
+  timeStamp: string;
   // lastAttempted: Date; // will be '3 day
   // color in the last atetempted if its past the next practice day
   lcDifficultyLevel: 'easy' | 'medium' | 'hard';
@@ -12,6 +14,17 @@ export interface IQuestionCardProps {
   // timesSolved: number;
   // timesAttempted: number;
   url: string;
+}
+
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// a and b are javascript Date objects
+function dateDiffInDays(a: Date, b: Date) {
+  // Discard the time and time-zone information.
+  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
 
 // middle screen https://dribbble.com/shots/18181992-Streak
@@ -22,9 +35,19 @@ export default function QuestionCard(props: IQuestionCardProps) {
     leetCodeLink?.click();
   }
 
+  function determineBadgeDigit() {
+    console.log('determineBadgeDigit timestamp', props.timeStamp);
+    const result = dateDiffInDays(new Date(props.timeStamp), new Date());
+    console.log('determineBadgeDigit result', result);
+    return result;
+  }
+
   return (
     <div class={styles.questionCardWrapper} onClick={handleCardClick}>
-      <div class={styles.daysRemainingBubble}>{props.daysBeforeReminder}</div>
+      <div class={styles.daysRemainingBubble}>
+        {Number(props.daysBeforeReminder) - determineBadgeDigit()}
+      </div>
+      {/* <div class={styles.daysRemainingBubble}>{props.daysBeforeReminder}</div> */}
       <p class={styles.questionName}>{props.name}</p>
       <Badge
         class={styles.leetCodeDifficulty}
