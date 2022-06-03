@@ -1,5 +1,6 @@
 import * as rootStyles from '~/styles/index.css';
 
+import { existingReminders, setExistingReminders } from '~/App';
 import * as styles from './SearchField.css';
 
 export default function SearchField() {
@@ -8,6 +9,31 @@ export default function SearchField() {
   function handleIconClick() {
     searchInput?.focus();
   }
+
+  const handleSearch = () => {
+    const searchValue = searchInput?.value ?? '';
+    console.log('searchValue', searchValue);
+    if (searchValue.length === 0) return;
+
+    const existingReminder = existingReminders().filter(([reminderTitle]) =>
+      reminderTitle.includes(searchValue)
+    );
+    if (existingReminder) {
+      console.log('existingReminder', existingReminder);
+      return;
+    }
+
+    const newReminder = [
+      searchValue,
+      {
+        title: searchValue,
+        url: '',
+        createdAt: new Date().toISOString(),
+      },
+    ];
+    // TODO: use lazy evaluation or something to spread in the existing reminders
+    setExistingReminders([...existingReminders, newReminder]);
+  };
 
   return (
     <>

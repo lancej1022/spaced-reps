@@ -1,4 +1,4 @@
-import { createTheme, style } from '@vanilla-extract/css';
+import { createTheme, globalStyle, style } from '@vanilla-extract/css';
 
 export const [themeClass, vars] = createTheme({
   color: {
@@ -20,3 +20,9 @@ export const visuallyHidden = style({
   padding: '0px !important',
   border: '0px !important',
 });
+
+globalStyle('a, p, h1, h2, h3, h4, h5, h6, span, div', {
+  color: '#ffffff',
+});
+// globalStyle('*', {
+// });

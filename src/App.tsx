@@ -4,23 +4,54 @@ import { Component, createSignal, For, lazy } from 'solid-js';
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
 import QuestionCard from './components/QuestionCard';
+import SaveReminderForm from './components/SaveReminderForm';
 import SearchField from './components/SearchField';
 import { parseUrl } from './helpers';
 
-const PAGES = {
+function testSize(obj: [string, any][]) {
+  const size = new TextEncoder().encode(JSON.stringify(obj)).length;
+  const kiloBytes = size / 1024;
+  console.log(`Size of all items in sync storage is ${size} bytes.`);
+  return kiloBytes;
+}
+
+export function loadAllResponses() {
+  chrome.storage.sync.get(null, (items) => {
+    // Pass any observed errors down the promise chain.
+    // if (chrome.runtime.lastError) {
+    //   // return reject(chrome.runtime.lastError);
+    // }
+    const itemsArr = Object.entries(items);
+
+    itemsArr.sort(
+      (a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder)
+    );
+    console.log(itemsArr);
+    testSize(itemsArr);
+    setExistingReminders(itemsArr);
+    // setCurrentView(PAGES.questionList);
+  });
+}
+
+export const PAGES = {
   questionList: 'questionList',
   saveReminderForm: 'saveReminderForm',
 } as const;
 
-const App: Component = () => {
-  const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(
-    PAGES.questionList
-  );
-  const [title, setTitle] = createSignal('');
-  const [unformattedTitle, setUnformattedTitle] = createSignal('');
-  const [url, setUrl] = createSignal('');
-  const [existingReminders, setExistingReminders] = createSignal<[string, any][]>([]);
+export const [existingReminders, setExistingReminders] = createSignal<[string, any][]>(
+  []
+);
+export const [filteredReminders, setFilteredReminders] = createSignal<[string, any][]>(
+  []
+);
+export const [title, setTitle] = createSignal('');
+export const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(
+  PAGES.questionList
+);
+export const [unformattedTitle, setUnformattedTitle] = createSignal('');
+export const [url, setUrl] = createSignal('');
 
+const App: Component = () => {
   function handleInitialPageLoad() {
     /**
      * We can't use "chrome.runtime.sendMessage" for sending messages from the `popup.html`.
@@ -72,64 +103,6 @@ const App: Component = () => {
     );
   }
 
-  async function saveUserResponse(
-    formEvent: Event & {
-      submitter: HTMLElement;
-    } & {
-      currentTarget: HTMLFormElement;
-      target: Element;
-    }
-  ) {
-    formEvent.preventDefault(); // avoid page reload
-    const formData = new FormData(formEvent.target as HTMLFormElement); // TODO: this seems wrong
-    const formElements = Object.fromEntries(formData);
-
-    // TODO: is this truly a desirable user flow?
-    // used to avoid creating duplicate entries
-    if (Number(formElements.daysBeforeReminder) === 0) {
-      return;
-    }
-
-    const userResponse = {
-      daysBeforeReminder: formElements.daysBeforeReminder,
-      name: title(),
-      url: url(),
-      timeStamp: new Date().toISOString(),
-    };
-    const key = unformattedTitle();
-
-    chrome.storage.sync.set({ [key]: userResponse }, function () {
-      loadAllResponses();
-    });
-
-    setCurrentView(PAGES.questionList);
-  }
-
-  function loadAllResponses() {
-    chrome.storage.sync.get(null, (items) => {
-      // Pass any observed errors down the promise chain.
-      // if (chrome.runtime.lastError) {
-      //   // return reject(chrome.runtime.lastError);
-      // }
-      const itemsArr = Object.entries(items);
-
-      itemsArr.sort(
-        (a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder)
-      );
-      console.log(itemsArr);
-      testSize(itemsArr);
-      setExistingReminders(itemsArr);
-      // setCurrentView(PAGES.questionList);
-    });
-  }
-
-  function testSize(obj: [string, any][]) {
-    const size = new TextEncoder().encode(JSON.stringify(obj)).length;
-    const kiloBytes = size / 1024;
-    console.log(`Size of all items in sync storage is ${size} bytes.`);
-    return kiloBytes;
-  }
-
   function handleViewChange(
     event: MouseEvent & {
       currentTarget: HTMLAnchorElement;
@@ -149,7 +122,9 @@ const App: Component = () => {
   return (
     <main class={styles.app}>
       <a
-        href="/questions-list"
+        href={
+          currentView() === PAGES.saveReminderForm ? '/save-reminder' : '/questions-list'
+        }
         onClick={(event) =>
           handleViewChange(
             event,
@@ -159,7 +134,9 @@ const App: Component = () => {
           )
         }
       >
-        Save a reminder for {title()}
+        {currentView() === PAGES.saveReminderForm
+          ? 'Return to questions list'
+          : `Save a reminder for ${title()}`}
       </a>
       {currentView() === PAGES.questionList && (
         <>
@@ -172,27 +149,7 @@ const App: Component = () => {
           </For>
         </>
       )}
-      {currentView() === PAGES.saveReminderForm && (
-        <>
-          <h1>Save reminder for: {title()}</h1>
-          <form onSubmit={saveUserResponse}>
-            <label id="days-before-reminder-label">
-              Enter the number of days (up to 100) until you are reminded to reattempt
-              this problem. 0 means no reminder.
-              <input
-                required
-                name="daysBeforeReminder"
-                id="days-before-reminder"
-                type="number"
-                max={100}
-                min={0}
-                value="1"
-              />
-            </label>
-            <button type="submit">Set reminder</button>
-          </form>
-        </>
-      )}
+      {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
     </main>
   );
 };

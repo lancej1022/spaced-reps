@@ -12,7 +12,6 @@ export interface IQuestionCardProps {
   lcDifficultyLevel: 'easy' | 'medium' | 'hard';
   // userDefinedDifficulty: number; // TODO: make this only accept 1-10
   // timesSolved: number;
-  // timesAttempted: number;
   url: string;
 }
 
