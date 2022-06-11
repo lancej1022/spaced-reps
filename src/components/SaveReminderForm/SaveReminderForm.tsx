@@ -6,10 +6,11 @@ import {
   setCurrentView,
   PAGES,
   handleViewChange,
-} from '~/App';
-import { actionButton } from '~/App.css';
+  existingReminders,
+} from "~/App";
+import { actionButton } from "~/App.css";
 
-import * as styles from './SaveReminderForm.css';
+import * as styles from "./SaveReminderForm.css";
 
 export default function SaveReminderForm() {
   async function saveUserResponse(
@@ -45,6 +46,14 @@ export default function SaveReminderForm() {
     setCurrentView(PAGES.questionList);
   }
 
+  let currentReminder;
+  for (let i = 0; i < existingReminders().length; i++) {
+    if (existingReminders()[i]?.[0] === unformattedTitle()) {
+      currentReminder = existingReminders()[i]?.[1].daysBeforeReminder;
+      break;
+    }
+  }
+
   return (
     <>
       <h1 class={styles.heading1}>Reminder for {title}</h1>
@@ -61,7 +70,18 @@ export default function SaveReminderForm() {
             type="number"
             max={30}
             min={1}
-            value="1"
+            value={currentReminder ?? "1"}
+          />
+          <label for="days-before-reminder" id="days-before-reminder-label">
+            Save any notes about this algo.
+          </label>
+          <textarea
+            class={styles.numberInput}
+            required
+            name="daysBeforeReminder"
+            id="days-before-reminder"
+            placeholder="Relies on two pointer solution and also ..."
+            // value={currentReminder ?? "1"}
           />
         </div>
         <div class={styles.btnWrapper}>

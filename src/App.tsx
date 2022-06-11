@@ -1,6 +1,6 @@
 import { Component, createSignal, For, lazy } from "solid-js";
 // import { Routes, Route } from 'solid-app-router';
-const isLocal = true;
+const isLocal = false;
 
 import * as styles from "./App.css";
 import { DOMMessage, DOMMessageResponse } from "./chrome/DomEvaluator";
@@ -20,8 +20,12 @@ import { questionMocks } from "./mocks/questionMocks";
 
 export function loadAllResponses() {
   let itemsArr: [string, IQuestionCardProps][] = [];
+  // TODO: extract 26-28 into a function so it isnt duplicated from 36-38
   if (isLocal) {
     itemsArr = questionMocks;
+    itemsArr.sort((a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder));
+    setExistingReminders(itemsArr);
+    setFilteredReminders(itemsArr);
   } else {
     chrome.storage.sync.get(null, (items) => {
       // Pass any observed errors down the promise chain.
@@ -29,13 +33,13 @@ export function loadAllResponses() {
       //   // return reject(chrome.runtime.lastError);
       // }
       itemsArr = Object.entries(items);
+      itemsArr.sort((a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder));
+      setExistingReminders(itemsArr);
+      setFilteredReminders(itemsArr);
     });
     // setCurrentView(PAGES.questionList);
   }
-  itemsArr.sort((a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder));
   // testSize(itemsArr);
-  setExistingReminders(itemsArr);
-  setFilteredReminders(itemsArr);
 }
 
 export const PAGES = {
