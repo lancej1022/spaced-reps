@@ -4,6 +4,8 @@ export const [themeClass, vars] = createTheme({
   color: {
     brand: 'blue',
     backgroundColor: '#0e141b',
+    neon: 'hsl(317 100% 54%)',
+    neonBg: 'hsl(323 21% 16%)',
   },
   font: {
     body: 'Helvettica Neue, Helvetica, Arial, sans-serif',

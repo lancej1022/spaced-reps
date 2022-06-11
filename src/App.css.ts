@@ -13,3 +13,19 @@ export const app = style({
   backgroundColor: '#332436',
   // backgroundColor: vars.color.backgroundColor, TODO: why tf doesnt this work?
 });
+
+export const actionButton = style({
+  display: 'inline-block',
+  cursor: 'pointer',
+  textDecoration: 'none',
+  border: `${vars.color.neon} 0.125em solid`,
+  backgroundColor: 'hsl(343deg 100% 54% / 70%)',
+  color: '#ffffff',
+  padding: '0.25em 1em',
+  borderRadius: '4px',
+});
+
+export const anchorBtn = style({
+  padding: '8px 16px',
+  marginTop: '24px',
+});

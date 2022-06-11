@@ -7,6 +7,7 @@ export const searchFieldWrapper = style({
   position: 'relative',
   width: '100%',
   display: 'flex',
+  marginBottom: '24px',
 });
 
 export const input = style({

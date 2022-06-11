@@ -5,7 +5,11 @@ import {
   loadAllResponses,
   setCurrentView,
   PAGES,
+  handleViewChange,
 } from '~/App';
+import { actionButton } from '~/App.css';
+
+import * as styles from './SaveReminderForm.css';
 
 export default function SaveReminderForm() {
   async function saveUserResponse(
@@ -43,22 +47,35 @@ export default function SaveReminderForm() {
 
   return (
     <>
-      <h1>Save reminder for: {title}</h1>
+      <h1 class={styles.heading1}>Reminder for {title}</h1>
       <form onSubmit={saveUserResponse}>
-        <label id="days-before-reminder-label">
-          Enter the number of days (up to 100) until you are reminded to reattempt this
-          problem. 0 means no reminder.
+        <div class={styles.inputWrapper}>
+          <label for="days-before-reminder" id="days-before-reminder-label">
+            Number of days until next attempt.
+          </label>
           <input
+            class={styles.numberInput}
             required
             name="daysBeforeReminder"
             id="days-before-reminder"
             type="number"
-            max={100}
-            min={0}
+            max={30}
+            min={1}
             value="1"
           />
-        </label>
-        <button type="submit">Set reminder</button>
+        </div>
+        <div class={styles.btnWrapper}>
+          <button class={actionButton} type="submit">
+            Set reminder
+          </button>
+          <a
+            class={styles.returnLink}
+            href="/questions-list"
+            onClick={(event) => handleViewChange(event, PAGES.questionList)}
+          >
+            Return to questions
+          </a>
+        </div>
       </form>
     </>
   );

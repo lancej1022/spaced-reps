@@ -1,6 +1,6 @@
-import Badge from '../Badge';
-import * as styles from './QuestionCard.css';
-import * as rootStyles from '~/styles/index.css';
+import Badge from "../Badge";
+import * as styles from "./QuestionCard.css";
+import * as rootStyles from "~/styles/index.css";
 
 export interface IQuestionCardProps {
   name: string;
@@ -9,7 +9,7 @@ export interface IQuestionCardProps {
   timeStamp: string;
   // lastAttempted: Date; // will be '3 day
   // color in the last atetempted if its past the next practice day
-  lcDifficultyLevel: 'easy' | 'medium' | 'hard';
+  lcDifficultyLevel?: "easy" | "medium" | "hard";
   // userDefinedDifficulty: number; // TODO: make this only accept 1-10
   // timesSolved: number;
   url: string;
@@ -35,9 +35,7 @@ export default function QuestionCard(props: IQuestionCardProps) {
   }
 
   function determineBadgeDigit() {
-    console.log('determineBadgeDigit timestamp', props.timeStamp);
     const result = dateDiffInDays(new Date(props.timeStamp), new Date());
-    console.log('determineBadgeDigit result', result);
     return result;
   }
 
@@ -50,9 +48,9 @@ export default function QuestionCard(props: IQuestionCardProps) {
       <p class={styles.questionName}>{props.name}</p>
       <Badge
         class={styles.leetCodeDifficulty}
-        lcDifficultyLevel={props.lcDifficultyLevel ?? 'easy'}
+        lcDifficultyLevel={props.lcDifficultyLevel ?? "easy"}
       >
-        {props.lcDifficultyLevel ?? 'easy'}
+        {props.lcDifficultyLevel ?? "easy"}
       </Badge>
       {/* serves as the right hand arrow */}
       <a
