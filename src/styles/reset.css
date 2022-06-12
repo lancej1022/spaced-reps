@@ -10,11 +10,12 @@
 }
 html, body {
   height: 100%;
-  font-size: 1rem;
+  max-height: 530px;
 }
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  font-size: 100%;
 }
 img, picture, video, canvas, svg {
   display: block;

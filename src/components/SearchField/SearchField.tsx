@@ -1,13 +1,28 @@
-import * as rootStyles from '~/styles/index.css';
+import * as rootStyles from "~/styles/index.css";
 
-import * as styles from './SearchField.css';
-
+import { existingReminders, setFilteredReminders } from "~/App";
+import * as styles from "./SearchField.css";
 export default function SearchField() {
   let searchInput: HTMLInputElement | undefined = undefined;
 
   function handleIconClick() {
     searchInput?.focus();
   }
+
+  const handleSearch = () => {
+    const searchValue = searchInput?.value ?? "";
+    if (!searchValue) {
+      setFilteredReminders(existingReminders());
+      return;
+    }
+
+    const matchingReminders = existingReminders().filter((reminderTouple) => {
+      const returnVal = reminderTouple[1].name.toLowerCase().includes(searchValue.toLowerCase());
+      return returnVal;
+    });
+
+    setFilteredReminders(matchingReminders);
+  };
 
   return (
     <>
@@ -22,6 +37,7 @@ export default function SearchField() {
           name="searchfield"
           type="search"
           placeholder="Search"
+          onInput={handleSearch}
         />
         <svg
           class={styles.searchIcon}
