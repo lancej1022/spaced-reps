@@ -10,6 +10,7 @@
 }
 html, body {
   height: 100%;
+  max-height: 530px;
 }
 body {
   line-height: 1.5;

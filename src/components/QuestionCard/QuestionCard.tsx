@@ -1,17 +1,8 @@
+import { createSignal } from 'solid-js';
 import Badge from '../Badge';
 import * as styles from './QuestionCard.css';
 import * as rootStyles from '~/styles/index.css';
-import { createSignal } from 'solid-js';
-
-const millisecondsPerDay = 1000 * 60 * 60 * 24;
-
-function dateDiffInDays(a: Date, b: Date) {
-  // Discard the time and time-zone information.
-  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-  return Math.floor((utc2 - utc1) / millisecondsPerDay);
-}
+import { dateDiffInDays } from '~/helpers';
 
 export interface IQuestionCardProps {
   name: string;
@@ -46,7 +37,7 @@ export default function QuestionCard(props: IQuestionCardProps) {
       <a
         class={styles.arrow}
         href={props.url}
-        // target="_blank"
+        target="_blank"
         referrerPolicy="no-referrer"
         ref={leetCodeLink}
       >

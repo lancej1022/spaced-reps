@@ -71,7 +71,7 @@ export default function SaveReminderForm() {
             type="number"
             max={30}
             min={1}
-            value={currentReminder ?? '1'}
+            value={currentReminder || '1'}
           />
         </div>
         <div class={styles.textAreaWrapper}>
@@ -80,7 +80,6 @@ export default function SaveReminderForm() {
           </label>
           <textarea
             class={styles.textInput}
-            required
             name="notes"
             id="notes"
             placeholder="Relies on two pointer solution and also ..."

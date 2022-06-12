@@ -8,7 +8,7 @@ export const app = style({
   width: '400px',
   height: '100%',
   minHeight: '530px',
-  maxHeight: '530px',
+  // maxHeight: '530px',
   overflow: 'hidden',
   fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
   color: '#ffffff',

@@ -1,5 +1,5 @@
 import { Component, createSignal, For, lazy } from 'solid-js';
-const isLocal = false;
+const isLocal = true;
 
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
@@ -7,15 +7,14 @@ import QuestionCard from './components/QuestionCard';
 import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
 import SaveReminderForm from './components/SaveReminderForm';
 import SearchField from './components/SearchField';
-import { parseUrl, testSize } from './helpers';
+import { parseUrl, sortByDaysRemainingBeforeReminder, testSize } from './helpers';
 import { questionMocks } from './mocks/questionMocks';
 
 export function loadAllReminders() {
   let itemsArr: [string, IQuestionCardProps][] = [];
-  // TODO: extract 26-28 into a function so it isnt duplicated from 36-38
   if (isLocal) {
     itemsArr = questionMocks;
-    itemsArr.sort((a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder));
+    sortByDaysRemainingBeforeReminder(itemsArr);
     setExistingReminders(itemsArr);
     setFilteredReminders(itemsArr);
   } else {
@@ -26,9 +25,7 @@ export function loadAllReminders() {
       // }
       testSize(items);
       itemsArr = Object.entries(items);
-      console.log('itemsArr', itemsArr);
-      itemsArr.sort((a, b) => Number(a[1].daysBeforeReminder) - Number(b[1].daysBeforeReminder));
-      console.log('itemsArr after sort', itemsArr);
+      sortByDaysRemainingBeforeReminder(itemsArr);
       setExistingReminders(itemsArr);
       setFilteredReminders(itemsArr);
     });
