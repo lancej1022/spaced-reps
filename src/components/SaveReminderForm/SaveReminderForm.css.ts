@@ -5,15 +5,18 @@ import { themeClass, vars } from '~/styles/index.css';
 export const heading1 = style({
   fontSize: '1.5rem',
 });
+export const saveReminderForm = style({
+  minHeight: '90%',
+});
 
 export const inputWrapper = style({
   display: 'grid',
   gridTemplateRows: 'auto',
-  gridTemplateAreas: 'input button button',
+  gridTemplateAreas: `"numberLabel numberInput"
+   "textLabel textLabel"`,
   gridTemplateColumns: '4fr 1fr',
   gap: '10px',
   marginTop: '16px',
-  marginBottom: '24px',
 });
 export const btnWrapper = style({
   display: 'grid',
@@ -21,7 +24,6 @@ export const btnWrapper = style({
   gridTemplateAreas: 'input button button',
   gridTemplateColumns: '2fr 2fr',
   gap: '10px',
-  // maxWidth: '95%',
 });
 
 export const numberInput = style({
@@ -32,9 +34,23 @@ export const numberInput = style({
   paddingLeft: '15px',
 });
 
+export const textAreaWrapper = style({
+  display: 'grid',
+  gridTemplateRows: 'auto',
+  gridTemplateAreas: `"textLabel"
+   "textInput"`,
+  minWidth: '100%',
+  marginBottom: '24px',
+});
+
+export const textInput = style({
+  width: '100%',
+  minHeight: '200px',
+  borderRadius: '4px',
+});
+
 export const returnLink = style({
   backgroundColor: '#fff',
-  // border: '1px solid #5a5a5a',
   borderRadius: '4px',
   color: '#000',
   padding: '8px',

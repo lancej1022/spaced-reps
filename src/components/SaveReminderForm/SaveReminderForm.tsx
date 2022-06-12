@@ -2,15 +2,14 @@ import {
   title,
   url,
   unformattedTitle,
-  loadAllResponses,
+  loadAllReminders,
   setCurrentView,
   PAGES,
-  handleViewChange,
   existingReminders,
-} from "~/App";
-import { actionButton } from "~/App.css";
+} from '~/App';
+import { actionButton } from '~/App.css';
 
-import * as styles from "./SaveReminderForm.css";
+import * as styles from './SaveReminderForm.css';
 
 export default function SaveReminderForm() {
   async function saveUserResponse(
@@ -27,9 +26,9 @@ export default function SaveReminderForm() {
 
     // TODO: is this truly a desirable user flow?
     // used to avoid creating duplicate entries
-    if (Number(formElements.daysBeforeReminder) === 0) {
-      return;
-    }
+    // if (Number(formElements.daysBeforeReminder) === 0) {
+    //   return;
+    // }
 
     const userResponse = {
       daysBeforeReminder: formElements.daysBeforeReminder,
@@ -37,10 +36,11 @@ export default function SaveReminderForm() {
       url: url(),
       timeStamp: new Date().toISOString(),
     };
-    const key = unformattedTitle();
+    // TODO: this logic is a confusing way to determine whether to go with a leetcode title vs educative. Also hard to expand on, such as adding AlgoExpert
+    const key = url().includes('leetcode') ? unformattedTitle() : title();
 
     chrome.storage.sync.set({ [key]: userResponse }, function () {
-      loadAllResponses();
+      loadAllReminders();
     });
 
     setCurrentView(PAGES.questionList);
@@ -48,7 +48,8 @@ export default function SaveReminderForm() {
 
   let currentReminder;
   for (let i = 0; i < existingReminders().length; i++) {
-    if (existingReminders()[i]?.[0] === unformattedTitle()) {
+    let reminderTitle = existingReminders()[i]?.[0];
+    if (reminderTitle === unformattedTitle()) {
       currentReminder = existingReminders()[i]?.[1].daysBeforeReminder;
       break;
     }
@@ -57,10 +58,10 @@ export default function SaveReminderForm() {
   return (
     <>
       <h1 class={styles.heading1}>Reminder for {title}</h1>
-      <form onSubmit={saveUserResponse}>
+      <form class={styles.saveReminderForm} onSubmit={saveUserResponse}>
         <div class={styles.inputWrapper}>
           <label for="days-before-reminder" id="days-before-reminder-label">
-            Number of days until next attempt.
+            Number of days until next attempt
           </label>
           <input
             class={styles.numberInput}
@@ -70,28 +71,33 @@ export default function SaveReminderForm() {
             type="number"
             max={30}
             min={1}
-            value={currentReminder ?? "1"}
+            value={currentReminder ?? '1'}
           />
-          <label for="days-before-reminder" id="days-before-reminder-label">
-            Save any notes about this algo.
+        </div>
+        <div class={styles.textAreaWrapper}>
+          <label for="notes" id="notes-label">
+            Save any notes about this algo
           </label>
           <textarea
-            class={styles.numberInput}
+            class={styles.textInput}
             required
-            name="daysBeforeReminder"
-            id="days-before-reminder"
+            name="notes"
+            id="notes"
             placeholder="Relies on two pointer solution and also ..."
-            // value={currentReminder ?? "1"}
+            // value={currentNotes ?? ""}
           />
         </div>
         <div class={styles.btnWrapper}>
           <button class={actionButton} type="submit">
-            Set reminder
+            Save reminder
           </button>
           <a
             class={styles.returnLink}
             href="/questions-list"
-            onClick={(event) => handleViewChange(event, PAGES.questionList)}
+            onClick={(event) => {
+              event.preventDefault();
+              setCurrentView(PAGES.questionList);
+            }}
           >
             Return to questions
           </a>

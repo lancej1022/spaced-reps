@@ -1,74 +1,63 @@
-import Badge from "../Badge";
-import * as styles from "./QuestionCard.css";
-import * as rootStyles from "~/styles/index.css";
+import Badge from '../Badge';
+import * as styles from './QuestionCard.css';
+import * as rootStyles from '~/styles/index.css';
+import { createSignal } from 'solid-js';
 
-export interface IQuestionCardProps {
-  name: string;
-  daysBeforeReminder: string;
-  // timeStamp: "2022-06-03T05:14:27.047Z"
-  timeStamp: string;
-  // lastAttempted: Date; // will be '3 day
-  // color in the last atetempted if its past the next practice day
-  lcDifficultyLevel?: "easy" | "medium" | "hard";
-  // userDefinedDifficulty: number; // TODO: make this only accept 1-10
-  // timesSolved: number;
-  url: string;
-}
+const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-
-// a and b are javascript Date objects
 function dateDiffInDays(a: Date, b: Date) {
   // Discard the time and time-zone information.
   const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
   const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+  return Math.floor((utc2 - utc1) / millisecondsPerDay);
+}
+
+export interface IQuestionCardProps {
+  name: string;
+  daysBeforeReminder: string;
+  timeStamp: string;
+  url: string;
 }
 
 // middle screen https://dribbble.com/shots/18181992-Streak
 export default function QuestionCard(props: IQuestionCardProps) {
-  let leetCodeLink: HTMLAnchorElement | undefined = undefined;
+  const [isHovered, setIsHovered] = createSignal(false);
 
+  let leetCodeLink: HTMLAnchorElement | undefined = undefined;
   function handleCardClick() {
     leetCodeLink?.click();
   }
 
-  function determineBadgeDigit() {
-    const result = dateDiffInDays(new Date(props.timeStamp), new Date());
-    return result;
-  }
-
   return (
-    <div class={styles.questionCardWrapper} onClick={handleCardClick}>
+    <div
+      class={styles.questionCardWrapper}
+      onClick={handleCardClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div class={styles.daysRemainingBubble}>
-        {Number(props.daysBeforeReminder) - determineBadgeDigit()}
+        {Number(props.daysBeforeReminder) - dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
-      {/* <div class={styles.daysRemainingBubble}>{props.daysBeforeReminder}</div> */}
       <p class={styles.questionName}>{props.name}</p>
-      <Badge
-        class={styles.leetCodeDifficulty}
-        lcDifficultyLevel={props.lcDifficultyLevel ?? "easy"}
-      >
-        {props.lcDifficultyLevel ?? "easy"}
-      </Badge>
-      {/* serves as the right hand arrow */}
+      <button class={styles.removeReminderBtn} onClick={(e) => e.preventDefault()}>
+        Remove reminder
+      </button>
       <a
         class={styles.arrow}
         href={props.url}
-        target="_blank"
+        // target="_blank"
         referrerPolicy="no-referrer"
         ref={leetCodeLink}
       >
         <span class={rootStyles.visuallyHidden}>{props.url}</span>
         <svg
+          class={`bi bi-chevron-right ${isHovered() ? styles.arrowHovered : ''}`}
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"
           fill="#fff"
-          class="bi bi-chevron-right"
           viewBox="0 0 16 16"
-          // TODO: improve the a11y of this link stuff. Ideally, the card itself functions as a link
           aria-hidden="true"
         >
           <path
