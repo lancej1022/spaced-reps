@@ -1,12 +1,12 @@
-import { Component, createSignal, For, lazy } from 'solid-js';
-const isLocal = true;
+// import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
+const isLocal = import.meta.env.MODE === 'development';
 
+import { Component, createSignal, lazy } from 'solid-js';
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
-import QuestionCard from './components/QuestionCard';
 import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
+import QuestionsList from './components/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm';
-import SearchField from './components/SearchField';
 import { parseUrl, sortByDaysRemainingBeforeReminder, testSize } from './helpers';
 import { questionMocks } from './mocks/questionMocks';
 
@@ -15,6 +15,7 @@ export function loadAllReminders() {
   if (isLocal) {
     itemsArr = questionMocks;
     sortByDaysRemainingBeforeReminder(itemsArr);
+
     setExistingReminders(itemsArr);
     setFilteredReminders(itemsArr);
   } else {
@@ -26,6 +27,7 @@ export function loadAllReminders() {
       testSize(items);
       itemsArr = Object.entries(items);
       sortByDaysRemainingBeforeReminder(itemsArr);
+
       setExistingReminders(itemsArr);
       setFilteredReminders(itemsArr);
     });
@@ -49,8 +51,7 @@ export const [unformattedTitle, setUnformattedTitle] = createSignal('');
 export const [url, setUrl] = createSignal('');
 
 const App: Component = () => {
-  const [isHovered, setIsHovered] = createSignal(false);
-
+  // TODO: split up this logic somehow, its become a monstrosity
   function handleInitialPageLoad() {
     if (isLocal) {
       loadAllReminders();
@@ -69,22 +70,30 @@ const App: Component = () => {
         if (!tabs[0]) return;
         console.log('tabs[0]', tabs[0]);
 
-        // TODO: manually saving this data in `useSignal` is pretty painful, we should extract this into some kind of solid-query thing
-        const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
-        console.log('unformattedTitle', unformattedTitle);
-        console.log('formattedTitle', formattedTitle);
-        setTitle(formattedTitle);
-        setUnformattedTitle(unformattedTitle);
+        if (tabs[0].url?.includes('educative')) {
+          let educativeFormattedTitle = tabs[0].title?.replace(/\((.*)/g, '') ?? '';
+          setTitle(educativeFormattedTitle);
+          // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
+          let legalKeyToSave = educativeFormattedTitle.toLowerCase().replace(/\s/g, '-');
+          if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
+            legalKeyToSave = legalKeyToSave.slice(0, -1);
+          }
+          setUnformattedTitle(legalKeyToSave);
+        } else {
+          // this block handles leetcode titles
+          const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
+          setTitle(formattedTitle);
+          setUnformattedTitle(unformattedTitle);
+        }
 
-        loadAllReminders();
         if (tabs[0].url?.includes('/submissions')) {
           setCurrentView(PAGES.saveReminderForm);
         }
+        loadAllReminders(); // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
 
         let questionUrl = tabs[0].url ?? '';
         if (questionUrl.includes('/submissions')) {
           questionUrl = questionUrl.replace('/submissions', '');
-          console.log('questionUrl after replacing submissions', questionUrl);
         }
         setUrl(questionUrl);
         /**
@@ -113,34 +122,7 @@ const App: Component = () => {
 
   return (
     <main class={styles.app}>
-      {currentView() === PAGES.questionList && (
-        <>
-          <SearchField />
-          <section
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            class={`${styles.questionsContainer} ${
-              isHovered() && styles.questionsContainerHovered
-            }`}
-          >
-            <For each={filteredReminders()}>
-              {(item) => {
-                return <QuestionCard {...item[1]} />;
-              }}
-            </For>
-          </section>
-          <a
-            class={`${styles.actionButton} ${styles.anchorBtn}`}
-            href="/save-reminder"
-            onClick={(event) => {
-              event.preventDefault();
-              setCurrentView(PAGES.saveReminderForm);
-            }}
-          >
-            Save Reminder
-          </a>
-        </>
-      )}
+      {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
     </main>
   );

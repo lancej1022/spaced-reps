@@ -7,7 +7,7 @@ import {
   PAGES,
   existingReminders,
 } from '~/App';
-import { actionButton } from '~/App.css';
+import { actionButton } from '../QuestionsList/QuestionsList.css';
 
 import * as styles from './SaveReminderForm.css';
 
@@ -23,12 +23,6 @@ export default function SaveReminderForm() {
     formEvent.preventDefault(); // avoid page reload
     const formData = new FormData(formEvent.target as HTMLFormElement); // TODO: this seems wrong
     const formElements = Object.fromEntries(formData);
-
-    // TODO: is this truly a desirable user flow?
-    // used to avoid creating duplicate entries
-    // if (Number(formElements.daysBeforeReminder) === 0) {
-    //   return;
-    // }
 
     const userResponse = {
       daysBeforeReminder: formElements.daysBeforeReminder,
@@ -50,14 +44,16 @@ export default function SaveReminderForm() {
   for (let i = 0; i < existingReminders().length; i++) {
     let reminderTitle = existingReminders()[i]?.[0];
     if (reminderTitle === unformattedTitle()) {
+      // TODO: update this to render the current days remaining, not the original daysBeforeReminder
       currentReminder = existingReminders()[i]?.[1].daysBeforeReminder;
       break;
     }
   }
 
+  console.log(title());
   return (
     <>
-      <h1 class={styles.heading1}>Reminder for {title}</h1>
+      <h1 class={styles.heading1}>Reminder for {title()}</h1>
       <form class={styles.saveReminderForm} onSubmit={saveUserResponse}>
         <div class={styles.inputWrapper}>
           <label for="days-before-reminder" id="days-before-reminder-label">
