@@ -1,5 +1,5 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
-const isLocal = import.meta.env.MODE === 'development';
+export const isLocal = import.meta.env.MODE === 'development';
 
 import { Component, createSignal, lazy } from 'solid-js';
 
@@ -9,12 +9,17 @@ import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
 import QuestionsList from './components/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm';
 import { parseUrl, sortByDaysRemainingBeforeReminder, testSize } from './helpers';
-import { questionMocks } from './mocks/questionMocks';
+import { questionMocksLarge } from './mocks/questionMocks';
 
-export function loadAllReminders() {
+export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, IQuestionCardProps][] = [];
   if (isLocal) {
-    itemsArr = questionMocks;
+    if (itemToDelete) {
+      itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
+    } else {
+      itemsArr = questionMocksLarge;
+    }
+
     sortByDaysRemainingBeforeReminder(itemsArr);
 
     setExistingReminders(itemsArr);

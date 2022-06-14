@@ -1,5 +1,18 @@
 import { IQuestionCardProps } from '~/components/QuestionCard/QuestionCard';
 
+export const questionMocksLarge: [string, IQuestionCardProps][] = [];
+for (let i = 0; i < 1000; i++) {
+  questionMocksLarge.push([
+    `${i}`,
+    {
+      name: `${i}`,
+      timeStamp: new Date().toISOString(),
+      daysBeforeReminder: '1', // TODO: random between 1-30
+      url: `${i}`,
+    },
+  ]);
+}
+
 export const questionMocks: [string, IQuestionCardProps][] = [
   [
     '3sum',

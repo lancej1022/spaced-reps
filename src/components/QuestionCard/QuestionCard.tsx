@@ -3,6 +3,7 @@ import Badge from '../Badge';
 import * as styles from './QuestionCard.css';
 import * as rootStyles from '~/styles/index.css';
 import { dateDiffInDays } from '~/helpers';
+import { isLocal, loadAllReminders } from '~/App';
 
 export interface IQuestionCardProps {
   name: string;
@@ -20,6 +21,25 @@ export default function QuestionCard(props: IQuestionCardProps) {
     leetCodeLink?.click();
   }
 
+  function handleDeleteClick(
+    event: MouseEvent & {
+      currentTarget: HTMLButtonElement;
+      target: Element;
+    }
+  ) {
+    event.stopPropagation();
+    if (isLocal) {
+      loadAllReminders(props.name);
+    } else {
+      chrome.storage.local.remove(props.name, () => {
+        // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
+        loadAllReminders();
+      });
+    }
+  }
+
+  // console.log('props.name', props.name);
+
   return (
     <div
       class={styles.questionCardWrapper}
@@ -31,7 +51,7 @@ export default function QuestionCard(props: IQuestionCardProps) {
         {Number(props.daysBeforeReminder) - dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
       <p class={styles.questionName}>{props.name}</p>
-      <button class={styles.removeReminderBtn} onClick={(e) => e.preventDefault()}>
+      <button class={styles.removeReminderBtn} onClick={handleDeleteClick}>
         Remove reminder
       </button>
       <a
