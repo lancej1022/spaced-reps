@@ -2,10 +2,9 @@
 const isLocal = import.meta.env.MODE === 'development';
 
 import { Component, createSignal, lazy } from 'solid-js';
+
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
-import DexieAdder from './components/DexieTester/DexieAdder';
-import DexieReader from './components/DexieTester/DexieReader';
 import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
 import QuestionsList from './components/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm';
@@ -21,7 +20,7 @@ export function loadAllReminders() {
     setExistingReminders(itemsArr);
     setFilteredReminders(itemsArr);
   } else {
-    chrome.storage.sync.get(null, (items) => {
+    chrome.storage.local.get(null, (items) => {
       // Pass any observed errors down the promise chain.
       // if (chrome.runtime.lastError) {
       //   // return reject(chrome.runtime.lastError);
@@ -120,13 +119,10 @@ const App: Component = () => {
   handleInitialPageLoad();
 
   // DEBUGGING PURPOSES ONLY -- will wipe out the `sync.storage` on every render
-  // chrome.storage.sync.clear();
+  // chrome.storage.local.clear();
 
   return (
     <main class={styles.app}>
-      {/* <DexieAdder /> */}
-      {/* <h2>results</h2> */}
-      {/* <DexieReader /> */}
       {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
     </main>

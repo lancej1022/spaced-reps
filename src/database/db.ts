@@ -55,3 +55,5 @@ db.friends
   .catch((err) => {
     alert('Ouch... ' + err);
   });
+
+// db.friends.bulkGet

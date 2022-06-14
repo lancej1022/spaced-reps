@@ -33,7 +33,7 @@ export default function SaveReminderForm() {
     // TODO: this logic is a confusing way to determine whether to go with a leetcode title vs educative. Also hard to expand on, such as adding AlgoExpert
     const key = url().includes('leetcode') ? unformattedTitle() : title();
 
-    chrome.storage.sync.set({ [key]: userResponse }, function () {
+    chrome.storage.local.set({ [key]: userResponse }, function () {
       loadAllReminders();
     });
 

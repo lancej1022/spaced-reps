@@ -16,7 +16,7 @@ export function parseUrl(url: string) {
 export function testSize(obj: { [key: string]: any }) {
   const size = new TextEncoder().encode(JSON.stringify(obj)).length;
   const kiloBytes = size / 1024;
-  console.log(`Size of all items in sync storage is ${size} bytes.`);
+  console.log(`Size of all items in local storage is ${size} bytes.`);
   return kiloBytes;
 }
 
