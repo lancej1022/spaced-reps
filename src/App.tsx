@@ -4,6 +4,8 @@ const isLocal = import.meta.env.MODE === 'development';
 import { Component, createSignal, lazy } from 'solid-js';
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
+import DexieAdder from './components/DexieTester/DexieAdder';
+import DexieReader from './components/DexieTester/DexieReader';
 import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
 import QuestionsList from './components/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm';
@@ -122,6 +124,9 @@ const App: Component = () => {
 
   return (
     <main class={styles.app}>
+      {/* <DexieAdder /> */}
+      {/* <h2>results</h2> */}
+      {/* <DexieReader /> */}
       {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
     </main>

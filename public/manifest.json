@@ -3,14 +3,15 @@
   "description": "A spaced reptition tool built to help you master challenging questions.",
   "version": "0.0.1",
   "manifest_version": 3,
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "unlimitedStorage", "activeTab"],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Launch Spaced Reps",
     "default_icon": "/assets/favicon.ico"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
