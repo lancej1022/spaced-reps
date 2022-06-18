@@ -65,7 +65,7 @@ export default function SaveReminderForm() {
             name="daysBeforeReminder"
             id="days-before-reminder"
             type="number"
-            max={30}
+            max={90}
             min={1}
             value={currentReminder || '1'}
           />
@@ -78,7 +78,7 @@ export default function SaveReminderForm() {
             class={styles.textInput}
             name="notes"
             id="notes"
-            placeholder="Relies on two pointer solution and also ..."
+            placeholder="Relies on two pointer solution and also ... runs in O(n) time and consumes O(k) space ..."
             // value={currentNotes ?? ""}
           />
         </div>
