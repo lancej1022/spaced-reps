@@ -1,0 +1,32 @@
+{
+  "name": "Spaced Reps",
+  "description": "A spaced reptition tool built to help you master challenging questions.",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "permissions": ["storage", "unlimitedStorage", "activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Spaced Reps",
+    "default_icon": {
+      "16": "/assets/rocket16.png",
+      "24": "/assets/rocket24.png",
+      "32": "/assets/rocket32.png"
+    }
+  },
+  "icons": {
+    "16": "/assets/rocket16.png",
+    "32": "/assets/rocket32.png",
+    "128": "/assets/rocket128.png"
+
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["./assets/DomEvaluator.js"]
+    }
+ ]
+}
