@@ -12,11 +12,6 @@ export default defineConfig({
   },
   plugins: [solidPlugin(), vanillaExtractPlugin()],
   build: {
-    // lib: {
-    //   entry: path.resolve(__dirname, 'src/index.ts'),
-    //   name: 'spaced reps',
-    //   fileName: (format) => `[name].${format}.[hash].js`;  // <-- outputs UMD + esm
-    // },
     chunkSizeWarningLimit: 1024 * 100, // 100kb limit per chunk, otherwise we're doing something wrong...
     rollupOptions: {
       input: ['popup.html', '/src/chrome/DomEvaluator.ts'],
