@@ -26,9 +26,7 @@ const messagesFromExtensionListener = (
   // the right popup UI regardless of whether theyve got the answer correct or not.
   const isAnswered = window.location.href.includes('/submissions');
 
-  const headlines = Array.from(document.getElementsByTagName<'h1'>('h1')).map(
-    (h1) => h1.innerText
-  );
+  const headlines = Array.from(document.getElementsByTagName<'h2'>('h2')).map((h2) => h2.innerText);
 
   // Prepare the response object with information about the site
   const response: DOMMessageResponse = {

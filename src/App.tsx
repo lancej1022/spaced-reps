@@ -31,6 +31,7 @@ export function loadAllReminders(itemToDelete?: string) {
       //   // return reject(chrome.runtime.lastError);
       // }
       testSize(items);
+      console.log('saved reminders', items);
       itemsArr = Object.entries(items);
       sortByDaysRemainingBeforeReminder(itemsArr);
 
