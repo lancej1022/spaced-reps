@@ -1,55 +1,28 @@
-## Usage
+# About
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+Spaced Reps is a Chrome extension that encourages spaced repetition learning of algorithms.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+For those unfamiliar, spaced repetition is a learning approach where an individual repeatedly attempts to solve the same problem over an extended window of time.
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+Imagine that you attempt to solve the [Two Sum problem on Leetcode](https://leetcode.com/problems/two-sum/) and manage to solve it after some difficulty.
+Rather than solve the problem and then "move on", you acknowledge that you probably need to keep practicing the problem a few more times before you feel confident that you can efficiently solve it on your first try in an interview setting.
+If you are using spaced repetitions to master the problem/pattern, you set a reminder to reattempt the problem from scratch in 2 days.
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+Those 2 days go by and then you reattempt the problem. It's easier this time around since you can remember the available patterns for solving the problem, but you still need 3 tries to get the algorithm right and pass all test cases.
+So, you set another reminder for 4 days in the future.
 
-## Available Scripts
+Those 4 days go by and you reattempt the problem. This time, you solve it on the first attempt. From here, you can either set another reminder even further into the future (7 days, 14 days, whatever) if you feel like you still need to solidify your understanding even further, or you can stop setting reminders for this problem if you are extremely confident that you no longer need to practice it.
 
-In the project directory, you can run:
+Academic research on spaced repetitions can be viewed @ https://www.pnas.org/doi/10.1073/pnas.1815156116 (there is plenty of other research available online as well).
 
-### `npm dev` or `npm start`
+## Technology
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This extension is currently built in a way that guarantees support with Google Chrome, but it may not work in other browsers (Firefox, Edge). **There are no plans to support other browsers at the moment**, but Pull Requests to add support are certainly welcome.
 
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
-
-"background": {
-"service_worker": "background.js"
-},
-action: {
-"default_icon": {
-"16": "/images/get_started16.png",
-"32": "/images/get_started32.png",
-"48": "/images/get_started48.png",
-"128": "/images/get_started128.png"
-}
-},
-"options_page": "options.html",
-"icons": {
-"16": "/images/get_started16.png",
-"32": "/images/get_started32.png",
-"48": "/images/get_started48.png",
-"128": "/images/get_started128.png"
-}
+The source code uses SolidJs for building the UI, Vanilla Extract for styling, and Vite for building the project.
 
 NOTE: do not create an `index.css` file or youll get vanilla-extract error due to `index.css.ts` already existing
+
+## Attributions / Credits
+
+The [rocketship icons](https://www.flaticon.com/free-icons/rocket) are created by Freepik - Flaticon

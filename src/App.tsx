@@ -116,6 +116,17 @@ const App: Component = () => {
           // Callback executed when the content script sends a response
           (response: DOMMessageResponse) => {
             console.log('response in handleInitialPageLoad', response);
+            if (
+              tabs[0]?.url?.includes('educative') &&
+              tabs[0].title?.startsWith('Problem Challenge')
+            ) {
+              // get rid of things like ` (hard)#` from the h2 heading `Permutation in a String (hard)#`
+              const problemTitle = response.headlines[0]?.replace(/\s\((.*)/g, '') || '';
+              console.log('problemTitle', problemTitle);
+              let keyToSave = problemTitle.toLowerCase().replace(/\s/g, '-');
+              setTitle(problemTitle);
+              setUnformattedTitle(keyToSave);
+            }
           }
         );
       }
@@ -124,7 +135,7 @@ const App: Component = () => {
 
   handleInitialPageLoad();
 
-  // DEBUGGING PURPOSES ONLY -- will wipe out the `sync.storage` on every render
+  // DEBUGGING PURPOSES ONLY -- will wipe out the `storage.local` on every render
   // chrome.storage.local.clear();
 
   return (
