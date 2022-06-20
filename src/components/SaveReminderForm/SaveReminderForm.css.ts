@@ -45,7 +45,11 @@ export const textAreaWrapper = style({
 
 export const textInput = style({
   width: '100%',
-  minHeight: '200px',
+  minHeight: '150px',
+  borderRadius: '4px',
+});
+
+export const categoriesSelect = style({
   borderRadius: '4px',
 });
 

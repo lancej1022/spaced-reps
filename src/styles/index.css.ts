@@ -42,3 +42,6 @@ globalStyle('body::-webkit-scrollbar-track-piece', {
   height: '30px',
   display: 'none',
 });
+globalStyle('*:focus', {
+  outline: '2px solid hsl(317 100% 54%)',
+});
