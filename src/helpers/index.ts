@@ -1,4 +1,4 @@
-import { IQuestionCardProps } from '~/components/QuestionCard/QuestionCard';
+import { ReminderInterface } from '~/components/QuestionCard/QuestionCard';
 
 export function parseUrl(url: string) {
   const urlObj = new URL(url);
@@ -30,7 +30,7 @@ export function dateDiffInDays(a: Date, b: Date) {
   return Math.floor((utc2 - utc1) / millisecondsPerDay);
 }
 
-export function sortByDaysRemainingBeforeReminder(array: [string, IQuestionCardProps][]) {
+export function sortByDaysRemainingBeforeReminder(array: [string, ReminderInterface][]) {
   return array.sort((a, b) => {
     const daysSinceA =
       Number(a[1].daysBeforeReminder) - dateDiffInDays(new Date(a[1].timeStamp), new Date());

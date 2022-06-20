@@ -1,19 +1,20 @@
 import { createSignal } from 'solid-js';
-import Badge from '../Badge';
 import * as styles from './QuestionCard.css';
-import * as rootStyles from '~/styles/index.css';
 import { dateDiffInDays } from '~/helpers';
-import { isLocal, loadAllReminders } from '~/App';
+import { isLocal, loadAllReminders, setCurrentView } from '~/App';
+import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 
-export interface IQuestionCardProps {
-  name: string;
+export interface ReminderInterface {
+  categories?: string[];
   daysBeforeReminder: string;
+  name: string;
+  notes?: string;
   timeStamp: string;
   url: string;
 }
 
 // middle screen https://dribbble.com/shots/18181992-Streak
-export default function QuestionCard(props: IQuestionCardProps) {
+export default function QuestionCard(props: ReminderInterface) {
   const [isHovered, setIsHovered] = createSignal(false);
 
   let leetCodeLink: HTMLAnchorElement | undefined = undefined;
@@ -38,8 +39,6 @@ export default function QuestionCard(props: IQuestionCardProps) {
     }
   }
 
-  // console.log('props.name', props.name);
-
   return (
     <div
       class={styles.questionCardWrapper}
@@ -55,6 +54,18 @@ export default function QuestionCard(props: IQuestionCardProps) {
         Remove reminder
       </button>
       <a
+        class={styles.arrow}
+        // href="/save-reminder" // TODO: why does this href break things?
+        onClick={(event) => {
+          event.preventDefault();
+          setReminderToSearchFor(props.name);
+          setCurrentView('saveReminderForm');
+        }}
+        ref={leetCodeLink}
+      >
+        Edit Reminder
+      </a>
+      {/* <a
         class={styles.arrow}
         href={props.url}
         target="_blank"
@@ -76,7 +87,7 @@ export default function QuestionCard(props: IQuestionCardProps) {
             d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
           />
         </svg>
-      </a>
+      </a> */}
     </div>
   );
 }

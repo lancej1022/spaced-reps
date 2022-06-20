@@ -1,5 +1,5 @@
 import { createSignal, For } from 'solid-js';
-import { filteredReminders, PAGES, setCurrentView } from '~/App';
+import { filteredReminders, setCurrentView } from '~/App';
 import QuestionCard from '../QuestionCard';
 import SearchField from '../SearchField';
 
@@ -26,7 +26,7 @@ export default function QuestionsList() {
         href="/save-reminder"
         onClick={(event) => {
           event.preventDefault();
-          setCurrentView(PAGES.saveReminderForm);
+          setCurrentView('saveReminderForm');
         }}
       >
         Save Reminder

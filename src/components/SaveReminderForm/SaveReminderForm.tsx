@@ -1,17 +1,24 @@
+import { createSignal, onCleanup, onMount } from 'solid-js';
 import {
   title,
   url,
   unformattedTitle,
   loadAllReminders,
   setCurrentView,
-  PAGES,
   existingReminders,
+  isLocal,
 } from '~/App';
+import { dateDiffInDays } from '~/helpers';
+import { ReminderInterface } from '../QuestionCard/QuestionCard';
 import { actionButton } from '../QuestionsList/QuestionsList.css';
-
 import * as styles from './SaveReminderForm.css';
 
+export const [reminderToSearchFor, setReminderToSearchFor] = createSignal('');
+const [currentReminder, setCurrentReminder] = createSignal<ReminderInterface | undefined>();
+
 export default function SaveReminderForm() {
+  let categoriesSelectRef: HTMLSelectElement | undefined = undefined;
+
   async function saveUserResponse(
     formEvent: Event & {
       submitter: HTMLElement;
@@ -21,43 +28,87 @@ export default function SaveReminderForm() {
     }
   ) {
     formEvent.preventDefault(); // avoid page reload
-    const formData = new FormData(formEvent.target as HTMLFormElement); // TODO: this seems wrong
+    const formData = new FormData(formEvent.target as HTMLFormElement);
     const formElements = Object.fromEntries(formData);
+    const selectedCategories = [];
 
-    const userResponse = {
-      daysBeforeReminder: formElements.daysBeforeReminder,
-      name: title(),
-      url: url(),
+    if (categoriesSelectRef?.options) {
+      for (let option of categoriesSelectRef.options) {
+        if (option.selected === true) selectedCategories.push(option.value);
+      }
+    }
+
+    const userResponse: ReminderInterface = {
+      daysBeforeReminder: String(formElements.daysBeforeReminder),
+      name: currentReminder()?.name ?? title(),
+      url: currentReminder()?.url ?? url(),
       timeStamp: new Date().toISOString(),
+      categories: selectedCategories,
+      notes: formElements.notes?.toString() ?? '',
     };
-    // TODO: this logic is a confusing way to determine whether to go with a leetcode title vs educative. Also hard to expand on, such as adding AlgoExpert
-    const key = url().includes('leetcode') ? unformattedTitle() : title();
 
-    chrome.storage.local.set({ [key]: userResponse }, function () {
-      loadAllReminders();
-    });
+    let key = title();
+    // TODO: this might be unnecessary -- we can probably just rely on `currentReminder.name` when present and fallback `title()`
+    if (url().includes('leetcode')) {
+      key = unformattedTitle();
+    }
+    if (currentReminder()?.name) {
+      key = currentReminder()?.name ?? title();
+    }
 
-    setCurrentView(PAGES.questionList);
-  }
-
-  let currentReminder;
-  for (let i = 0; i < existingReminders().length; i++) {
-    let reminderTitle = existingReminders()[i]?.[0];
-    if (reminderTitle === unformattedTitle()) {
-      // TODO: update this to render the current days remaining, not the original daysBeforeReminder
-      currentReminder = existingReminders()[i]?.[1].daysBeforeReminder;
-      break;
+    if (isLocal) {
+      loadAllReminders(key);
+    } else {
+      // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
+      chrome.storage.local.set({ [key]: userResponse }, function () {
+        console.log('inside SaveReminderForm after setting, userResponse: ', userResponse);
+        // Pass any observed errors down the promise chain.
+        if (chrome.runtime.lastError) {
+          console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+          // return reject(chrome.runtime.lastError);
+        }
+        loadAllReminders();
+        setCurrentView('questionList');
+      });
     }
   }
 
-  console.log(title());
+  function findCurrentReminder() {
+    for (let i = 0; i < existingReminders().length; i++) {
+      let reminderTitle = existingReminders()[i]?.[0];
+      if (reminderToSearchFor()) {
+        if (existingReminders()[i]?.[1].name === reminderToSearchFor()) {
+          return existingReminders()[i]?.[1];
+        }
+      } else if (
+        reminderTitle === title() ||
+        // TODO: do we need the `unformattedTitle` check? seems specific to LC, and might not be necessary
+        reminderTitle === unformattedTitle()
+      ) {
+        return existingReminders()[i]?.[1];
+      }
+    }
+  }
+
+  onMount(() => {
+    setCurrentReminder(findCurrentReminder());
+  });
+
+  onCleanup(() => {
+    setCurrentReminder();
+    setReminderToSearchFor('');
+  });
+
   return (
     <>
-      <h1 class={styles.heading1}>Reminder for {title()}</h1>
+      <h1 class={styles.heading1}>
+        Reminder for {currentReminder() ? currentReminder()?.name : title()}
+      </h1>
       <form class={styles.saveReminderForm} onSubmit={saveUserResponse}>
         <div class={styles.inputWrapper}>
           <label for="days-before-reminder" id="days-before-reminder-label">
-            Number of days until next attempt
+            {/* TODO: replace asterisk with pseudoelement for proper a11y, and make it reddish */}
+            Number of days until next attempt *
           </label>
           <input
             class={styles.numberInput}
@@ -67,8 +118,33 @@ export default function SaveReminderForm() {
             type="number"
             max={90}
             min={1}
-            value={currentReminder || '1'}
+            value={
+              currentReminder()?.timeStamp
+                ? Number(currentReminder()?.daysBeforeReminder) -
+                  dateDiffInDays(new Date(currentReminder()?.timeStamp ?? ''), new Date())
+                : '1'
+            }
           />
+        </div>
+        <div class={styles.textAreaWrapper}>
+          <label for="categories" id="categories-label">
+            Categorize this problem
+          </label>
+          <select
+            class={styles.categoriesSelect}
+            multiple
+            name="categories"
+            id="categories"
+            ref={categoriesSelectRef}
+            // TODO: this doesnt handle multiple values
+            value={currentReminder()?.categories}
+          >
+            <option value="slidingWindow">Sliding Window</option>
+            <option value="twoPointers">Two Pointers</option>
+            <option value="bfs">Breadth First Search</option>
+            <option value="dfs">Depth First Search</option>
+            <option value="binarySearch">Binary Search</option>
+          </select>
         </div>
         <div class={styles.textAreaWrapper}>
           <label for="notes" id="notes-label">
@@ -79,19 +155,19 @@ export default function SaveReminderForm() {
             name="notes"
             id="notes"
             placeholder="Relies on two pointer solution and also ... runs in O(n) time and consumes O(k) space ..."
-            // value={currentNotes ?? ""}
+            value={currentReminder()?.notes ?? ''}
           />
         </div>
         <div class={styles.btnWrapper}>
           <button class={actionButton} type="submit">
-            Save reminder
+            Save
           </button>
           <a
             class={styles.returnLink}
             href="/questions-list"
             onClick={(event) => {
               event.preventDefault();
-              setCurrentView(PAGES.questionList);
+              setCurrentView('questionList');
             }}
           >
             Return to questions

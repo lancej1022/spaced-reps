@@ -5,19 +5,19 @@ import { Component, createSignal, lazy } from 'solid-js';
 
 import * as styles from './App.css';
 import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
-import { IQuestionCardProps } from './components/QuestionCard/QuestionCard';
+import { ReminderInterface } from './components/QuestionCard/QuestionCard';
 import QuestionsList from './components/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm';
 import { parseUrl, sortByDaysRemainingBeforeReminder, testSize } from './helpers';
-import { questionMocksLarge } from './mocks/questionMocks';
+import { questionMocks } from './mocks/questionMocks';
 
 export function loadAllReminders(itemToDelete?: string) {
-  let itemsArr: [string, IQuestionCardProps][] = [];
+  let itemsArr: [string, ReminderInterface][] = [];
   if (isLocal) {
     if (itemToDelete) {
       itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
     } else {
-      itemsArr = questionMocksLarge;
+      itemsArr = questionMocks;
     }
 
     sortByDaysRemainingBeforeReminder(itemsArr);
@@ -31,7 +31,7 @@ export function loadAllReminders(itemToDelete?: string) {
       //   // return reject(chrome.runtime.lastError);
       // }
       testSize(items);
-      console.log('saved reminders', items);
+      console.log('saved reminders', Object.entries(items));
       itemsArr = Object.entries(items);
       sortByDaysRemainingBeforeReminder(itemsArr);
 
@@ -47,10 +47,10 @@ export const PAGES = {
 } as const;
 
 export const [existingReminders, setExistingReminders] = createSignal<
-  [string, IQuestionCardProps][]
+  [string, ReminderInterface][]
 >([]);
 export const [filteredReminders, setFilteredReminders] = createSignal<
-  [string, IQuestionCardProps][]
+  [string, ReminderInterface][]
 >([]);
 export const [title, setTitle] = createSignal('');
 export const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(PAGES.questionList);
@@ -94,7 +94,7 @@ const App: Component = () => {
         }
 
         if (tabs[0].url?.includes('/submissions')) {
-          setCurrentView(PAGES.saveReminderForm);
+          setCurrentView('saveReminderForm');
         }
         loadAllReminders(); // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
 
@@ -115,14 +115,13 @@ const App: Component = () => {
           { type: 'GET_DOM' } as DOMMessage, // Message type
           // Callback executed when the content script sends a response
           (response: DOMMessageResponse) => {
-            console.log('response in handleInitialPageLoad', response);
+            console.log('DomEvaluator response in handleInitialPageLoad', response);
             if (
               tabs[0]?.url?.includes('educative') &&
               tabs[0].title?.startsWith('Problem Challenge')
             ) {
               // get rid of things like ` (hard)#` from the h2 heading `Permutation in a String (hard)#`
               const problemTitle = response.headlines[0]?.replace(/\s\((.*)/g, '') || '';
-              console.log('problemTitle', problemTitle);
               let keyToSave = problemTitle.toLowerCase().replace(/\s/g, '-');
               setTitle(problemTitle);
               setUnformattedTitle(keyToSave);
