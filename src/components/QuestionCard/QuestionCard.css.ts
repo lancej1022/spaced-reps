@@ -10,10 +10,9 @@ export const questionCardWrapper = style({
   padding: '8px 0',
   borderBottom: '1px solid #5a5a5a',
   gridTemplateRows: 'auto',
-  gridTemplateAreas: `"left top-right arrow"
-    "left bottom-right arrow" `,
+  gridTemplateAreas: `"left top top top"
+    "left bottom bottom bottom"`,
   gridTemplateColumns: '1fr 4fr 1fr',
-  cursor: 'pointer',
 });
 
 export const daysRemainingBubble = style({
@@ -26,15 +25,17 @@ export const daysRemainingBubble = style({
   borderRadius: '100%',
   backgroundColor: '#5a5a5a',
   color: '#fff',
-  width: '44px',
-  height: '44px',
+  width: '48px',
+  height: '48px',
   fontSize: '1rem',
 });
 
 export const questionName = style({
-  gridArea: 'top-right',
+  gridArea: 'top',
   fontWeight: 'bold',
   fontSize: '1rem',
+  padding: '0 16px',
+  marginBottom: '4px',
 });
 
 export const leetCodeDifficulty = style({
@@ -56,6 +57,75 @@ export const removeReminderBtn = style({
     '&:hover': {
       backgroundColor: '#fff',
       color: 'black',
+    },
+  },
+});
+
+export const buttonGroup = style({
+  gridArea: 'bottom',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  // padding: '0 8px',
+  fontSize: '1rem',
+  fontWeight: 'bold',
+  color: '#fff',
+  // backgroundColor: '#5a5a5a',
+  borderRadius: '0 0 4px 4px',
+});
+
+export const questionButton = style({
+  display: 'inline-flex',
+  // '-webkit-box-align': 'center',
+  alignItems: 'center',
+  // '-webkit-box-pack': 'center',
+  justifyContent: 'center',
+  position: 'relative',
+  boxSizing: 'border-box',
+  // '-webkit-tap-highlight-color': 'transparent',
+  backgroundColor: 'transparent',
+  outline: '0px',
+  border: '0px',
+  margin: '0px',
+  cursor: 'pointer',
+  userSelect: 'none',
+  verticalAlign: 'middle',
+  appearance: 'none',
+  textDecoration: 'none',
+  fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+  fontWeight: 500,
+  fontSize: '0.875rem',
+  lineHeight: '1.75',
+  letterSpacing: '0.02857em',
+  padding: '6px 8px',
+  // textTransform: 'uppercase',
+  minWidth: '64px',
+  width: '100%',
+  borderRadius: '4px',
+  transition:
+    'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+  color: '#f6f6f6',
+  selectors: {
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: 'rgba(186, 224, 255, 0.2)',
+    },
+    '&:focus': {
+      textDecoration: 'none',
+      backgroundColor: 'rgba(186, 224, 255, 0.2)',
+    },
+    '&:not(:first-of-type)': {
+      borderTopLeftRadius: '0px',
+      borderBottomLeftRadius: '0px',
+    },
+    '&:first-of-type': {
+      borderTopRightRadius: '0px',
+      borderBottomRightRadius: '0px',
+      borderRight: '1px solid rgba(144, 202, 249, 0.5)',
+      borderTopColor: 'rgba(144, 202, 249, 0.5)',
+      borderBottomColor: 'rgba(144, 202, 249, 0.5)',
+      borderLeftColor: 'rgba(144, 202, 249, 0.5)',
     },
   },
 });
