@@ -139,6 +139,7 @@ const App: Component = () => {
 
   return (
     <main class={styles.app}>
+      <h1 class={styles.extensionTitle}>Spaced Reps</h1>
       {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
     </main>

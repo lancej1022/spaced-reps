@@ -8,7 +8,7 @@ export const questionCardWrapper = style({
   fontFamily: vars.font.body,
   color: '#fff',
   padding: '8px 0',
-  borderBottom: '1px solid #5a5a5a',
+  borderBottom: '1px solid #52324d',
   gridTemplateRows: 'auto',
   gridTemplateAreas: `"left top top top"
     "left bottom bottom bottom"`,
@@ -36,6 +36,7 @@ export const questionName = style({
   fontSize: '1rem',
   padding: '0 16px',
   marginBottom: '4px',
+  textAlign: 'center',
 });
 
 export const leetCodeDifficulty = style({
@@ -122,10 +123,10 @@ export const questionButton = style({
     '&:first-of-type': {
       borderTopRightRadius: '0px',
       borderBottomRightRadius: '0px',
-      borderRight: '1px solid rgba(144, 202, 249, 0.5)',
-      borderTopColor: 'rgba(144, 202, 249, 0.5)',
-      borderBottomColor: 'rgba(144, 202, 249, 0.5)',
-      borderLeftColor: 'rgba(144, 202, 249, 0.5)',
+      borderRight: '1px solid #52324d',
+      borderTopColor: '#52324d',
+      borderBottomColor: '#52324d',
+      borderLeftColor: '#52324d',
     },
   },
 });
