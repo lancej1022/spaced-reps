@@ -3,7 +3,7 @@ import { vars } from '~/styles/index.css';
 
 export const questionsContainer = style({
   overflowY: 'scroll',
-  maxHeight: '360px',
+  maxHeight: '420px',
   width: '100%',
   // transition: "all 0.15s ease-in-out", TODO: figure out how to get the appearance of the scrollbar to animate in
 

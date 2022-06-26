@@ -7,6 +7,7 @@ export const heading1 = style({
 });
 export const saveReminderForm = style({
   minHeight: '90%',
+  width: '100%',
 });
 
 export const inputWrapper = style({
