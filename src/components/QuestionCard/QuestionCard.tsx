@@ -51,7 +51,7 @@ export default function QuestionCard(props: ReminderInterface) {
       <div class={styles.daysRemainingBubble}>
         {Number(props.daysBeforeReminder) - dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
-      <p class={styles.questionName}>{props.name}</p>
+      <h2 class={styles.questionName}>{props.name}</h2>
       <div role="group" aria-label="button group" class={styles.buttonGroup}>
         <button class={styles.questionButton} onClick={handleDeleteClick}>
           Remove
