@@ -1,10 +1,7 @@
-import { createSignal } from 'solid-js';
 import * as styles from './QuestionCard.css';
 import { dateDiffInDays } from '~/helpers';
 import { isLocal, loadAllReminders, setCurrentView } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
-
-import * as rootStyles from '~/styles/index.css';
 
 export interface ReminderInterface {
   categories?: string[];
@@ -15,15 +12,7 @@ export interface ReminderInterface {
   url: string;
 }
 
-// middle screen https://dribbble.com/shots/18181992-Streak
 export default function QuestionCard(props: ReminderInterface) {
-  const [isHovered, setIsHovered] = createSignal(false);
-
-  let leetCodeLink: HTMLAnchorElement | undefined = undefined;
-  function handleCardClick() {
-    leetCodeLink?.click();
-  }
-
   function handleDeleteClick(
     event: MouseEvent & {
       currentTarget: HTMLButtonElement;
@@ -42,12 +31,7 @@ export default function QuestionCard(props: ReminderInterface) {
   }
 
   return (
-    <div
-      class={styles.questionCardWrapper}
-      onClick={handleCardClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div class={styles.questionCardWrapper}>
       <div class={styles.daysRemainingBubble}>
         {Number(props.daysBeforeReminder) - dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
@@ -76,7 +60,6 @@ export default function QuestionCard(props: ReminderInterface) {
           href={props.url}
           target="_blank"
           referrerPolicy="no-referrer"
-          ref={leetCodeLink}
         >
           Visit
         </a>

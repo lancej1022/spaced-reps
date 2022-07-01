@@ -32,10 +32,9 @@ export const daysRemainingBubble = style({
 
 export const questionName = style({
   gridArea: 'top',
-  fontWeight: 'bold',
+  fontWeight: '500',
   fontSize: '1rem',
   padding: '0 16px',
-  marginBottom: '4px',
   textAlign: 'center',
 });
 
