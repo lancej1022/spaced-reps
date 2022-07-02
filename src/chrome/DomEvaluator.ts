@@ -11,7 +11,7 @@ export type DOMMessageResponse = {
 // This runs as a callback AFTER the extension App.tsx has run
 const messagesFromExtensionListener = (
   msg: DOMMessage,
-  sender: chrome.runtime.MessageSender,
+  _sender: chrome.runtime.MessageSender,
   sendResponse: (response: DOMMessageResponse) => void
 ) => {
   console.log('[content-script.js] Message received', msg);

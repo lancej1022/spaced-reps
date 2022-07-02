@@ -1,7 +1,7 @@
-import * as rootStyles from "~/styles/index.css";
+import * as rootStyles from '~/styles/index.css';
 
-import { existingReminders, setFilteredReminders } from "~/App";
-import * as styles from "./SearchField.css";
+import { existingReminders, setFilteredReminders } from '~/App';
+import styles from './SearchField.css';
 export default function SearchField() {
   let searchInput: HTMLInputElement | undefined = undefined;
 
@@ -10,7 +10,7 @@ export default function SearchField() {
   }
 
   const handleSearch = () => {
-    const searchValue = searchInput?.value ?? "";
+    const searchValue = searchInput?.value ?? '';
     if (!searchValue) {
       setFilteredReminders(existingReminders());
       return;
@@ -26,7 +26,7 @@ export default function SearchField() {
 
   return (
     <>
-      <label class={rootStyles.visuallyHidden} htmlFor="searchfield">
+      <label class={rootStyles.visuallyHidden} for="searchfield">
         Search
       </label>
       <div class={styles.searchFieldWrapper}>

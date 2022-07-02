@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { themeClass, vars } from '~/styles/index.css';
+import { vars } from '~/styles/index.css';
 
 const questionCardWrapper = style({
   display: 'grid',

@@ -1,7 +1,7 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
 const isLocal = import.meta.env.MODE === 'development';
 
-import { Component, createSignal, lazy } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 
 import styles from './App.css';
 import QuestionsList from './components/QuestionsList/QuestionsList';
