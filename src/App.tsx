@@ -1,15 +1,16 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
-export const isLocal = import.meta.env.MODE === 'development';
+const isLocal = import.meta.env.MODE === 'development';
 
 import { Component, createSignal, lazy } from 'solid-js';
 
-import * as styles from './App.css';
-import { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
-import { ReminderInterface } from './components/QuestionCard/QuestionCard';
-import QuestionsList from './components/QuestionsList';
-import SaveReminderForm from './components/SaveReminderForm';
-import { parseUrl, sortByDaysRemainingBeforeReminder, testSize } from './helpers';
-import { questionMocks } from './mocks/questionMocks';
+import styles from './App.css';
+import QuestionsList from './components/QuestionsList/QuestionsList';
+import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
+import PAGES from './constants/pages';
+import helpers from './helpers';
+import mocks from './mocks/questionMocks';
+import type { ReminderInterface } from './components/QuestionCard/QuestionCard';
+import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
 
 export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
@@ -17,10 +18,10 @@ export function loadAllReminders(itemToDelete?: string) {
     if (itemToDelete) {
       itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
     } else {
-      itemsArr = questionMocks;
+      itemsArr = mocks.questionMocks;
     }
 
-    sortByDaysRemainingBeforeReminder(itemsArr);
+    helpers.sortByDaysRemainingBeforeReminder(itemsArr);
 
     setExistingReminders(itemsArr);
     setFilteredReminders(itemsArr);
@@ -30,21 +31,16 @@ export function loadAllReminders(itemToDelete?: string) {
       // if (chrome.runtime.lastError) {
       //   // return reject(chrome.runtime.lastError);
       // }
-      testSize(items);
+      helpers.testSize(items);
       console.log('saved reminders', Object.entries(items));
       itemsArr = Object.entries(items);
-      sortByDaysRemainingBeforeReminder(itemsArr);
+      helpers.sortByDaysRemainingBeforeReminder(itemsArr);
 
       setExistingReminders(itemsArr);
       setFilteredReminders(itemsArr);
     });
   }
 }
-
-export const PAGES = {
-  questionList: 'questionList',
-  saveReminderForm: 'saveReminderForm',
-} as const;
 
 export const [existingReminders, setExistingReminders] = createSignal<
   [string, ReminderInterface][]
@@ -88,7 +84,7 @@ const App: Component = () => {
           setUnformattedTitle(legalKeyToSave);
         } else {
           // this block handles leetcode titles
-          const { unformattedTitle, formattedTitle } = parseUrl(tabs[0].url ?? '');
+          const { unformattedTitle, formattedTitle } = helpers.parseUrl(tabs[0].url ?? '');
           setTitle(formattedTitle);
           setUnformattedTitle(unformattedTitle);
         }

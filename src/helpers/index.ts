@@ -1,6 +1,6 @@
-import { ReminderInterface } from '~/components/QuestionCard/QuestionCard';
+import type { ReminderInterface } from '~/components/QuestionCard/QuestionCard';
 
-export function parseUrl(url: string) {
+function parseUrl(url: string) {
   const urlObj = new URL(url);
   const { hostname, pathname } = urlObj;
 
@@ -13,7 +13,7 @@ export function parseUrl(url: string) {
   return { pathname, hostname, unformattedTitle: problemName, formattedTitle };
 }
 
-export function testSize(obj: { [key: string]: any }) {
+function testSize(obj: { [key: string]: any }) {
   const size = new TextEncoder().encode(JSON.stringify(obj)).length;
   const kiloBytes = size / 1024;
   console.log(`Size of all items in local storage is ${size} bytes.`);
@@ -22,7 +22,7 @@ export function testSize(obj: { [key: string]: any }) {
 
 const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-export function dateDiffInDays(a: Date, b: Date) {
+function dateDiffInDays(a: Date, b: Date) {
   // Discard the time and time-zone information.
   const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
   const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
@@ -30,7 +30,7 @@ export function dateDiffInDays(a: Date, b: Date) {
   return Math.floor((utc2 - utc1) / millisecondsPerDay);
 }
 
-export function sortByDaysRemainingBeforeReminder(array: [string, ReminderInterface][]) {
+function sortByDaysRemainingBeforeReminder(array: [string, ReminderInterface][]) {
   return array.sort((a, b) => {
     const daysSinceA =
       Number(a[1].daysBeforeReminder) - dateDiffInDays(new Date(a[1].timeStamp), new Date());
@@ -39,3 +39,11 @@ export function sortByDaysRemainingBeforeReminder(array: [string, ReminderInterf
     return daysSinceA - daysSinceB;
   });
 }
+
+const helpers = {
+  parseUrl,
+  testSize,
+  sortByDaysRemainingBeforeReminder,
+  dateDiffInDays,
+};
+export default helpers;

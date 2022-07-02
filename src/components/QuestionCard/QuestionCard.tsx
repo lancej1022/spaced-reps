@@ -1,6 +1,6 @@
-import * as styles from './QuestionCard.css';
-import { dateDiffInDays } from '~/helpers';
-import { isLocal, loadAllReminders, setCurrentView } from '~/App';
+import styles from './QuestionCard.css';
+import helpers from '~/helpers';
+import { loadAllReminders, setCurrentView } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 
 export interface ReminderInterface {
@@ -20,7 +20,7 @@ export default function QuestionCard(props: ReminderInterface) {
     }
   ) {
     event.stopPropagation();
-    if (isLocal) {
+    if (import.meta.env.MODE === 'development') {
       loadAllReminders(props.name);
     } else {
       chrome.storage.local.remove(props.name, () => {
@@ -33,7 +33,8 @@ export default function QuestionCard(props: ReminderInterface) {
   return (
     <div class={styles.questionCardWrapper}>
       <div class={styles.daysRemainingBubble}>
-        {Number(props.daysBeforeReminder) - dateDiffInDays(new Date(props.timeStamp), new Date())}
+        {Number(props.daysBeforeReminder) -
+          helpers.dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
       <h2 class={styles.questionName}>{props.name}</h2>
       <div role="group" aria-label="button group" class={styles.buttonGroup}>

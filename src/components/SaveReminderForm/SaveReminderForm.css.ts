@@ -1,16 +1,14 @@
 import { style } from '@vanilla-extract/css';
 
-import { themeClass, vars } from '~/styles/index.css';
-
-export const heading1 = style({
+const heading1 = style({
   fontSize: '1.5rem',
 });
-export const saveReminderForm = style({
+const saveReminderForm = style({
   minHeight: '90%',
   width: '100%',
 });
 
-export const inputWrapper = style({
+const inputWrapper = style({
   display: 'grid',
   gridTemplateRows: 'auto',
   gridTemplateAreas: `"numberLabel numberInput"
@@ -19,7 +17,7 @@ export const inputWrapper = style({
   gap: '10px',
   marginTop: '16px',
 });
-export const btnWrapper = style({
+const btnWrapper = style({
   display: 'grid',
   gridTemplateRows: 'auto',
   gridTemplateAreas: 'input button button',
@@ -27,7 +25,7 @@ export const btnWrapper = style({
   gap: '10px',
 });
 
-export const numberInput = style({
+const numberInput = style({
   width: '100%',
   border: 'none',
   borderRadius: '4px',
@@ -35,7 +33,7 @@ export const numberInput = style({
   paddingLeft: '15px',
 });
 
-export const textAreaWrapper = style({
+const textAreaWrapper = style({
   display: 'grid',
   gridTemplateRows: 'auto',
   gridTemplateAreas: `"textLabel"
@@ -44,17 +42,17 @@ export const textAreaWrapper = style({
   marginBottom: '24px',
 });
 
-export const textInput = style({
+const textInput = style({
   width: '100%',
   minHeight: '150px',
   borderRadius: '4px',
 });
 
-export const categoriesSelect = style({
+const categoriesSelect = style({
   borderRadius: '4px',
 });
 
-export const returnLink = style({
+const returnLink = style({
   backgroundColor: '#fff',
   borderRadius: '4px',
   color: '#000',
@@ -62,3 +60,15 @@ export const returnLink = style({
   textDecoration: 'none',
   textAlign: 'center',
 });
+
+export default {
+  heading1,
+  saveReminderForm,
+  inputWrapper,
+  btnWrapper,
+  numberInput,
+  textAreaWrapper,
+  textInput,
+  categoriesSelect,
+  returnLink,
+};

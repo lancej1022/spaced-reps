@@ -1,9 +1,9 @@
 import { createSignal, For } from 'solid-js';
 import { filteredReminders, setCurrentView } from '~/App';
-import QuestionCard from '../QuestionCard';
-import SearchField from '../SearchField';
+import QuestionCard from '../QuestionCard/QuestionCard';
+import SearchField from '../SearchField/SearchField';
 
-import * as styles from './QuestionsList.css';
+import styles from './QuestionsList.css';
 
 export default function QuestionsList() {
   const [isHovered, setIsHovered] = createSignal(false);

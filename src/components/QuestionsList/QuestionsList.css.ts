@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '~/styles/index.css';
 
-export const questionsContainer = style({
+const questionsContainer = style({
   overflowY: 'scroll',
   maxHeight: '420px',
   width: '100%',
@@ -19,13 +19,13 @@ export const questionsContainer = style({
   },
 });
 
-export const questionsContainerHovered = style({
+const questionsContainerHovered = style({
   '::-webkit-scrollbar-thumb': {
     backgroundColor: '#babac0',
   },
 });
 
-export const actionButton = style({
+const actionButton = style({
   display: 'inline-block',
   cursor: 'pointer',
   textDecoration: 'none',
@@ -36,7 +36,14 @@ export const actionButton = style({
   borderRadius: '4px',
 });
 
-export const anchorBtn = style({
+const anchorBtn = style({
   padding: '8px 16px',
   marginTop: '24px',
 });
+
+export default {
+  questionsContainer,
+  questionsContainerHovered,
+  actionButton,
+  anchorBtn,
+};

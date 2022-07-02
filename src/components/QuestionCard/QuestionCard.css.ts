@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { themeClass, vars } from '~/styles/index.css';
 
-export const questionCardWrapper = style({
+const questionCardWrapper = style({
   display: 'grid',
   width: '100%',
   fontFamily: vars.font.body,
@@ -15,7 +15,7 @@ export const questionCardWrapper = style({
   gridTemplateColumns: '1fr 4fr 1fr',
 });
 
-export const daysRemainingBubble = style({
+const daysRemainingBubble = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -30,7 +30,7 @@ export const daysRemainingBubble = style({
   fontSize: '1rem',
 });
 
-export const questionName = style({
+const questionName = style({
   gridArea: 'top',
   fontWeight: '500',
   fontSize: '1rem',
@@ -38,12 +38,12 @@ export const questionName = style({
   textAlign: 'center',
 });
 
-export const leetCodeDifficulty = style({
+const leetCodeDifficulty = style({
   gridArea: 'bottom-right',
   fontSize: 14 / 16 + 'rem',
 });
 
-export const removeReminderBtn = style({
+const removeReminderBtn = style({
   cursor: 'pointer',
   width: 'fit-content',
   padding: '0 8px',
@@ -61,7 +61,7 @@ export const removeReminderBtn = style({
   },
 });
 
-export const buttonGroup = style({
+const buttonGroup = style({
   gridArea: 'bottom',
   display: 'flex',
   justifyContent: 'space-between',
@@ -75,7 +75,7 @@ export const buttonGroup = style({
   borderRadius: '0 0 4px 4px',
 });
 
-export const questionButton = style({
+const questionButton = style({
   display: 'inline-flex',
   // '-webkit-box-align': 'center',
   alignItems: 'center',
@@ -130,26 +130,40 @@ export const questionButton = style({
   },
 });
 
-export const arrow = style({
+const arrow = style({
   gridArea: 'arrow',
   justifySelf: 'center',
   alignSelf: 'center',
   width: 'fit-content !important', // TODO: Why does this only seem to work with !important? Is it a Vite dev mode bug?
 });
 
-export const arrowHovered = style({
+const arrowHovered = style({
   fill: 'hsl(343deg 100% 54% / 70%)',
 });
 
-export const loginFormLabel = style({
+const loginFormLabel = style({
   fontFamily: vars.font.body,
   textAlign: 'center',
   color: '#000000',
   marginBottom: 4,
 });
-export const loginFormInput = style({
+const loginFormInput = style({
   fontFamily: vars.font.body,
   textAlign: 'center',
   color: '#000000',
   marginBottom: 8,
 });
+
+export default {
+  questionCardWrapper,
+  daysRemainingBubble,
+  questionName,
+  leetCodeDifficulty,
+  removeReminderBtn,
+  buttonGroup,
+  questionButton,
+  arrow,
+  arrowHovered,
+  loginFormLabel,
+  loginFormInput,
+};

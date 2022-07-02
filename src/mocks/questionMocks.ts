@@ -1,6 +1,6 @@
 import { ReminderInterface } from '~/components/QuestionCard/QuestionCard';
 
-export const questionMocksLarge: [string, ReminderInterface][] = [];
+const questionMocksLarge: [string, ReminderInterface][] = [];
 for (let i = 0; i < 1000; i++) {
   questionMocksLarge.push([
     `${i}`,
@@ -13,7 +13,7 @@ for (let i = 0; i < 1000; i++) {
   ]);
 }
 
-export const questionMocks: [string, ReminderInterface][] = [
+const questionMocks: [string, ReminderInterface][] = [
   [
     'Fruits into Baskets ',
     {
@@ -116,3 +116,8 @@ export const questionMocks: [string, ReminderInterface][] = [
     },
   ],
 ];
+
+export default {
+  questionMocks,
+  questionMocksLarge,
+};

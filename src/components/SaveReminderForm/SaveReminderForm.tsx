@@ -6,12 +6,11 @@ import {
   loadAllReminders,
   setCurrentView,
   existingReminders,
-  isLocal,
 } from '~/App';
-import { dateDiffInDays } from '~/helpers';
-import { ReminderInterface } from '../QuestionCard/QuestionCard';
-import { actionButton } from '../QuestionsList/QuestionsList.css';
-import * as styles from './SaveReminderForm.css';
+import helpers from '~/helpers';
+import questionListStyles from '../QuestionsList/QuestionsList.css';
+import styles from './SaveReminderForm.css';
+import type { ReminderInterface } from '../QuestionCard/QuestionCard';
 
 export const [reminderToSearchFor, setReminderToSearchFor] = createSignal('');
 const [currentReminder, setCurrentReminder] = createSignal<ReminderInterface | undefined>();
@@ -56,7 +55,7 @@ export default function SaveReminderForm() {
       key = currentReminder()?.name ?? title();
     }
 
-    if (isLocal) {
+    if (import.meta.env.MODE === 'development') {
       loadAllReminders(key);
     } else {
       // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
@@ -117,11 +116,11 @@ export default function SaveReminderForm() {
             id="days-before-reminder"
             type="number"
             max={90}
-            min={1}
+            min={0}
             value={
               currentReminder()?.timeStamp
                 ? Number(currentReminder()?.daysBeforeReminder) -
-                  dateDiffInDays(new Date(currentReminder()?.timeStamp ?? ''), new Date())
+                  helpers.dateDiffInDays(new Date(currentReminder()?.timeStamp ?? ''), new Date())
                 : '1'
             }
           />
@@ -159,7 +158,7 @@ export default function SaveReminderForm() {
           />
         </div>
         <div class={styles.btnWrapper}>
-          <button class={actionButton} type="submit">
+          <button class={questionListStyles.actionButton} type="submit">
             Save
           </button>
           <a
