@@ -322,3 +322,81 @@ console.log(`LinkedList cycle start: ${find_cycle_start(head).value}`);
 
 head.next.next.next.next.next.next = head;
 console.log(`LinkedList cycle start: ${find_cycle_start(head).value}`);
+
+// MinHeap
+// Do not edit the class below except for the buildHeap,
+// siftDown, siftUp, peek, remove, and insert methods.
+// Feel free to add new properties and methods to the class.
+class MinHeap {
+  constructor(array) {
+    this.heap = this.buildHeap(array);
+  }
+
+  // TODO: this doesnt make much sense
+  // O(n) time | O(1) space
+  buildHeap(array) {
+    let firstParentIndex = Math.floor((array.length - 2) / 2);
+    for (let i = firstParentIndex; i >= 0; i--) {
+      this.siftDown(i, array.length - 1, array);
+    }
+    return array;
+  }
+
+  // O(log(n)) time | O(1) space
+  siftDown(index, endIndex, heap) {
+    let childOneIndex = index * 2 + 1; // will point to SOME child node, but maybe not left child
+    while (childOneIndex <= endIndex) {
+      let childTwoIndex = index * 2 + 2 <= endIndex ? index * 2 + 2 : -1;
+      let indexToSwap;
+      // childTwo is in range and smaller than child 1, so swap with that
+      if (childTwoIndex !== -1 && heap[childTwoIndex] < heap[childOneIndex]) {
+        indexToSwap = childTwoIndex;
+      } else {
+        indexToSwap = childOneIndex;
+      }
+
+      if (heap[indexToSwap] < heap[index]) {
+        this.swap(index, indexToSwap, heap);
+        index = indexToSwap;
+        childOneIndex = index * 2 + 1;
+      } else {
+        return;
+      }
+    }
+  }
+
+  // O(log(n)) time | O(1) space
+  siftUp(index, heap) {
+    let parentIndex = Math.floor((index - 1) / 2);
+    while (index > 0 && heap[index] < heap[parentIndex]) {
+      this.swap(index, parentIndex);
+      index = parentIndex;
+      parentIndex = Math.floor((index - 1) / 2);
+    }
+  }
+
+  // O(1) time | O(1) space
+  peek() {
+    return this.heap[0];
+  }
+
+  // // O(log(n)) time | O(1) space
+  remove() {
+    this.swap(0, this.heap.length - 1, this.heap);
+    const returnVal = this.heap.pop();
+    this.siftDown(0, this.heap.length - 1, this.heap);
+    return returnVal;
+  }
+
+  // O(log(n)) time | O(1) space
+  insert(value) {
+    this.heap.push(value);
+    this.siftUp(this.heap.length - 1, this.heap);
+  }
+
+  swap(i, j, heap = this.heap) {
+    const temp = heap[j];
+    heap[j] = heap[i];
+    heap[i] = temp;
+  }
+}

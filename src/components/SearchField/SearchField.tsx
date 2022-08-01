@@ -2,6 +2,7 @@ import * as rootStyles from '~/styles/index.css';
 
 import { existingReminders, setFilteredReminders } from '~/App';
 import styles from './SearchField.css';
+
 export default function SearchField() {
   let searchInput: HTMLInputElement | undefined = undefined;
 

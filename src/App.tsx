@@ -8,9 +8,22 @@ import QuestionsList from './components/QuestionsList/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
 import PAGES from './constants/pages';
 import helpers from './helpers';
+// TODO: strip out the mocks when building for production because it drastically bloats the output JS bundle
 import mocks from './mocks/questionMocks';
 import type { ReminderInterface } from './components/QuestionCard/QuestionCard';
 import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
+
+// Can be used to repopulate saved questions if you lose them for whatever reason
+// mocks.questionMocks.forEach(([name, reminder]) => {
+//   chrome.storage.local.set({ [name]: reminder }, function () {
+//     // console.log('inside SaveReminderForm after setting, userResponse: ', userResponse);
+//     // Pass any observed errors down the promise chain.
+//     if (chrome.runtime.lastError) {
+//       console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+//       // return reject(chrome.runtime.lastError);
+//     }
+//   });
+// });
 
 export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
@@ -78,6 +91,14 @@ const App: Component = () => {
           setTitle(educativeFormattedTitle);
           // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
           let legalKeyToSave = educativeFormattedTitle.toLowerCase().replace(/\s/g, '-');
+          if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
+            legalKeyToSave = legalKeyToSave.slice(0, -1);
+          }
+          setUnformattedTitle(legalKeyToSave);
+        } else if (tabs[0].url?.includes('algoexpert.io/questions')) {
+          let algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
+          setTitle(algoExpertFormattedTitle);
+          let legalKeyToSave = algoExpertFormattedTitle.toLowerCase().replace(/\s/g, '-');
           if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
             legalKeyToSave = legalKeyToSave.slice(0, -1);
           }

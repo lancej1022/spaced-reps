@@ -140,8 +140,19 @@ export default function SaveReminderForm() {
           >
             <option value="slidingWindow">Sliding Window</option>
             <option value="twoPointers">Two Pointers</option>
+            <option value="fastAndSlowPointers">Fast and Slow Pointers</option>
+            <option value="mergeIntervals">Merge Intervals</option>
+            <option value="cyclicSort">Cyclic Sort</option>
+            <option value="reverseLinkedList">Reverse Linked List</option>
             <option value="bfs">Breadth First Search</option>
             <option value="dfs">Depth First Search</option>
+            <option value="heaps">Heaps</option>
+            <option value="subsets">Subsets</option>
+            <option value="xor">Bitwise XOR</option>
+            <option value="topElements">Top K Elements</option>
+            <option value="kWayMerge">K Way Merge</option>
+            <option value="dp">Dynammic Programming</option>
+            <option value="topologicalSort">Topological Sort (Graph)</option>
             <option value="binarySearch">Binary Search</option>
           </select>
         </div>
