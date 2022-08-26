@@ -323,10 +323,6 @@ console.log(`LinkedList cycle start: ${find_cycle_start(head).value}`);
 head.next.next.next.next.next.next = head;
 console.log(`LinkedList cycle start: ${find_cycle_start(head).value}`);
 
-// MinHeap
-// Do not edit the class below except for the buildHeap,
-// siftDown, siftUp, peek, remove, and insert methods.
-// Feel free to add new properties and methods to the class.
 class MinHeap {
   constructor(array) {
     this.heap = this.buildHeap(array);
@@ -400,3 +396,154 @@ class MinHeap {
     heap[i] = temp;
   }
 }
+
+// console.log('MinHeap:', new MinHeap([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
+
+class MaxHeap {
+  constructor(array) {
+    this.heap = this.buildHeap(array);
+  }
+
+  // TODO: this doesnt make much sense
+  // O(n) time | O(1) space
+  buildHeap(array) {
+    let firstParentIndex = Math.floor((array.length - 2) / 2);
+    for (let i = firstParentIndex; i >= 0; i--) {
+      this.siftDown(i, array.length - 1, array);
+    }
+    return array;
+  }
+
+  // O(log(n)) time | O(1) space
+  siftDown(index, endIndex, heap) {
+    let childOneIndex = index * 2 + 1; // will point to SOME child node, but maybe not left child
+    while (childOneIndex <= endIndex) {
+      let childTwoIndex = index * 2 + 2 <= endIndex ? index * 2 + 2 : -1;
+      let indexToSwap;
+      // childTwo is in range and greater than child 1, so swap with that
+      if (childTwoIndex !== -1 && heap[childTwoIndex] > heap[childOneIndex]) {
+        indexToSwap = childTwoIndex;
+      } else {
+        indexToSwap = childOneIndex;
+      }
+
+      if (heap[indexToSwap] > heap[index]) {
+        this.swap(index, indexToSwap, heap);
+        index = indexToSwap;
+        childOneIndex = index * 2 + 1;
+      } else {
+        return;
+      }
+    }
+  } // DOUBLE CHECK THIS ONE
+
+  // O(log(n)) time | O(1) space
+  siftUp(index, heap) {
+    let parentIndex = Math.floor((index - 1) / 2);
+    while (index > 0 && heap[index] > heap[parentIndex]) {
+      this.swap(index, parentIndex);
+      index = parentIndex;
+      parentIndex = Math.floor((index - 1) / 2);
+    }
+  }
+
+  // O(1) time | O(1) space
+  peek() {
+    return this.heap[0];
+  }
+
+  // // O(log(n)) time | O(1) space
+  remove() {
+    this.swap(0, this.heap.length - 1, this.heap);
+    const returnVal = this.heap.pop();
+    this.siftDown(0, this.heap.length - 1, this.heap);
+    return returnVal;
+  }
+
+  // O(log(n)) time | O(1) space
+  insert(value) {
+    this.heap.push(value);
+    this.siftUp(this.heap.length - 1, this.heap);
+  }
+
+  swap(i, j, heap = this.heap) {
+    const temp = heap[j];
+    heap[j] = heap[i];
+    heap[i] = temp;
+  }
+}
+
+class Heap {
+  constructor(array, compareFunc) {
+    this.compareFunc = compareFunc;
+    this.heap = this.buildHeap(array);
+    this.length = this.heap.length;
+  }
+
+  swap(i, j, heap) {
+    let temp = heap[j];
+    heap[j] = heap[i];
+    heap[i] = temp;
+  }
+
+  buildHeap(array) {
+    for (let i = array.length - 1; i >= 0; i -= 1) {
+      this.siftDown(i, array.length - 1, array);
+    }
+    return array;
+  }
+
+  siftDown(index, endIndex, heap) {
+    let childOneIndex = index * 2 + 1;
+    while (childOneIndex <= endIndex) {
+      let childTwoIndex = index * 2 + 2 <= endIndex ? index * 2 + 2 : -1;
+      let indexToSwap;
+      if (
+        childTwoIndex !== -1 &&
+        this.compareFunc(this.heap[childTwoIndex], this.heap[childOneIndex])
+      ) {
+        indexToSwap = childTwoIndex;
+      } else {
+        indexToSwap = childOneIndex;
+      }
+
+      if (this.compareFunc(this.heap[indexToSwap], this.heap[index])) {
+        this.swap(index, indexToSwap);
+        index = indexToSwap;
+        childOndexIndex = index * 2 + 1;
+      } else {
+        return;
+      }
+    }
+  }
+
+  siftUp(index, heap) {
+    let parentIndex = Math.floor((index - 1) / 2);
+    // TODO: this bit might be wrong :|
+    while (parentIndex >= 0 && this.compareFunc(this.heap[index], this.heap[parentIndex])) {
+      this.swap(index, parentIndex, this.heap);
+      index = parentIndex;
+      parentIndex = Math.floor((index - 1) / 2);
+    }
+  }
+
+  insert(val) {
+    this.heap.push(val);
+    this.siftUp(this.heap.length - 1, this.heap);
+    this.length += 1;
+  }
+
+  remove() {
+    this.swap(0, this.heap.length - 1, this.heap);
+    let returnVal = this.heap.pop();
+    this.siftDown(0, this.heap.length - 1, this.heap);
+    this.length -= 1;
+    return returnVal;
+  }
+
+  peek() {
+    return this.heap[0] || null;
+  }
+}
+
+console.log('heap:', new Heap([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (a, b) => a > b)); // max heap function
