@@ -104,10 +104,14 @@ export default function SaveReminderForm() {
         Reminder for {currentReminder() ? currentReminder()?.name : title()}
       </h1>
       <form class={styles.saveReminderForm} onSubmit={saveUserResponse}>
+        <p>
+          Previous reminder was set for {currentReminder()?.daysBeforeReminder}{' '}
+          {Number(currentReminder()?.daysBeforeReminder) > 1 ? 'days' : 'day'}
+        </p>
         <div class={styles.inputWrapper}>
           <label for="days-before-reminder" id="days-before-reminder-label">
-            {/* TODO: replace asterisk with pseudoelement for proper a11y, and make it reddish */}
-            Number of days until next attempt *
+            {/* TODO: insert asterisk pseudoelement for proper a11y, and make it reddish */}
+            Number of days until next attempt
           </label>
           <input
             class={styles.numberInput}

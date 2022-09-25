@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 const heading1 = style({
-  fontSize: '1.5rem',
+  fontSize: '1.25rem',
 });
 const saveReminderForm = style({
   minHeight: '90%',
