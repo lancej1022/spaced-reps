@@ -6,11 +6,9 @@ const searchFieldWrapper = style({
   position: 'relative',
   width: '100%',
   display: 'flex',
-  marginBottom: '24px',
 });
 
 const input = style({
-  backgroundColor: '#52324d',
   display: 'grid',
   width: '100%',
   fontFamily: vars.font.body,

@@ -3,7 +3,7 @@ import { vars } from '~/styles/index.css';
 
 const questionsContainer = style({
   overflowY: 'scroll',
-  maxHeight: '420px',
+  maxHeight: '100%',
   width: '100%',
   borderRadius: '8px',
   paddingLeft: '10px', // the scrollbar belows takes up 10px width so we need to account for that

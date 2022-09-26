@@ -30,10 +30,10 @@ export default function SearchField() {
       <label class={rootStyles.visuallyHidden} for="searchfield">
         Search
       </label>
-      <div class={styles.searchFieldWrapper}>
+      <div class={`${styles.searchFieldWrapper} mb-2`}>
         <input
           ref={searchInput}
-          class={styles.input}
+          class={`${styles.input} bg-slate-600`}
           id="searchfield"
           name="searchfield"
           type="search"

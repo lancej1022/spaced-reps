@@ -37,6 +37,7 @@
   "dependencies": {
     "@types/chrome": "^0.0.184",
     "@vanilla-extract/css": "^1.7.2",
+    "dayjs": "^1.11.5",
     "solid-app-router": "^0.3.2",
     "solid-js": "^1.4.5"
   },

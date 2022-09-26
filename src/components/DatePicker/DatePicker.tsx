@@ -17,6 +17,7 @@ interface DatePickerProps {
 
 export default function DatePicker(props: DatePickerProps) {
   let dialogRef: HTMLDialogElement | undefined = undefined;
+  let openCalendarButtonRef: HTMLButtonElement | undefined = undefined;
 
   return (
     <div class="wrapper">
@@ -42,6 +43,7 @@ export default function DatePicker(props: DatePickerProps) {
             // }
           />
           <button
+            ref={openCalendarButtonRef}
             onClick={() => dialogRef?.showModal()}
             // aria-label={`Choose date, selected date is ${date}`}
             class="relative p-2 -mr-2 inline-flex items-center bg-transparent rounded-full	justify-center cursor-pointer text-white"
@@ -59,12 +61,22 @@ export default function DatePicker(props: DatePickerProps) {
         </div>
       </div>
 
-      <dialog class={`bg-slate-800 text-white w-80 pt-1 ${styles.dialogBackdrop}`} ref={dialogRef}>
-        <form method="dialog">
+      <dialog
+        aria-label="Select date of next reminder"
+        class={`bg-slate-800 text-white w-100 pt-1 ${styles.dialogBackdrop} rounded-md`}
+        ref={dialogRef}
+      >
+        <form method="dialog" onSubmit={(e) => console.log(e)}>
           <div class="flex justify-end">
             <button
               aria-label="Close date picker"
+              onClick={(event) => {
+                event.preventDefault();
+                dialogRef?.close();
+                openCalendarButtonRef?.focus();
+              }}
               title="Close date picker"
+              type="button"
               class="p-1 -mr-2 inline-flex items-center bg-transparent rounded-full justify-center cursor-pointer"
               value="cancel"
             >
