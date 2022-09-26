@@ -22,9 +22,9 @@ export default defineConfig({
       },
     },
     target: 'esnext',
-    polyfillDynamicImport: false,
   },
   server: {
     open: '/popup.html',
+    port: 3000,
   },
 });
