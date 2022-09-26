@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1024 * 100, // 100kb limit per chunk, otherwise we're doing something wrong...
     rollupOptions: {
-      input: ['popup.html', '/src/chrome/DomEvaluator.ts'],
+      input: ['popup.html', '/src/chrome/DomEvaluator.ts', 'src/tailwind.css'],
       output: {
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,

@@ -34,14 +34,16 @@ globalStyle('body::-webkit-scrollbar', {
   background: 'white',
 });
 globalStyle('body::-webkit-scrollbar-thumb', {
-  background: '#c0392b',
+  background: 'rgb(66, 165, 245)',
+  // background: '#c0392b',
   height: '30px',
 });
 globalStyle('body::-webkit-scrollbar-track-piece', {
-  background: '#c0392b',
+  background: 'rgb(66, 165, 245)',
   height: '30px',
   display: 'none',
 });
 globalStyle('*:focus', {
-  outline: '2px solid hsl(317 100% 54%)',
+  // outline: '2px solid hsl(317 100% 54%)',
+  outline: '2px solid rgb(66, 165, 245)',
 });

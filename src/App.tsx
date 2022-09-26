@@ -12,6 +12,7 @@ import helpers from './helpers';
 import mocks from './mocks/questionMocks';
 import type { ReminderInterface } from './components/QuestionCard/QuestionCard';
 import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
+import DatePicker from './components/DatePicker/DatePicker';
 
 // Can be used to repopulate saved questions if you lose them for whatever reason
 // mocks.questionMocks.forEach(([name, reminder]) => {
@@ -155,10 +156,16 @@ const App: Component = () => {
   // chrome.storage.local.clear();
 
   return (
-    <main class={styles.app}>
+    <main class={`${styles.app} bg-slate-800`}>
       <h1 class={styles.extensionTitle}>Spaced Reps</h1>
-      {currentView() === PAGES.questionList && <QuestionsList />}
+      {currentView() === PAGES.questionList && (
+        <>
+          <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
+          <QuestionsList />
+        </>
+      )}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
+      {currentView() === PAGES.calendar && <DatePicker />}
     </main>
   );
 };

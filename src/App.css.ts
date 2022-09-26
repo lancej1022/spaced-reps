@@ -10,7 +10,7 @@ const app = style({
   fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
   color: '#ffffff',
   padding: 24,
-  backgroundColor: '#332436',
+  // backgroundColor: '#332436',
   // backgroundColor: vars.color.backgroundColor, TODO: why tf doesnt this work?
 });
 
