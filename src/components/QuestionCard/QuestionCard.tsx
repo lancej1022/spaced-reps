@@ -32,7 +32,7 @@ export default function QuestionCard(props: ReminderInterface) {
 
   return (
     <div class={styles.questionCardWrapper}>
-      <div class={styles.daysRemainingBubble}>
+      <div class={`${styles.daysRemainingBubble} text-white bg-slate-600`}>
         {Number(props.daysBeforeReminder) -
           helpers.dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>

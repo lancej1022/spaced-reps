@@ -8,7 +8,7 @@ const questionCardWrapper = style({
   fontFamily: vars.font.body,
   color: '#fff',
   padding: '8px 0',
-  borderBottom: '1px solid #52324d',
+  borderBottom: '1px solid rgb(2 132 199)',
   gridTemplateRows: 'auto',
   gridTemplateAreas: `"left top top top"
     "left bottom bottom bottom"`,
@@ -23,8 +23,6 @@ const daysRemainingBubble = style({
   alignSelf: 'center',
   justifySelf: 'start',
   borderRadius: '100%',
-  backgroundColor: '#5a5a5a',
-  color: '#fff',
   width: '48px',
   height: '48px',
   fontSize: '1rem',
@@ -122,10 +120,10 @@ const questionButton = style({
     '&:first-of-type': {
       borderTopRightRadius: '0px',
       borderBottomRightRadius: '0px',
-      borderRight: '1px solid #52324d',
-      borderTopColor: '#52324d',
-      borderBottomColor: '#52324d',
-      borderLeftColor: '#52324d',
+      borderRight: '1px solid rgb(2 132 199)',
+      borderTopColor: 'rgb(2 132 199)',
+      borderBottomColor: 'rgb(2 132 199)',
+      borderLeftColor: 'rgb(2 132 199)',
     },
   },
 });

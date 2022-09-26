@@ -114,7 +114,7 @@ export default function SaveReminderForm() {
             Number of days until next attempt
           </label>
           <input
-            class={styles.numberInput}
+            class={`${styles.numberInput} text-black`}
             required
             name="daysBeforeReminder"
             id="days-before-reminder"
@@ -134,7 +134,7 @@ export default function SaveReminderForm() {
             Categorize this problem
           </label>
           <select
-            class={styles.categoriesSelect}
+            class={`${styles.categoriesSelect} text-black`}
             multiple
             name="categories"
             id="categories"
@@ -165,7 +165,7 @@ export default function SaveReminderForm() {
             Save any notes about this algo
           </label>
           <textarea
-            class={styles.textInput}
+            class={`${styles.textInput} text-black`}
             name="notes"
             id="notes"
             placeholder="Relies on two pointer solution and also ... runs in O(n) time and consumes O(k) space ..."
@@ -173,7 +173,7 @@ export default function SaveReminderForm() {
           />
         </div>
         <div class={styles.btnWrapper}>
-          <button class={questionListStyles.actionButton} type="submit">
+          <button class={`${questionListStyles.actionButton} text-white bg-sky-600`} type="submit">
             Save
           </button>
           <a

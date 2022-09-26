@@ -1,8 +1,8 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
-const isLocal = import.meta.env.MODE === 'development';
+export const isLocal = import.meta.env.MODE === 'development';
 
 import { Component, createSignal } from 'solid-js';
-
+import { QueryClient, QueryClientProvider, createQuery } from '@tanstack/solid-query';
 import styles from './App.css';
 import QuestionsList from './components/QuestionsList/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
@@ -13,6 +13,7 @@ import mocks from './mocks/questionMocks';
 import type { ReminderInterface } from './components/QuestionCard/QuestionCard';
 import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
 import DatePicker from './components/DatePicker/DatePicker';
+import { getAllStorageLocalData } from './promises/chromeStorage';
 
 // Can be used to repopulate saved questions if you lose them for whatever reason
 // mocks.questionMocks.forEach(([name, reminder]) => {
@@ -25,6 +26,8 @@ import DatePicker from './components/DatePicker/DatePicker';
 //     }
 //   });
 // });
+
+const queryClient = new QueryClient();
 
 export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
@@ -67,11 +70,45 @@ export const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(PA
 export const [unformattedTitle, setUnformattedTitle] = createSignal('');
 export const [url, setUrl] = createSignal('');
 
+function setReminderInfo(tabs: chrome.tabs.Tab[]) {
+  if (!tabs[0]) return;
+
+  if (tabs[0].url?.includes('educative')) {
+    let educativeFormattedTitle = tabs[0].title?.replace(/\((.*)/g, '') ?? '';
+    setTitle(educativeFormattedTitle);
+    // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
+    let legalKeyToSave = educativeFormattedTitle.toLowerCase().replace(/\s/g, '-');
+    if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
+      legalKeyToSave = legalKeyToSave.slice(0, -1);
+    }
+    setUnformattedTitle(legalKeyToSave);
+  } else if (tabs[0].url?.includes('algoexpert.io/questions')) {
+    let algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
+    setTitle(algoExpertFormattedTitle);
+    let legalKeyToSave = algoExpertFormattedTitle.toLowerCase().replace(/\s/g, '-');
+    if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
+      legalKeyToSave = legalKeyToSave.slice(0, -1);
+    }
+    setUnformattedTitle(legalKeyToSave);
+  } else {
+    // this block handles leetcode titles
+    const { unformattedTitle, formattedTitle } = helpers.parseUrl(tabs[0].url ?? '');
+    setTitle(formattedTitle);
+    setUnformattedTitle(unformattedTitle);
+  }
+}
+
 const App: Component = () => {
+  // const query = createQuery(() => ["reminders"], fetchTodos)
+
   // TODO: split up this logic somehow, its become a monstrosity
   function handleInitialPageLoad() {
     if (isLocal) {
-      loadAllReminders();
+      // loadAllReminders();
+      getAllStorageLocalData().then((res) => {
+        setExistingReminders(res);
+        setFilteredReminders(res);
+      });
       return;
     }
     /**
@@ -87,34 +124,16 @@ const App: Component = () => {
         if (!tabs[0]) return;
         console.log('tabs[0]', tabs[0]);
 
-        if (tabs[0].url?.includes('educative')) {
-          let educativeFormattedTitle = tabs[0].title?.replace(/\((.*)/g, '') ?? '';
-          setTitle(educativeFormattedTitle);
-          // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
-          let legalKeyToSave = educativeFormattedTitle.toLowerCase().replace(/\s/g, '-');
-          if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
-            legalKeyToSave = legalKeyToSave.slice(0, -1);
-          }
-          setUnformattedTitle(legalKeyToSave);
-        } else if (tabs[0].url?.includes('algoexpert.io/questions')) {
-          let algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
-          setTitle(algoExpertFormattedTitle);
-          let legalKeyToSave = algoExpertFormattedTitle.toLowerCase().replace(/\s/g, '-');
-          if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
-            legalKeyToSave = legalKeyToSave.slice(0, -1);
-          }
-          setUnformattedTitle(legalKeyToSave);
-        } else {
-          // this block handles leetcode titles
-          const { unformattedTitle, formattedTitle } = helpers.parseUrl(tabs[0].url ?? '');
-          setTitle(formattedTitle);
-          setUnformattedTitle(unformattedTitle);
-        }
+        setReminderInfo(tabs);
 
         if (tabs[0].url?.includes('/submissions')) {
           setCurrentView('saveReminderForm');
         }
-        loadAllReminders(); // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
+        // loadAllReminders(); // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
+        getAllStorageLocalData().then((res) => {
+          setExistingReminders(res);
+          setFilteredReminders(res);
+        });
 
         let questionUrl = tabs[0].url ?? '';
         if (questionUrl.includes('/submissions')) {
@@ -124,7 +143,6 @@ const App: Component = () => {
         /**
          * Sends a single message to the content script(s) in the specified tab,
          * with an optional callback to run when a response is sent back.
-         *
          * The runtime.onMessage event registered in `DomEvaluator` is fired in each content script
          * running in the specified tab for the current extension.
          */
@@ -156,17 +174,22 @@ const App: Component = () => {
   // chrome.storage.local.clear();
 
   return (
-    <main class={`${styles.app} bg-slate-800`}>
-      <h1 class={styles.extensionTitle}>Spaced Reps</h1>
-      {currentView() === PAGES.questionList && (
-        <>
-          <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
-          <QuestionsList />
-        </>
-      )}
-      {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
-      {currentView() === PAGES.calendar && <DatePicker />}
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <main class={`${styles.app} bg-slate-800`}>
+        <div class="flex place-self-start items-center">
+          <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
+          <h1 class="text-lg ">Spaced Reps</h1>
+        </div>
+        {currentView() === PAGES.questionList && (
+          <>
+            <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
+            <QuestionsList />
+          </>
+        )}
+        {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
+        {currentView() === PAGES.calendar && <DatePicker />}
+      </main>
+    </QueryClientProvider>
   );
 };
 

@@ -193,7 +193,7 @@ export default function Calendar(props: DatePickerProps) {
             </For>
 
             <For each={days()}>
-              {(day) => {
+              {(day, index) => {
                 return (
                   <CalendarDay
                     date={day.date}

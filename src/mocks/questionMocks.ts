@@ -99,6 +99,18 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
+    'Bubble Sort',
+    {
+      categories: [],
+      daysBeforeReminder: '7',
+      name: 'Bubble Sort',
+      notes:
+        'Outer for loop `i` over the entire input.\nNested for loop `j` from 0 to input.length - i;\nif j > j + 1, swap.\nreturn the now-sorted array.',
+      timeStamp: '2022-09-25T18:06:06.514Z',
+      url: 'https://www.algoexpert.io/questions/bubble-sort',
+    },
+  ],
+  [
     'Ceiling of a Number ',
     {
       categories: ['binarySearch'],
@@ -174,11 +186,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Cycle in a Circular Array',
     {
       categories: ['twoPointers'],
-      daysBeforeReminder: '6',
+      daysBeforeReminder: '5',
       name: 'Cycle in a Circular Array',
       notes:
-        "Make a helper function that gets the next index.\nIt accepts a currentIndex, an arr, and an `isForward` boolean that indicates whether we need to move forwards or backwards to be a valid cycle.\nIn the helper, create a `nextIndex` variable that is equal to the currentIndex + the value at the current index (arr[currentIndex]) MODULO the arr length to handle positively wrapping around. \n\nCheck if `arr[nextIndex] < 0` and compare against isForward boolean. \nIf isForward is true and arr[nextIndex < 0` is also true, then return -1 since we're going in opposite directions.\nif that check passes, check if `nextIndex < 0` due to negative values and add the arr.length to nextIndex to wrap around if so.\n\nLastly, if nextIndex equals the current index, then we have a one element cycle which doesnt satisfy our requirements so we return -1. Otherwise if all those other checks succeeded, we return the nextIndex.\n\nBack in the main function we perform a for loop over the entire input. \nIn each loop, we assign slow to `i` and fast to `helper(i)`. we pass our `isForward` variable based on whether the current array value is >=0. \n\nThen, do a nested while loop as long as slow !== fast.\nEach loop, reassign slow and fast to the getNextIndex return value. \nAfter the initial reassignment, check if either value is -1 and break if so.\nOtherwise, reassign fast again (recreating the fast.next.next pattern).\nAfter slow + fast are reassigned, if slow === fast return true.",
-      timeStamp: '2022-09-20T03:09:25.314Z',
+        "Make a helper function that gets the next index.\nIt accepts a currentIndex, an arr, and an `isForward` boolean that indicates whether we need to move forwards or backwards to be a valid cycle.\nIn the helper, create a `nextIndex` variable that is equal to (currentIndex + the value at the current index) MODULO the arr length to handle positively wrapping around. \n\nCheck if `arr[nextIndex] < 0` and compare against isForward boolean. \nIf isForward is true and arr[nextIndex < 0` is also true, then return -1 since we're going in opposite directions.\nif that check passes, check if `nextIndex < 0` due to negative values and add the arr.length to nextIndex to wrap around if so.\n\nLastly, if nextIndex equals the current index, then we have a one element cycle which doesnt satisfy our requirements so we return -1. Otherwise if all those other checks succeeded, we return the nextIndex.\n\nBack in the main function we perform a for loop over the entire input. \nIn each loop, we assign slow to `i` and fast to `helper(i)`. we pass our `isForward` variable based on whether the current array value is >=0. \n\nThen, do a nested while loop as long as slow !== fast.\nEach loop, reassign slow and fast to the getNextIndex return value. \nAfter the initial reassignment, check if either value is -1 and break if so.\nOtherwise, reassign fast again (recreating the fast.next.next pattern).\nAfter slow + fast are reassigned, if slow === fast return true.",
+      timeStamp: '2022-09-25T19:00:43.457Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/3jY0GKpPDxr',
     },
   ],
@@ -510,7 +522,7 @@ const questionMocks: [string, ReminderInterface][] = [
       name: 'Max Path Sum In Binary Tree',
       notes:
         'Define a recursive helper function `findMaxSum` that accepts a node. \nThis function will always return a tuple in the format of [maxSumAsBranch, maxSumAsPath].\nThe base case when `node` is undefined will return [0, -Infinity].\n\nIn the helper, compute the values for the left node and right nodes by calling the helper recursively.\nThen, declare a `maxChildSumAsBranch` which is just a Math.max on the first value from the left/right tuples (the `maxSumAsBranch` for left/right).\n\nStill in the helper, declare a `maxSumAsBranch` which is just the current node.value + the maxChildSumAsBranch.\n\nThen declare a `maxSumAsRootNode` which is the Math.max of `leftMaxSumAsBranch + rightMaxSumAsBranch + node.value` vs `maxSumAsBranch`. \nThis is basically the value if we formed a "triangle" rather than an individual branch IF the triangle value was actually greater than the branch value.\n\nFinally, declare a `maxPathSum` which is the Math.max of leftPathSum vs rightPathSum vs maxSumAsRootNode.\n\nThen, just return a tuple containing [maxSumAsBranch, maxPathSum].\n\nIn the main function, invoke your helper and pass in the root node. \nreturn the 2nd value from the resulting tuple, which will be the max path sum',
-      timeStamp: '2022-09-24T02:25:03.033Z',
+      timeStamp: '2022-09-25T02:40:43.695Z',
       url: 'https://www.algoexpert.io/questions/max-path-sum-in-binary-tree',
     },
   ],
@@ -565,11 +577,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Merge K Sorted Lists ',
     {
       categories: ['heaps'],
-      daysBeforeReminder: '5',
+      daysBeforeReminder: '8',
       name: 'Merge K Sorted Lists ',
       notes:
         'Create a minHeap. \nLoop over each list in the input array and insert the head of the linked list into the minHeap.\n\nCreate a `head` and `curr` variable.\nLoop while the minHeap has length.\nEach loop, remove a node and store it in a variable.\nIf there is no `head` created yet, assign `curr` to the removed object and then assign `head` to curr.\nElse, assign `curr.next` to the removed node and then reassign curr to curr.next.\n\nOutside the if/else but within the loop, if the `removed` has a truthy `next` value, push that next value back into the minHeap. This is how we wind up processing every node in each list.\n\nAfter the loop, return the `head`',
-      timeStamp: '2022-09-20T20:19:03.629Z',
+      timeStamp: '2022-09-25T19:08:08.569Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/Y5n0n3vAgYK',
     },
   ],
@@ -623,11 +635,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Minimum Window Sort',
     {
       categories: ['twoPointers'],
-      daysBeforeReminder: '1',
+      daysBeforeReminder: '2',
       name: 'Minimum Window Sort',
       notes:
-        'do a typical two pointer while loop using left and right pointers. \nIn the while loop, increment left if arr[left + 1] is > arr[left]. \nDecrement right using the same logic. \nIf both of those two pieces of logic are false, break the while loop. \nThis is used to find the MINIMUM subarray that needs to be sorted, but we then need to check if it needs to be expanded. \nBefore we go further though, return 0 if right <= left since it means the array is already sorted.\n\nNext, create a min and max variable to track the min/max in our subarray. \nLoop from left up to and including right, and recalculate min/max at each step.\n\nAfter looping to establish the min/max in the subarray, do a while loop as long as left > 0 and arr[left - 1] > min and decrement left each time.\nDo basically the same thing for right, except incrementing and checking against max.\n\nfinally, return right - left + 1 since thats the length of our subarray that needs to be sorted.',
-      timeStamp: '2022-09-24T03:13:34.882Z',
+        'do a typical two pointer while loop using left and right pointers. \nIn the while loop, increment left if arr[left + 1] is > arr[left]. \nDecrement right using the same logic. \nIf both of those two pieces of logic are false, break the while loop. \nThis is used to find the MINIMUM subarray that needs to be sorted, but we then need to check if it needs to be expanded. \n\nBefore we go further though, return 0 if right <= left since it means the array is already sorted.\n\nNext, create a min and max variable to track the min/max in our subarray. \nLoop from left up to and including right, and recalculate min/max at each step.\n\nAfter looping to establish the min/max in the subarray, do a while loop as long as left > 0 and arr[left - 1] > min and decrement left each time.\nDo basically the same thing for right, except incrementing and checking against max.\n\nfinally, return right - left + 1 since thats the length of our subarray that needs to be sorted.',
+      timeStamp: '2022-09-25T02:05:15.267Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/N8rOAP6Lmw6',
     },
   ],
@@ -706,11 +718,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Palindrome LinkedList',
     {
       categories: ['fastAndSlowPointers'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '3',
       name: 'Palindrome LinkedList',
       notes:
-        'use fast/slow pointers to find the middle pointer (slow = middle).\n\nCreate a helper function that reverses a linked list and returns the head of the newly reversed list (should be the `prev` value of the reverse function). \nPass in the middle node (slow), and store the returned node in a variable.\nCreate another variable to copy that returned head so that we can reverse it again at the end.\nAlso create another variable called `start` that points to the original head. \n\nWhile `start && reversedHead`, check if `start.val === reversedHead.val`. \nIf they mismatch, return false, otherwise increment both nodes to the `next` property.\n\nAfter the while loop, unreverse the list and return `true`',
-      timeStamp: '2022-09-23T05:29:00.761Z',
+        'use fast/slow pointers to find the middle pointer (slow = middle).\n\nCreate a helper function that reverses a linked list and returns the head of the newly reversed list (should be the `prev` value of the reverse function). \nPass in the middle node (slow), and store the returned node in a variable.\nCreate another variable to copy that returned head so that we can reverse it again at the end.\nReset `slow` back to the original head. \n\nWhile `slow && reversed`, check if `slow.val !== reversed.val`. \nIf they mismatch, return false, otherwise increment both nodes to the `next` property.\n\nAfter the while loop, unreverse the list and return `true`.\nThere is no need to reconnect anything',
+      timeStamp: '2022-09-25T01:01:50.294Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/B1PzmqOKDLQ',
     },
   ],
@@ -862,11 +874,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Rotation Count',
     {
       categories: ['binarySearch'],
-      daysBeforeReminder: '1',
+      daysBeforeReminder: '3',
       name: 'Rotation Count',
       notes:
         "we're basically searching for the smallest element, since that will mark the pivot\n\nwithin the while loop (start < end), if the middle element is greater than the element to its right AND `mid` is < `end`, then return the middle index + 1 since the next element is the pivot. \n\nIf the middle element is less than the element to the left, AND mid is > start, return mid since we found the pivot.\n\nIf neither of the above cases were true, then we just check if the left of `mid` is sorted via `arr[start] < arr[mid]`. \nIf true, then move to the right since the sorted part of the array wont pass either of our two checks above. \nElse, move to the left (since the right side is sorted) so we can find the element smaller than its neighbor.",
-      timeStamp: '2022-09-24T02:09:14.451Z',
+      timeStamp: '2022-09-25T01:48:25.287Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/7nPmB8mZ6vj',
     },
   ],
@@ -886,11 +898,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Search in Rotated Array',
     {
       categories: ['binarySearch'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '3',
       name: 'Search in Rotated Array',
       notes:
         'modified binary search using `while start < end` loop.\n\nCalculate middle and return it if it contains the target element.\n\nOtherwise, if arr[mid] === arr[start] === arr[end], increment start and decrement end by 1.\n\nPast those checks, we need to determine if arr[start] < arr[mid], which would indicate that everything left of mid is sorted in ascending order. \nIf so, then we check if the `target` is between `start` and `mid`. \nIf true, we reassign end to mid. \nIf false, we need to move to the right of mid.\n\nIf arr[start] was NOT <= arr[mid], then the right half of the array after `mid` will be in ascending order. \nSo we first check if the target is between `mid` and `end` and if it is, we move the `start` to mid + 1. \nOtherwise, we move leftwards.\n\nReturn -1 in the main function if the while loop never finds a match.',
-      timeStamp: '2022-09-23T05:40:26.615Z',
+      timeStamp: '2022-09-25T01:41:35.331Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/N8XZQ1q1O46',
     },
   ],
@@ -898,11 +910,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Search in a Sorted Infinite Array ',
     {
       categories: ['binarySearch'],
-      daysBeforeReminder: '5',
+      daysBeforeReminder: '8',
       name: 'Search in a Sorted Infinite Array ',
       notes:
         'This one uses a normal binary search EXCEPT you first need to find the right range to search through.\n\nDeclare start = 0, end = 1. while `(reader[end] <= target)` reassign start to `end` to keep the search range small. \nThen just double `end` to bring in more numbers `end *= 2`. \nOnce the while loop ends, do a normal binary search',
-      timeStamp: '2022-09-20T02:48:13.571Z',
+      timeStamp: '2022-09-25T01:53:44.973Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/B1ZW38kXJB2',
     },
   ],
@@ -993,11 +1005,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'String Permutations by changing case ',
     {
       categories: ['subsets'],
-      daysBeforeReminder: '4',
+      daysBeforeReminder: '8',
       name: 'String Permutations by changing case ',
       notes:
         "CHECK THE GRAPHIC to understand the solution.\n\nDeclare an output array, and put the input string as the first element of the array.\n\nFor loop over the input string -- we'll use this to ensure we handle permutations at each index. \nIn each loop, use isNaN on input[i] and `continue` (skip current iteration) if isNaN returns false so that we dont try to lowercase a number.\n\nWithin the loop, declare a `len = output.length` variable. \nThen, do a for loop starting from `0` while `j < len`. \nWhat we are doing here is creating new permutations based on existing permutations. \n\nIn the nested for loop, use `.split('')` on `output[j]` to copy the existing permutation as an array (because strings are immutable in JS). \nThen, just test if the splitStr[i] is lowercase -- if it is, reassign copy[i] to uppercase, else reassign to lowercase. \n`.join('')` the array and push the permutation back into the output array.",
-      timeStamp: '2022-09-20T20:44:33.779Z',
+      timeStamp: '2022-09-25T01:30:53.604Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/xVlKmyX542P',
     },
   ],
@@ -1149,11 +1161,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Words Concatenation',
     {
       categories: ['slidingWindow'],
-      daysBeforeReminder: '1',
+      daysBeforeReminder: '2',
       name: 'Words Concatenation',
       notes:
         'create a Map to record the frequency of each WORD (not letter) in the input array.\nThen, loop over the input array to populate the map with word counts.\n\ncreate an output array that will contain the valid indices we find.\n\nPerform a for loop that ends when i < str.length - words.length * words[0].length + 1. \nThis helps us avoid iterating over the part of the input string where the substrings we\'ll create cannot possibly fit the full length of a string necessary to match the input array.\n\nDuring each iteration of the for loop, create a new Map that will hold the frequency of each substring we create. \nThen, do another for loop where `j` starts at 0 and ends when `j < inputArr.length`. \n\nWithin the nested for loop, create a `nextWordIndex` variable that is equal to `i + j * inputArr[0].length`. \nThis tells us the index for our next substring since each word is equal in length.\n\nOnce nextWordIndex is set, create a new variable to hold `inputString.subString(nextWordIndex, nextWordIndex + inputArr[0].length` to create the next substring.\n\nOnce we have the next substring, try to retrieve it from the "wordCounts" Map based on the input arr. \nif the substring isnt present, break the nested loop. \n\nAssuming it is present, set the substring into the substringCounts Map created during the main for loop. \nThen, compare the count at that map versus the count in the main map to see if we have seen the word too many times during this nested loop. \nIf we have too high of a frequency, break the loop.\n\nFinally, within the nested loop we can push `i` (the start of a valid substring) IF j + 1 === words.length because we reached the end of the j loop and didnt have to break for any reason.\n\nIn the main function, just return the results once the main for loop ends.\n---\nConsider this case\na) s.length = 10 -->(0-9 indexes) and\nb) given words[] = {"aa", "aa", "aa"}....\nc) The total length of substring is (3 words * 2 char len each) = 6.\n\nSo when searching for subString in \'s\' the window should contain at least 6 chars.\nSo possible start positions of subString in \'s\' are 0,1,2,3,4 only. From 5th position, there are only 5 chars or less to search...\nSo no point searching sections of \'s\' which have insufficient number of chars to required to find the subString\n+1 is required because array indexes start from 0 and not 1... an array of length 5 has index 0-4',
-      timeStamp: '2022-09-23T19:31:52.346Z',
+      timeStamp: '2022-09-25T19:22:34.899Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/Y5YDWzqPn7O',
     },
   ],
