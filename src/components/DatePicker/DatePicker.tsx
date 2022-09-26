@@ -1,12 +1,5 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import {
-  title,
-  url,
-  unformattedTitle,
-  loadAllReminders,
-  setCurrentView,
-  existingReminders,
-} from '~/App';
+import { title, url, unformattedTitle, setCurrentView, existingReminders } from '~/App';
 import helpers from '~/helpers';
 import Calendar from './Calendar';
 import styles from './DatePicker.css';

@@ -1,8 +1,8 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
 export const isLocal = import.meta.env.MODE === 'development';
 
-import { Component, createSignal } from 'solid-js';
-import { QueryClient, QueryClientProvider, createQuery } from '@tanstack/solid-query';
+import { Component, createSignal, createEffect } from 'solid-js';
+import { createQuery } from '@tanstack/solid-query';
 import styles from './App.css';
 import QuestionsList from './components/QuestionsList/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
@@ -26,8 +26,6 @@ import { getAllStorageLocalData } from './promises/chromeStorage';
 //     }
 //   });
 // });
-
-const queryClient = new QueryClient();
 
 export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
@@ -99,7 +97,7 @@ function setReminderInfo(tabs: chrome.tabs.Tab[]) {
 }
 
 const App: Component = () => {
-  // const query = createQuery(() => ["reminders"], fetchTodos)
+  const query = createQuery(() => ['reminders'], getAllStorageLocalData);
 
   // TODO: split up this logic somehow, its become a monstrosity
   function handleInitialPageLoad() {
@@ -174,22 +172,20 @@ const App: Component = () => {
   // chrome.storage.local.clear();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <main class={`${styles.app} bg-slate-800`}>
-        <div class="flex place-self-start items-center">
-          <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
-          <h1 class="text-lg ">Spaced Reps</h1>
-        </div>
-        {currentView() === PAGES.questionList && (
-          <>
-            <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
-            <QuestionsList />
-          </>
-        )}
-        {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
-        {currentView() === PAGES.calendar && <DatePicker />}
-      </main>
-    </QueryClientProvider>
+    <main class={`${styles.app} bg-slate-800`}>
+      <div class="flex place-self-start items-center">
+        <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
+        <h1 class="text-lg ">Spaced Reps</h1>
+      </div>
+      {currentView() === PAGES.questionList && (
+        <>
+          <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
+          <QuestionsList />
+        </>
+      )}
+      {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
+      {currentView() === PAGES.calendar && <DatePicker />}
+    </main>
   );
 };
 
