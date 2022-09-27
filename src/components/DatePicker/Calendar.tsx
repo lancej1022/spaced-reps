@@ -1,9 +1,7 @@
-import { createSignal, For, onCleanup, onMount } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import { title, url, unformattedTitle, setCurrentView, existingReminders } from '~/App';
-import helpers from '~/helpers';
 import { CalendarDay, CalendarDayProps } from './CalendarDay';
 
 dayjs.extend(weekday);

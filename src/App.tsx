@@ -1,7 +1,7 @@
 // import.meta.env.MODE gets injected by Vite at build time. Its similar to `NODE_ENV` in webpack.
 export const isLocal = import.meta.env.MODE === 'development';
 
-import { Component, createSignal, createEffect } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 import { createQuery } from '@tanstack/solid-query';
 import styles from './App.css';
 import QuestionsList from './components/QuestionsList/QuestionsList';
@@ -27,6 +27,7 @@ import { getAllStorageLocalData } from './promises/chromeStorage';
 //   });
 // });
 
+// TODO: delete this in favor of `getAllStorageLocalData`
 export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
   if (isLocal) {
@@ -127,7 +128,7 @@ const App: Component = () => {
         if (tabs[0].url?.includes('/submissions')) {
           setCurrentView('saveReminderForm');
         }
-        // loadAllReminders(); // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
+        // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
         getAllStorageLocalData().then((res) => {
           setExistingReminders(res);
           setFilteredReminders(res);

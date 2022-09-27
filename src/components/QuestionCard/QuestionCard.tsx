@@ -1,6 +1,6 @@
 import styles from './QuestionCard.css';
 import helpers from '~/helpers';
-import { loadAllReminders, setCurrentView } from '~/App';
+import { loadAllReminders, setCurrentView, isLocal } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 
 export interface ReminderInterface {
@@ -20,7 +20,7 @@ export default function QuestionCard(props: ReminderInterface) {
     }
   ) {
     event.stopPropagation();
-    if (import.meta.env.MODE === 'development') {
+    if (isLocal) {
       loadAllReminders(props.name);
     } else {
       chrome.storage.local.remove(props.name, () => {

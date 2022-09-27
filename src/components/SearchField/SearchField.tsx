@@ -1,7 +1,7 @@
 import { createQuery } from '@tanstack/solid-query';
 import * as rootStyles from '~/styles/index.css';
 
-import { existingReminders, setFilteredReminders } from '~/App';
+import { setFilteredReminders } from '~/App';
 import styles from './SearchField.css';
 import { getAllStorageLocalData } from '~/promises/chromeStorage';
 
@@ -20,10 +20,11 @@ export default function SearchField() {
       return;
     }
 
-    const matchingReminders = existingReminders().filter((reminderTouple) => {
-      const returnVal = reminderTouple[1].name.toLowerCase().includes(searchValue.toLowerCase());
-      return returnVal;
-    });
+    const matchingReminders =
+      query.data?.filter((reminderTouple) => {
+        const returnVal = reminderTouple[1].name.toLowerCase().includes(searchValue.toLowerCase());
+        return returnVal;
+      }) ?? [];
 
     setFilteredReminders(matchingReminders);
   };
