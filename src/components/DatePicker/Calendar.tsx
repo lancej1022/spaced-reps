@@ -8,7 +8,7 @@ dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const TODAY = dayjs().format('YYYY-MM-DD');
+// const TODAY = dayjs().format('YYYY-MM-DD');
 const INITIAL_YEAR = dayjs().format('YYYY');
 const INITIAL_MONTH = dayjs().format('M');
 
@@ -26,7 +26,7 @@ function getWeekday(date: string) {
 }
 
 function createDaysForCurrentMonth(year: string, month: string) {
-  return [...Array(getNumberOfDaysInMonth(year, month))].map((day, index) => {
+  return [...Array(getNumberOfDaysInMonth(year, month))].map((_day, index) => {
     return {
       date: dayjs(`${year}-${month}-${index + 1}`).format('YYYY-MM-DD'),
       dayOfMonth: index + 1,
@@ -44,7 +44,7 @@ function createDaysForNextMonth(year: string, month: string) {
     ? 7 - lastDayOfTheMonthWeekday
     : lastDayOfTheMonthWeekday;
 
-  return [...Array(visibleNumberOfDaysFromNextMonth)].map((day, index) => {
+  return [...Array(visibleNumberOfDaysFromNextMonth)].map((_day, index) => {
     return {
       date: dayjs(`${nextMonth.year()}-${nextMonth.month() + 1}-${index + 1}`).format('YYYY-MM-DD'),
       dayOfMonth: index + 1,
@@ -67,7 +67,7 @@ function createDaysForPreviousMonth(year: string, month: string) {
     .subtract(visibleNumberOfDaysFromPreviousMonth, 'day')
     .date();
 
-  return [...Array(visibleNumberOfDaysFromPreviousMonth)].map((day, index) => {
+  return [...Array(visibleNumberOfDaysFromPreviousMonth)].map((_day, index) => {
     return {
       date: dayjs(
         `${previousMonth.year()}-${previousMonth.month() + 1}-${

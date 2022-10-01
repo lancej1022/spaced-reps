@@ -114,10 +114,6 @@ export default function SaveReminderForm() {
     };
 
     let key = title();
-    // TODO: this might be unnecessary -- we can probably just rely on `currentReminder.name` when present and fallback `title()`
-    if (url().includes('leetcode')) {
-      key = unformattedTitle();
-    }
     if (currentReminder()?.name) {
       key = currentReminder()?.name ?? title();
     }

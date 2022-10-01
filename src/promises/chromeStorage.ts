@@ -1,4 +1,4 @@
-import { filteredReminders, isLocal, loadAllReminders, setCurrentView } from '~/App';
+import { isLocal } from '~/App';
 import { ReminderInterface } from '~/components/QuestionCard/QuestionCard';
 import helpers from '~/helpers';
 // TODO: strip out the mocks when building for production because it drastically bloats the output JS bundle
@@ -27,10 +27,9 @@ export function getAllStorageLocalData(): Promise<[string, ReminderInterface][]>
         }
 
         // helpers.testSize(items);
-        // console.log('saved reminders', Object.entries(items));
+        console.log('saved reminders', Object.entries(items));
         const itemsArr: [string, ReminderInterface][] = Object.entries(items);
         helpers.sortByDaysRemainingBeforeReminder(itemsArr);
-
         // Pass the data retrieved from storage down the promise chain.
         resolve(itemsArr);
       });

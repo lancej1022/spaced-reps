@@ -2,7 +2,6 @@
 export const isLocal = import.meta.env.MODE === 'development';
 
 import { Component, createSignal } from 'solid-js';
-import { createQuery } from '@tanstack/solid-query';
 import styles from './App.css';
 import QuestionsList from './components/QuestionsList/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
@@ -98,12 +97,9 @@ function setReminderInfo(tabs: chrome.tabs.Tab[]) {
 }
 
 const App: Component = () => {
-  const query = createQuery(() => ['reminders'], getAllStorageLocalData);
-
   // TODO: split up this logic somehow, its become a monstrosity
   function handleInitialPageLoad() {
     if (isLocal) {
-      // loadAllReminders();
       getAllStorageLocalData().then((res) => {
         setExistingReminders(res);
         setFilteredReminders(res);
@@ -180,7 +176,6 @@ const App: Component = () => {
       </div>
       {currentView() === PAGES.questionList && (
         <>
-          <button onClick={() => setCurrentView('calendar')}>visit calendar</button>
           <QuestionsList />
         </>
       )}
