@@ -36,6 +36,7 @@ export function getAllStorageLocalData(): Promise<[string, ReminderInterface][]>
     }
   });
 }
+
 /**
  * @description Promise-based wrapper around chrome.storage.local.set. Sets or overwrites a reminder in the chrome extension storage.
  * @param key the name of the reminder, as a string
@@ -50,9 +51,31 @@ export function updateExistingReminder(
     if (isLocal) {
       resolve();
     } else {
-      // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
       chrome.storage.local.set({ [key]: userResponse }, function () {
-        console.log('inside SaveReminderForm after setting, userResponse: ', userResponse);
+        // Pass any observed errors down the promise chain.
+        if (chrome.runtime.lastError) {
+          console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+          return reject(chrome.runtime.lastError);
+        }
+
+        resolve();
+      });
+    }
+  });
+}
+
+/**
+ * @description Promise-based wrapper around chrome.storage.local.remove. Permanently removes a reminder from the list of reminders.
+ * @param key the name of the reminder, as a string
+ * @returns void
+ */
+export function removeReminder(key: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (isLocal) {
+      resolve();
+    } else {
+      // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
+      chrome.storage.local.remove(key, () => {
         // Pass any observed errors down the promise chain.
         if (chrome.runtime.lastError) {
           console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);

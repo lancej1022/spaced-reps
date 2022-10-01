@@ -51,18 +51,6 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
-    'Binary Tree Diameter',
-    {
-      categories: ['dfs'],
-      daysBeforeReminder: '2',
-      name: 'Binary Tree Diameter',
-      notes:
-        'declare `diameter = 0`.\nThen declare a nested `dfs` function that accepts a node.\n\nThe nested function returns 0 if there is no node.\nElse, it sets `left` to `dfs(node.left)` and does the same for `right`.\nThen it does a Math.max on (diameter, left + right) since left + right === currDiameter.\nThen, it returns the `height` which is 1 + max(left, right).\n\nDont forget to invoke the nested function prior to returning `diameter` from the main func.',
-      timeStamp: '2022-10-01T00:36:32.219Z',
-      url: 'https://www.algoexpert.io/questions/binary-tree-diameter',
-    },
-  ],
-  [
     'Binary Tree Level Order Traversal ',
     {
       categories: ['bfs'],
@@ -249,8 +237,8 @@ const questionMocks: [string, ReminderInterface][] = [
       daysBeforeReminder: '1',
       name: 'Diameter of binary tree',
       notes:
-        'Create a DFS helper function that takes in a node. Within that function, if node is falsey then return a diameter of 0 and a height of 0, aka [0,0].\n\nCreate a leftTree variable equal to the return of dfs(node.left). Do the same for the right side. \n\nThen, create a maxDiameter variable and assign it to the max of leftTree[0] and rightTree[0] (the diameter in the tuple). Assign a longestPath variable to leftTree[1] + rightTree[1] (the height of each path). Assign a currDiameter variable to the max of maxDiameter vs longestPath. Then assign a currentHeight variable to `1 + max(leftTree height, rightTree height)`.\n\nFinally, return a tuple in the form of [currentDiameter, currentHeight]. \n\nThen in the main function, just invoke the helper and return the diameter from the tuple',
-      timeStamp: '2022-09-30T23:56:39.584Z',
+        'declare `diameter = 0`.\nThen declare a nested `dfs` function that accepts a node.\n\nThe nested function returns 0 if there is no node.\nElse, it sets `left` to `dfs(node.left)` and does the same for `right`.\nThen it does a Math.max on (diameter, left + right) since left + right === currDiameter.\nThen, it returns the `height` which is 1 + max(left, right).\n\nDont forget to invoke the nested function prior to returning `diameter` from the main func.',
+      timeStamp: '2022-10-01T02:27:28.480Z',
       url: 'https://leetcode.com/problems/diameter-of-binary-tree/',
     },
   ],
@@ -789,6 +777,17 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
+    'Palindrome number',
+    {
+      categories: ['twoPointers'],
+      daysBeforeReminder: '89',
+      name: 'Palindrome number',
+      notes: 'test2',
+      timeStamp: '2022-10-01T02:32:19.539Z',
+      url: 'https://leetcode.com/problems/palindrome-number/',
+    },
+  ],
+  [
     'Path With Given Sequence ',
     {
       categories: ['dfs'],
@@ -888,11 +887,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Reverse Level Order Traversal ',
     {
       categories: ['bfs'],
-      daysBeforeReminder: '55',
+      daysBeforeReminder: '57',
       name: 'Reverse Level Order Traversal ',
       notes:
         'Use a queue to process the nodes. \nwhile queue.lenth, use a nested for loop to process the nodes for a given level of the tree.',
-      timeStamp: '2022-09-29T20:12:26.038Z',
+      timeStamp: '2022-10-01T02:03:46.634Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/m2N6GwARL8r',
     },
   ],
@@ -1268,19 +1267,6 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
 ];
-
-// [
-//   'diameter-of-binary-tree',
-//   {
-//     categories: ['dfs'],
-//     daysBeforeReminder: '5',
-//     name: 'Diameter of binary tree',
-//     notes:
-//       'Create a DFS helper function that takes in a node. Within that function, if node is falsey then return a diameter of 0 and a height of 0, aka [0,0].\n\nCreate a leftTree variable equal to the return of dfs(node.left). Do the same for the right side. \n\nThen, create a maxDiameter variable and assign it to the max of leftTree[0] and rightTree[0] (the diameter in the tuple). Assign a longestPath variable to leftTree[1] + rightTree[1] (the height of each path). Assign a currDiameter variable to the max of maxDiameter vs longestPath. Then assign a currentHeight variable to `1 + max(leftTree height, rightTree height)`.\n\nFinally, return a tuple in the form of [currentDiameter, currentHeight]. \n\nThen in the main function, just invoke the helper and return the diameter from the tuple\n\n',
-//     timeStamp: '2022-08-19T20:15:11.516Z',
-//     url: 'https://leetcode.com/problems/diameter-of-binary-tree/',
-//   },
-// ],
 
 export default {
   questionMocks,

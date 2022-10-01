@@ -1,7 +1,9 @@
 import styles from './QuestionCard.css';
 import helpers from '~/helpers';
-import { loadAllReminders, setCurrentView, isLocal } from '~/App';
+import { loadAllReminders, setCurrentView, isLocal, setFilteredReminders } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
+import { removeReminder } from '~/promises/chromeStorage';
+import { createMutation, useQueryClient } from '@tanstack/solid-query';
 
 export interface ReminderInterface {
   categories?: string[];
@@ -13,22 +15,55 @@ export interface ReminderInterface {
 }
 
 export default function QuestionCard(props: ReminderInterface) {
-  function handleDeleteClick(
-    event: MouseEvent & {
-      currentTarget: HTMLButtonElement;
-      target: Element;
+  const queryClient = useQueryClient();
+
+  const saveReminderMutation = createMutation(
+    (
+      event: MouseEvent & {
+        currentTarget: HTMLButtonElement;
+        target: Element;
+      }
+    ) => {
+      event.stopPropagation();
+      return removeReminder(props.name);
+    },
+    {
+      onMutate: async (
+        event: MouseEvent & {
+          currentTarget: HTMLButtonElement;
+          target: Element;
+        }
+      ) => {
+        event.stopPropagation();
+        // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+        await queryClient.cancelQueries(['reminders']);
+
+        // Snapshot the previous value
+        const previousReminders: [string, ReminderInterface][] | undefined =
+          queryClient.getQueryData(['reminders']);
+
+        const updatedReminders = previousReminders?.filter((reminder) => {
+          return reminder[1].name !== props.name && reminder[0] !== 'key';
+          // return reminder[1].name !== props.name && reminder[0] !== 'key';
+        });
+        // Optimistically update to the new value
+        queryClient.setQueryData(['reminders'], (_oldReminders) => updatedReminders);
+        setFilteredReminders(updatedReminders ?? []);
+        // Return a context object with the snapshotted value
+        return { previousReminders };
+      },
+      // If the mutation fails, use the context returned from onMutate to roll back
+      onError: (err, _formEvent, context) => {
+        console.error('error during mutation', err);
+        queryClient.setQueryData(['reminders'], context?.previousReminders);
+      },
+      // // Always refetch after error or success:
+      onSuccess: () => {
+        setCurrentView('questionList');
+        // queryClient.invalidateQueries(['reminders'])
+      },
     }
-  ) {
-    event.stopPropagation();
-    if (isLocal) {
-      loadAllReminders(props.name);
-    } else {
-      chrome.storage.local.remove(props.name, () => {
-        // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
-        loadAllReminders();
-      });
-    }
-  }
+  );
 
   return (
     <div class={styles.questionCardWrapper}>
@@ -38,7 +73,7 @@ export default function QuestionCard(props: ReminderInterface) {
       </div>
       <h2 class={styles.questionName}>{props.name}</h2>
       <div role="group" aria-label="button group" class={styles.buttonGroup}>
-        <button class={styles.questionButton} onClick={handleDeleteClick}>
+        <button class={styles.questionButton} onClick={saveReminderMutation.mutate}>
           Remove
         </button>
 

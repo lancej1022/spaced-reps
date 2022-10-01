@@ -57,7 +57,7 @@ export default function SaveReminderForm() {
 
         updatedReminders?.push([key, userResponse]);
         // Optimistically update to the new value
-        queryClient.setQueryData(['todos'], (_oldReminders) => updatedReminders);
+        queryClient.setQueryData(['reminders'], (_oldReminders) => updatedReminders);
         setFilteredReminders(updatedReminders ?? []);
         // Return a context object with the snapshotted value
         return { previousReminders };
@@ -70,7 +70,7 @@ export default function SaveReminderForm() {
       // // Always refetch after error or success:
       onSuccess: () => {
         setCurrentView('questionList');
-        // queryClient.invalidateQueries(['todos'])
+        // queryClient.invalidateQueries(['reminders'])
       },
     }
   );
