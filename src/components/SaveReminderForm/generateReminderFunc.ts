@@ -1,4 +1,4 @@
-import { title, unformattedTitle, url } from '~/App';
+import { title, url } from '~/App';
 import { ReminderInterface } from '../QuestionCard/QuestionCard';
 import { currentReminder } from './SaveReminderForm';
 
@@ -37,14 +37,8 @@ export const createSaveableReminder = (
   };
 
   let key = title();
-  // TODO: this might be unnecessary -- we can probably just rely on `currentReminder.name` when present and fallback `title()`
-  if (url().includes('leetcode')) {
-    key = unformattedTitle();
-  } else if (currentReminder()?.name) {
+  if (currentReminder()?.name) {
     key = currentReminder()?.name ?? title();
   }
-  console.log('unformattedTitle()', unformattedTitle());
-  console.log('title()', title());
-  console.log('key', key);
   return { key, userResponse };
 };

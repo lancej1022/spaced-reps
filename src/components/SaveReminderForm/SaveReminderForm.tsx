@@ -1,12 +1,5 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import {
-  title,
-  unformattedTitle,
-  setCurrentView,
-  url,
-  setFilteredReminders,
-  loadAllReminders,
-} from '~/App';
+import { title, unformattedTitle, setCurrentView, setFilteredReminders } from '~/App';
 import helpers from '~/helpers';
 import questionListStyles from '../QuestionsList/QuestionsList.css';
 import styles from './SaveReminderForm.css';
@@ -23,121 +16,64 @@ export default function SaveReminderForm() {
   const queryClient = useQueryClient();
   const query = createQuery(() => ['reminders'], getAllStorageLocalData);
 
-  // TODO: this is busted because the updatedReminders are incorrect
-  // const saveReminderMutation = createMutation(
-  //   (
-  //     formEvent: Event & {
-  //       submitter: HTMLElement;
-  //     } & {
-  //       currentTarget: HTMLFormElement;
-  //       target: Element;
-  //     }
-  //   ) => {
-  //     formEvent.preventDefault(); // avoid page reload
-  //     const { key, userResponse } = createSaveableReminder(formEvent, categoriesSelectRef?.options);
-  //     return updateExistingReminder(key, userResponse);
-  //   },
-  //   {
-  //     onMutate: async (
-  //       formEvent: Event & {
-  //         submitter: HTMLElement;
-  //       } & {
-  //         currentTarget: HTMLFormElement;
-  //         target: Element;
-  //       }
-  //     ) => {
-  //       formEvent.preventDefault(); // avoid page reload
-  //       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-  //       await queryClient.cancelQueries(['reminders']);
-
-  //       // Snapshot the previous value
-  //       const previousReminders: [string, ReminderInterface][] | undefined =
-  //         queryClient.getQueryData(['reminders']);
-  //       console.log('within onMutate: previousReminders', previousReminders);
-
-  //       const { key, userResponse } = createSaveableReminder(
-  //         formEvent,
-  //         categoriesSelectRef?.options
-  //       );
-
-  //       console.log('key', key);
-  //       const updatedReminders = previousReminders?.filter((reminder) => {
-  //         return reminder[1].name !== key && reminder[0] !== 'key';
-  //       });
-  //       console.log('updatedReminders', updatedReminders);
-  //       updatedReminders?.push([key, userResponse]);
-  //       // Optimistically update to the new value
-  //       queryClient.setQueryData(['todos'], (oldReminders) => updatedReminders);
-  //       setFilteredReminders(updatedReminders ?? []);
-  //       // Return a context object with the snapshotted value
-  //       return { previousReminders };
-  //     },
-  //     // If the mutation fails, use the context returned from onMutate to roll back
-  //     onError: (err, formEvent, context) => {
-  //       console.error('error during mutation', err);
-  //       queryClient.setQueryData(['reminders'], context?.previousReminders);
-  //     },
-  //     // // Always refetch after error or success:
-  //     onSuccess: () => {
-  //       setCurrentView('questionList');
-  //       // queryClient.invalidateQueries(['todos'])
-  //     },
-  //   }
-  // );
-
-  async function saveUserResponse(
-    formEvent: Event & {
-      submitter: HTMLElement;
-    } & {
-      currentTarget: HTMLFormElement;
-      target: Element;
-    }
-  ) {
-    formEvent.preventDefault(); // avoid page reload
-    const formData = new FormData(formEvent.target as HTMLFormElement);
-    const formElements = Object.fromEntries(formData);
-    const selectedCategories = [];
-
-    if (categoriesSelectRef?.options) {
-      for (let option of categoriesSelectRef.options) {
-        if (option.selected === true) selectedCategories.push(option.value);
+  const saveReminderMutation = createMutation(
+    (
+      formEvent: Event & {
+        submitter: HTMLElement;
+      } & {
+        currentTarget: HTMLFormElement;
+        target: Element;
       }
-    }
-
-    const userResponse: ReminderInterface = {
-      daysBeforeReminder: String(formElements.daysBeforeReminder),
-      name: currentReminder()?.name ?? title(),
-      url: currentReminder()?.url ?? url(),
-      timeStamp: new Date().toISOString(),
-      categories: selectedCategories,
-      notes: formElements.notes?.toString() ?? '',
-    };
-
-    let key = title();
-    if (currentReminder()?.name) {
-      key = currentReminder()?.name ?? title();
-    }
-
-    if (import.meta.env.MODE === 'development') {
-      loadAllReminders(key);
-    } else {
-      // TODO: we should do an optimistic delete that doesnt require refetching the entire storage
-      chrome.storage.local.set({ [key]: userResponse }, function () {
-        console.log('inside SaveReminderForm after setting, userResponse: ', userResponse);
-        // Pass any observed errors down the promise chain.
-        if (chrome.runtime.lastError) {
-          console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
-          // return reject(chrome.runtime.lastError);
+    ) => {
+      formEvent.preventDefault(); // avoid page reload
+      const { key, userResponse } = createSaveableReminder(formEvent, categoriesSelectRef?.options);
+      return updateExistingReminder(key, userResponse);
+    },
+    {
+      onMutate: async (
+        formEvent: Event & {
+          submitter: HTMLElement;
+        } & {
+          currentTarget: HTMLFormElement;
+          target: Element;
         }
-        // loadAllReminders();
-        getAllStorageLocalData().then((res) => {
-          // setExistingReminders(res);
-          setFilteredReminders(res);
-          setCurrentView('questionList');
+      ) => {
+        formEvent.preventDefault(); // avoid page reload
+        // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+        await queryClient.cancelQueries(['reminders']);
+
+        // Snapshot the previous value
+        const previousReminders: [string, ReminderInterface][] | undefined =
+          queryClient.getQueryData(['reminders']);
+
+        const { key, userResponse } = createSaveableReminder(
+          formEvent,
+          categoriesSelectRef?.options
+        );
+
+        const updatedReminders = previousReminders?.filter((reminder) => {
+          return reminder[1].name !== key && reminder[0] !== 'key';
         });
-      });
+
+        updatedReminders?.push([key, userResponse]);
+        // Optimistically update to the new value
+        queryClient.setQueryData(['todos'], (_oldReminders) => updatedReminders);
+        setFilteredReminders(updatedReminders ?? []);
+        // Return a context object with the snapshotted value
+        return { previousReminders };
+      },
+      // If the mutation fails, use the context returned from onMutate to roll back
+      onError: (err, _formEvent, context) => {
+        console.error('error during mutation', err);
+        queryClient.setQueryData(['reminders'], context?.previousReminders);
+      },
+      // // Always refetch after error or success:
+      onSuccess: () => {
+        setCurrentView('questionList');
+        // queryClient.invalidateQueries(['todos'])
+      },
     }
-  }
+  );
 
   function findCurrentReminder() {
     let queryData = query.data ?? [];
@@ -172,7 +108,7 @@ export default function SaveReminderForm() {
       <h1 class={styles.heading1}>
         Reminder for {currentReminder() ? currentReminder()?.name : title()}
       </h1>
-      <form class={styles.saveReminderForm} onSubmit={saveUserResponse}>
+      <form class={styles.saveReminderForm} onSubmit={saveReminderMutation.mutate}>
         <p>
           Previous reminder was set for {currentReminder()?.daysBeforeReminder}{' '}
           {Number(currentReminder()?.daysBeforeReminder) > 1 ? 'days' : 'day'}
