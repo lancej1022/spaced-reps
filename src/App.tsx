@@ -121,10 +121,6 @@ const App: Component = () => {
 
         setReminderInfo(tabs);
 
-        if (tabs[0].url?.includes('/submissions')) {
-          setCurrentView('saveReminderForm');
-        }
-        // TODO: does this need to be moved PRIOR to the `/submissions` check? That originally worked, but seemed slow...
         getAllStorageLocalData().then((res) => {
           setExistingReminders(res);
           setFilteredReminders(res);
@@ -174,11 +170,7 @@ const App: Component = () => {
         <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
         <h1 class="text-lg ">Spaced Reps</h1>
       </div>
-      {currentView() === PAGES.questionList && (
-        <>
-          <QuestionsList />
-        </>
-      )}
+      {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
       {currentView() === PAGES.calendar && <DatePicker />}
     </main>

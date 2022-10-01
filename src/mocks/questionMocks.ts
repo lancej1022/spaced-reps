@@ -75,6 +75,18 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
+    'Binary tree maximum path sum',
+    {
+      categories: ['dfs'],
+      daysBeforeReminder: '1',
+      name: 'Binary tree maximum path sum',
+      notes:
+        "declare a `result` variable and assign it to the root's value.\n\nDefine a nested `dfs` function that accepts a node.\nWithin that function, if node is falsey return 0.\nThen, calculate the `left` and `right` by recursively invoking dfs.\nNext, reassign left to the max of `left, 0`. \nDo the same for `right`.\nThis is done to ensure that if a node had a negative value, it doesnt get included in the remaining calculations.\nWe can calculate the maxPathSum for the CURRENT node via left + right + node.value.\nMake sure to update the original `result` via Math.max.\nFinally, return node.value + the max of `left` vs `right`.\nThis is the equivalent of returning our current node as a branch since we cant return a maxPathSum.\n\nDont forget to invoke the dfs function back in the main function.\n\nRuns in O(N) time, O(h) space where h is the height of the tree (generally translates to O(logN) if the tree is balanced.",
+      timeStamp: '2022-10-01T19:34:16.154Z',
+      url: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
+    },
+  ],
+  [
     'Bitonic Array Maximum ',
     {
       categories: ['binarySearch'],
@@ -138,11 +150,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Comparing Strings containing Backspaces',
     {
       categories: ['twoPointers'],
-      daysBeforeReminder: '7',
+      daysBeforeReminder: '13',
       name: 'Comparing Strings containing Backspaces',
       notes:
         "create a helper function that accepts a string and index. \nInitialize a count variable to 0. \nLoop while the input index >= 0. \nIn the while loop, if string[index] is a '#', increment count. \nelse if count is > 0, decrement count. \nElse, return the index. \nOutside of that if/else-if/else, decrement index by 1 each loop. \nMake sure to return the index after the while loop in case you didnt hit the early return.\n\nBack in the main function, create 1 pointer for each input string, and make it point to that input string's length - 1 (last index). \nLoop while either pointer is >= 0. \n\nIn each loop, reassign the pointer by passing them and their associated string to the helper function. \nThen, if both pointers are below 0 then return true. \nElse if one pointer is below 0 but not the other, return false. \nElse if str1[i] !== str2[j], also return false. Then, decrement each pointer by 1.\nIf the while loop finishes, return true.",
-      timeStamp: '2022-09-24T21:10:03.191Z',
+      timeStamp: '2022-10-01T18:30:50.271Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/g7pBzR12YPl',
     },
   ],
@@ -234,11 +246,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Diameter of binary tree',
     {
       categories: [],
-      daysBeforeReminder: '1',
+      daysBeforeReminder: '3',
       name: 'Diameter of binary tree',
       notes:
         'declare `diameter = 0`.\nThen declare a nested `dfs` function that accepts a node.\n\nThe nested function returns 0 if there is no node.\nElse, it sets `left` to `dfs(node.left)` and does the same for `right`.\nThen it does a Math.max on (diameter, left + right) since left + right === currDiameter.\nThen, it returns the `height` which is 1 + max(left, right).\n\nDont forget to invoke the nested function prior to returning `diameter` from the main func.',
-      timeStamp: '2022-10-01T02:27:28.480Z',
+      timeStamp: '2022-10-01T18:34:39.929Z',
       url: 'https://leetcode.com/problems/diameter-of-binary-tree/',
     },
   ],
@@ -258,11 +270,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Employee Free Time',
     {
       categories: ['heaps'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '4',
       name: 'Employee Free Time',
       notes:
         'create a helper class EmployeeInterval that accepts an interval, \nan employeeIndex (used to track which employee it is from the original array), and an intervalIndex (used to track which interval this is for the employee).\n\nIn the main function, create a MinHeap, where the compareFunc is based on `a.interval.start < b.interval.start`. \nLoop over the input schedule and insert a new EmployeeInterval(input[i][0], i, 0). \nThis will find gaps between any employees FIRST schedules \n(since one employee might have multiple schedules, we will process those later.\n\nThen, create a previousInterval variable that points to minHeap.peek().\n\nwhile the minHeap has length, remove from the minHeap and destructure the `currInterval`,\nthe `employeeIndex`, and `intervalIndex`. \nIF prevInterval.end < currInterval.start, then push a new interval into the results array based on `prev.end, popped.start`. \nOutside the `if` block, reassign prev to currInterval.\n\nStill within the while loop, look up the employeeSchedule via input[popped.employeeIndex] \nand save it to a variable. \nIf that employeeSchedule.length is greater than the popped intervalIndex + 1, then we\nstill have more intervals for the same employee to process so we insert another EmployeeInterval into the minHeap, \npassing in `employeeSchedule[intervalIndex + 1], employeeIndex, and intervalIndex + 1`.\n\nThat wraps up the while loop, so now you can return the result arr',
-      timeStamp: '2022-09-30T03:19:41.588Z',
+      timeStamp: '2022-10-01T18:51:50.179Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/YQykDmBnvB0',
     },
   ],
@@ -270,11 +282,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Evaluate Expression',
     {
       categories: ['subsets'],
-      daysBeforeReminder: '3',
+      daysBeforeReminder: '4',
       name: 'Evaluate Expression',
       notes:
         'Recursive approach that slowly breaks down each character to an individual number within an array, ie `[num]`.\n\nStart by declaring an output array.\nIF the current input is a number (isNaN(input) === false), then just push the string as a Number into the output.\n\nELSE, loop over each index in the string.\n\nIF the current character is not a number (isNaN(Number(input[i])) === true), then we have one of our symbols (+, -, *).\nrecursively call the main function on the left half of the string via str.substring(0, i) and the right half of the string (str.substring(i + 1).\nThis generates smaller `result` arrays.\n\nPerform a for loop over the left half, and a nested for loop over the right half.\nif the current character is a `+`, then push leftHalf[i] + rightHalf[j]. \nElse if ifs a `-`, do the same for subtraction.\nLastly, handle `*`.\n\nAt the end, return the result',
-      timeStamp: '2022-09-27T19:32:57.303Z',
+      timeStamp: '2022-10-01T20:25:25.792Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/gx7O7nO0R8l',
     },
   ],
@@ -553,18 +565,6 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
-    'Max Path Sum In Binary Tree',
-    {
-      categories: ['dfs'],
-      daysBeforeReminder: '1',
-      name: 'Max Path Sum In Binary Tree',
-      notes:
-        'Define a recursive helper function `findMaxSum` that accepts a node. \nThis function will always return a tuple in the format of [maxSumAsBranch, maxSumAsPath].\nThe base case when `node` is undefined will return [0, -Infinity].\n\nIn the helper, compute the values for the left node and right nodes by calling the helper recursively.\nThen, declare a `maxChildSumAsBranch` which is just a Math.max on the first value from the left and right tuples (the `maxSumAsBranch` for left/right).\n\nStill in the helper, declare a `maxSumAsBranch` via Math.max on curr.value + the maxChildSumAsBranch vs curr.value alone.\n\nThen declare a `maxSumAsRootNode` which is the Math.max of `leftMaxSumAsBranch + rightMaxSumAsBranch + node.value` vs `maxSumAsBranch`. \nThis is basically the value if we formed a "triangle" rather than an individual branch IF the triangle value was actually greater than the branch value.\nForming a triangle would make the current node the root, since the topmost node in the tree may not actually have the max path running through it.\n\nFinally, declare a `maxPathSum` which is the Math.max of leftPathSum vs rightPathSum vs maxSumAsRootNode.\n\nThen, just return a tuple containing [maxSumAsBranch, maxPathSum].\n\nIn the main function, invoke your helper and pass in the root node. \nreturn the 2nd value from the resulting tuple, which will be the max path sum',
-      timeStamp: '2022-09-30T03:12:54.112Z',
-      url: 'https://www.algoexpert.io/questions/max-path-sum-in-binary-tree',
-    },
-  ],
-  [
     'Maximum CPU Load',
     {
       categories: ['mergeIntervals'],
@@ -709,11 +709,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Number Of Binary Tree Topologies',
     {
       categories: ['subsets'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '1',
       name: 'Number Of Binary Tree Topologies',
       notes:
         "main function accepts `n` but also a `cache` that defaults to a value of `{0: 1}`.\nWe'll use the cache to avoid recalculating the different subtrees as we recurse.\n\nTo begin the function, check if our cache has a value for `n` and return it if present.\n\nDeclare a `numberOfTrees` variable = 0.\nLoop from 0 to n, and name the iterator `leftTreeSize`.\nWithin the loop, declare a `rightTreeSize` = n - 1 - leftTreeSize.\nThese 2 values dictate how we split our binary tree topology between left/right sides for any given value of n.\n\nDeclare numOfLeftTrees = recursiveFunction(leftTreeSize, cache).\nDo the same for numberOfRightTrees but use rightTreeSize.\nThen, multiply the return value of those two variables (left * right) and add it to the numberOfTrees.\nWe use multiplication to handle all possible variations of the topologies.\n\nFinally, store the numberOfTrees in our cache and then return it.",
-      timeStamp: '2022-09-29T01:50:31.550Z',
+      timeStamp: '2022-10-01T20:37:01.777Z',
       url: 'https://www.algoexpert.io/questions/number-of-binary-tree-topologies',
     },
   ],
@@ -742,17 +742,6 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
-    'Pair with Target Sum ',
-    {
-      categories: ['twoPointers'],
-      daysBeforeReminder: '60',
-      name: 'Pair with Target Sum ',
-      notes: 'Can be done in O(1) space.',
-      timeStamp: '2022-09-24T21:25:34.917Z',
-      url: 'https://www.educative.io/courses/grokking-the-coding-interview/xog6q15W9GP',
-    },
-  ],
-  [
     'Palindrome Check',
     {
       categories: ['twoPointers'],
@@ -774,17 +763,6 @@ const questionMocks: [string, ReminderInterface][] = [
         'use fast/slow pointers to find the middle pointer (slow = middle).\n\nCreate a helper function that reverses a linked list and returns the head of the newly reversed list (should be the `prev` value of the reverse function). \nPass in the middle node (slow), and store the returned node in a variable.\nCreate another variable to copy that returned head so that we can reverse it again at the end.\nReset `slow` back to the original head. \n\nWhile `slow && reversed`, check if `slow.val !== reversed.val`. \nIf they mismatch, return false, otherwise increment both nodes to the `next` property.\n\nAfter the while loop, unreverse the list and return `true`.\nThere is no need to reconnect anything',
       timeStamp: '2022-10-01T01:45:13.672Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/B1PzmqOKDLQ',
-    },
-  ],
-  [
-    'Palindrome number',
-    {
-      categories: ['twoPointers'],
-      daysBeforeReminder: '89',
-      name: 'Palindrome number',
-      notes: 'test2',
-      timeStamp: '2022-10-01T02:32:19.539Z',
-      url: 'https://leetcode.com/problems/palindrome-number/',
     },
   ],
   [
@@ -851,11 +829,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Rearrange a LinkedList',
     {
       categories: ['fastAndSlowPointers'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '4',
       name: 'Rearrange a LinkedList',
       notes:
         "Start by creating a `reverse` helper function that reverses a list by taking in a single node as the argument.\n\nIn the main function, use fast/slow pointers to find the middle node. \nThen, use the `reverse` helper and store the returned value as something like `reversedHead`.\nDeclare another variable to clone `head`, and a `temp variable.\n\nLoop while `reversedHead && headClone`. \nin the loop, you're just pointing the node in `headFirstHalf.next` to the node at `reversedHead`, then reassigning `headFirstHalf` to its ORIGINAL .next value (which you needed to store in a `temp` variable before overriding the .next pointer). \nThen, do the same thing for the `reversedHead.next` pointers, where you reassign them to point to the node at `headFirstHalf` before reassigning `reversedHead` to its ORIGINAL .next value in the reversed list.\n\nAfter the while loop is over, if `headFirstHalf.next` is truthy make sure to reassign it to `null` since it is now the tail node of the modified list.\nFinally, return the original `head` input.",
-      timeStamp: '2022-09-29T02:32:43.452Z',
+      timeStamp: '2022-10-01T18:23:59.346Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/YQJ4mr7yOrW',
     },
   ],
@@ -920,6 +898,18 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
+    'Reverse alternating K-element Sub-list',
+    {
+      categories: ['reverseLinkedList'],
+      daysBeforeReminder: '2',
+      name: 'Reverse alternating K-element Sub-list',
+      notes:
+        'DRAW THIS OUT FOR PRACTICE/LEARNING!\nlet curr = head, prev = null.\nLoop while curr is truthy.\ndeclare tailOfPrevList = prev, tailOfCurrList = curr, i = 0, next.\n\nnested loop while curr is truthy and i < k where you reverse the nodes as usual.\n\nAfter the nested loop ends, if tailOfPrevList is truthy, point its `next` to prev.\nElse, point `head` to prev.\n\nPast the if/else, assign tailOfCurrList.next to curr.\nThen assign tailOfCurrList to prev.\n\nThen, reassign `i` back to 0 so we can skip `k` nodes.\nLoop while curr is truthy and i < k.\nJust reassign prev/curr each loop.\n\nAt the end of the main while loop, just return `head`.',
+      timeStamp: '2022-10-01T21:11:29.377Z',
+      url: 'https://www.educative.io/courses/grokking-the-coding-interview/m2YYJJRP9KG',
+    },
+  ],
+  [
     'Reverse every K-element Sub-list ',
     {
       categories: ['reverseLinkedList'],
@@ -927,8 +917,20 @@ const questionMocks: [string, ReminderInterface][] = [
       name: 'Reverse every K-element Sub-list ',
       notes:
         'let `curr = head` and `prev = null`.\nInfinite loop `while(true)`. \nWithin loop, create variable "tailOfPrevSubArr = prev" to store the node we need to connect after reversing the next subArr. \nAlso, create variables for `lastNodeOfSublist = curr`, `next = null`, and `i = 0`.\n\nnested while loop, curr !== null && i < k. \nreverse the nodes here: next = curr.next, curr.next = prev, prev = curr, curr = next, i + 1.\nafter the nested while loop, connect the PREVIOUS subarray with the new `prev` -- if tailOfPrevSubArr !== null, tailOfPrevSubArr.next = prev. \nOtherwise, head = prev.\n\nAfter above if/else, assign `lastNodeOfSublist.next = curr` to connect the end of the current sub array with the upcoming one.\n\nAt any point within larger `while` loop, if !curr then we break the loop. \nOtherwise, we end the while loop by assigning `prev` to `lastNodeOfSublist`.\n\nNOTE: drawing this out on paper will help it make more sense :)',
-      timeStamp: '2022-09-30T04:05:55.076Z',
+      timeStamp: '2022-10-01T20:32:12.057Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/RMZylvkGznR',
+    },
+  ],
+  [
+    'Rotate a LinkedList',
+    {
+      categories: ['reverseLinkedList'],
+      daysBeforeReminder: '1',
+      name: 'Rotate a LinkedList',
+      notes:
+        'declare a `tail` variable that = head, and a `totalLength` = 1.\nloop while (tail.next) and just move tail and increment totalLength by 1.\n\nAfter the loop, assign tail.next to head. \nThis makes the list circular by linking the last node to the beginning node.\n\nNext, modulo the rotations by the totalLength.\nThis ensures that if `rotations` was larger than the actual list itself, we dont go out of bounds.\n\nDeclare a `skip` variable equal to the totalLength - `rotations`.\nAlso set a `newTail` variable to `head`.\n\nFor loop from 0 to skip - 1 where we reassign newTail to newTail.next.\nThis allows us to skip to the correct node that will become the new tail of the list.\n\nAfter the for loop, reassign `head` to `tail`.\nThen, assign newTail.next to null.\nFinally, return head.',
+      timeStamp: '2022-10-01T22:26:08.650Z',
+      url: 'https://www.educative.io/courses/grokking-the-coding-interview/mErolRNQ00R',
     },
   ],
   [
@@ -1055,11 +1057,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Start of LinkedList Cycle ',
     {
       categories: ['fastAndSlowPointers'],
-      daysBeforeReminder: '14',
+      daysBeforeReminder: '21',
       name: 'Start of LinkedList Cycle ',
       notes:
         'Create fast + slow pointer. \nLoop while `fast && fast.next` and break when fast and slow meet. \nThis lets us find a node in the cycle.\n\nCreate a cycleLength variable = 1.\nIncrement `fast` to `fast.next`.\nLoop while (slow !== fast) and increment cycleLength each time.\n\nFinally, point slow and fast back to `head`. \nIterate `fast`  by the length of the cycle. \n\nThen iterate both pointers 1 step at a time until they meet. \nReturn `slow`',
-      timeStamp: '2022-09-17T22:08:43.646Z',
+      timeStamp: '2022-10-01T18:39:06.927Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/N7pvEn86YrN',
     },
   ],
@@ -1090,11 +1092,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Structurally Unique Binary Search Trees',
     {
       categories: ['subsets'],
-      daysBeforeReminder: '2',
+      daysBeforeReminder: '4',
       name: 'Structurally Unique Binary Search Trees',
       notes:
         'in the main function, if the `input` is <= 0, return [].\nOtherwise, call a recursive helper, passing in `1` for the start and `input` as the `end`.\nReturn the `length` of the array returned by the helper.\n\nThe recursive helper accepts a `start` and `end` argument, which it will use to generate valid binary trees.\n\nfor the base case, if `start > end` return [null].\n\nPast the base case, for loop from start to `end + 1`.\nCreate the leftSubtree by calling the recursive function on (start, `i - 1`).\nCreate the rightSubtree by calling the recursive function on (`i + 1`, end).\nWhat this does is create all possible valid binary trees below the current node with a value of `i`. start to `i - 1` creates all combinations of nodes on the left, and `i + 1 to end` does the same for the right.\n\nAfter generating the subtrees, loop from `0` over the leftSubtrees and then nested loop from 0 over the rightSubtrees.\nIn the most nested loop, push a new TreeNode into the output array, in the form of:\n{value: i, leftChild: leftSubtrees[l], rightChild: rightSubtrees[r]}.\nThis output array now contains all possible binary trees where `i` is the root node, and then we have our various tree shapes on the left and right.\n\nReturn `result` from the recursive function, since the output array contains all possible trees and so the length will equal all possible topologies.',
-      timeStamp: '2022-09-29T01:35:57.832Z',
+      timeStamp: '2022-10-01T20:19:55.639Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/3j9V2QL3Ky9',
     },
   ],
@@ -1126,11 +1128,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Sum of Path Numbers ',
     {
       categories: ['dfs'],
-      daysBeforeReminder: '14',
+      daysBeforeReminder: '15',
       name: 'Sum of Path Numbers ',
       notes:
         'function should take in a node and a sum arg, where sum defaults to `0`. \nIf there is no node, return 0. \nOtherwise, reassign sum to (sum * 10) + node.value to achieve a "concatenating number".\n\nIf its a leaf node, return sum. Otherwise, recursively return func(left, sum) + func(right, sum)',
-      timeStamp: '2022-09-16T21:33:27.427Z',
+      timeStamp: '2022-10-01T20:30:24.774Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/YQ5o5vEXP69',
     },
   ],
@@ -1195,15 +1197,15 @@ const questionMocks: [string, ReminderInterface][] = [
     },
   ],
   [
-    'Two Single Numbers ',
+    'Two sum ii input array is sorted',
     {
-      categories: ['xor'],
-      daysBeforeReminder: '5',
-      name: 'Two Single Numbers ',
+      categories: ['twoPointers'],
+      daysBeforeReminder: '53',
+      name: 'Two sum ii input array is sorted',
       notes:
-        'start by initializing a variable to 0. Then loop over the input right and XOR that variable by each number in the arr.\n\nNext, declare `rightMostBit = 1` so we can use the bitwise AND operator (&) on it.\n\nwhile( (rightMostBit & xor) === 0), aka the rightMostBit and the xor have the same bits in each position --> reassign rightMostBit to `rightMostBit << 1`, which shifts each bit in the 32bit representation of rightMostBit to the left by 1.\n\nFinally, declare `num1` and `num2`. Do another loop over the input array. In the loop, if `arr[i] & rightMostBit !== 0` then the bit is set, so we can perform num1 ^= num. Else, the bit is not set so we can perform `num2 ^= num`. This is basically performing the same "single number" algo on each number by using distinct bits.',
-      timeStamp: '2022-08-19T04:34:04.362Z',
-      url: 'https://www.educative.io/courses/grokking-the-coding-interview/N7VMDGgr9Vm',
+        'uses a two-pointer solution to work from the outsides inwards since the input array is already sorted.',
+      timeStamp: '2022-10-01T19:05:15.626Z',
+      url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/',
     },
   ],
   [
@@ -1234,11 +1236,11 @@ const questionMocks: [string, ReminderInterface][] = [
     'Words Concatenation',
     {
       categories: ['slidingWindow'],
-      daysBeforeReminder: '4',
+      daysBeforeReminder: '7',
       name: 'Words Concatenation',
       notes:
         'create a Map to record the frequency of each WORD (not letter) in the input array.\nThen, loop over the input array to populate the map with word counts.\n\ncreate an output array that will contain the valid indices we find.\n\nPerform a for loop that ends when i < str.length - words.length * words[0].length + 1. \nThis helps us avoid iterating over the part of the input string where the substrings we\'ll create cannot possibly fit the full length of a string necessary to match the input array.\n\nDuring each iteration of the for loop, create a new Map that will hold the frequency of each substring we create. \nThen, do another for loop where `j` starts at 0 and ends when `j < inputArr.length`. \n\nWithin the nested for loop, create a `nextWordIndex` variable that is equal to `i + j * inputArr[0].length`. \nThis tells us the index for our next substring since each word is equal in length.\n\nOnce nextWordIndex is set, create a new variable to hold `inputString.subString(nextWordIndex, nextWordIndex + inputArr[0].length` to create the next substring.\n\nOnce we have the next substring, try to retrieve it from the "wordCounts" Map based on the input arr. \nif the substring isnt present, break the nested loop. \n\nAssuming it is present, set the substring into the substringCounts Map created during the main for loop. \nThen, compare the count at that map versus the count in the main map to see if we have seen the word too many times during this nested loop. \nIf we have too high of a frequency, break the loop.\n\nFinally, within the nested loop we can push `i` (the start of a valid substring) IF j + 1 === words.length because we reached the end of the j loop and didnt have to break for any reason.\n\nIn the main function, just return the results once the main for loop ends.\n---\nConsider this case\na) s.length = 10 -->(0-9 indexes) and\nb) given words[] = {"aa", "aa", "aa"}....\nc) The total length of substring is (3 words * 2 char len each) = 6.\n\nSo when searching for subString in \'s\' the window should contain at least 6 chars.\nSo possible start positions of subString in \'s\' are 0,1,2,3,4 only. From 5th position, there are only 5 chars or less to search...\nSo no point searching sections of \'s\' which have insufficient number of chars to required to find the subString\n+1 is required because array indexes start from 0 and not 1... an array of length 5 has index 0-4',
-      timeStamp: '2022-09-28T03:33:05.986Z',
+      timeStamp: '2022-10-01T18:44:38.777Z',
       url: 'https://www.educative.io/courses/grokking-the-coding-interview/Y5YDWzqPn7O',
     },
   ],
