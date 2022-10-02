@@ -1,32 +1,18 @@
-import { createQuery } from '@tanstack/solid-query';
 import * as rootStyles from '~/styles/index.css';
-
-import { setFilteredReminders } from '~/App';
 import styles from './SearchField.css';
-import { getAllStorageLocalData } from '~/promises/chromeStorage';
+import { createSignal } from 'solid-js';
+
+export const [searchText, setSearchText] = createSignal('');
 
 export default function SearchField() {
   let searchInput: HTMLInputElement | undefined = undefined;
-  const query = createQuery(() => ['reminders'], getAllStorageLocalData);
 
   function handleIconClick() {
     searchInput?.focus();
   }
 
   const handleSearch = () => {
-    const searchValue = searchInput?.value ?? '';
-    if (!searchValue) {
-      setFilteredReminders(query.data ?? []);
-      return;
-    }
-
-    const matchingReminders =
-      query.data?.filter((reminderTouple) => {
-        const returnVal = reminderTouple[1].name.toLowerCase().includes(searchValue.toLowerCase());
-        return returnVal;
-      }) ?? [];
-
-    setFilteredReminders(matchingReminders);
+    setSearchText(searchInput?.value ?? '');
   };
 
   return (

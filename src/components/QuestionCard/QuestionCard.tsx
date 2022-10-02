@@ -1,6 +1,6 @@
 import styles from './QuestionCard.css';
 import helpers from '~/helpers';
-import { loadAllReminders, setCurrentView, isLocal, setFilteredReminders } from '~/App';
+import { setCurrentView, setFilteredReminders } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 import { removeReminder } from '~/promises/chromeStorage';
 import { createMutation, useQueryClient } from '@tanstack/solid-query';
@@ -17,7 +17,7 @@ export interface ReminderInterface {
 export default function QuestionCard(props: ReminderInterface) {
   const queryClient = useQueryClient();
 
-  const saveReminderMutation = createMutation(
+  const removeReminderMutation = createMutation(
     (
       event: MouseEvent & {
         currentTarget: HTMLButtonElement;
@@ -44,7 +44,6 @@ export default function QuestionCard(props: ReminderInterface) {
 
         const updatedReminders = previousReminders?.filter((reminder) => {
           return reminder[1].name !== props.name && reminder[0] !== 'key';
-          // return reminder[1].name !== props.name && reminder[0] !== 'key';
         });
         // Optimistically update to the new value
         queryClient.setQueryData(['reminders'], (_oldReminders) => updatedReminders);
@@ -57,9 +56,9 @@ export default function QuestionCard(props: ReminderInterface) {
         console.error('error during mutation', err);
         queryClient.setQueryData(['reminders'], context?.previousReminders);
       },
-      // // Always refetch after error or success:
       onSuccess: () => {
         setCurrentView('questionList');
+        // // Always refetch after error or success:
         // queryClient.invalidateQueries(['reminders'])
       },
     }
@@ -73,7 +72,7 @@ export default function QuestionCard(props: ReminderInterface) {
       </div>
       <h2 class={styles.questionName}>{props.name}</h2>
       <div role="group" aria-label="button group" class={styles.buttonGroup}>
-        <button class={styles.questionButton} onClick={saveReminderMutation.mutate}>
+        <button class={styles.questionButton} onClick={removeReminderMutation.mutate}>
           Remove
         </button>
 
