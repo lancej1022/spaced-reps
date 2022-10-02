@@ -13,7 +13,7 @@ function parseUrl(url: string) {
   return { pathname, hostname, unformattedTitle: problemName, formattedTitle };
 }
 
-function testSize(obj: { [key: string]: any }) {
+function testSize(obj: Record<string, unknown>) {
   const size = new TextEncoder().encode(JSON.stringify(obj)).length;
   const kiloBytes = size / 1024;
   console.log(`Size of all items in local storage is ${size} bytes.`);

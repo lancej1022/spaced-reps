@@ -7,9 +7,6 @@ import QuestionsList from './components/QuestionsList/QuestionsList';
 import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
 import PAGES from './constants/pages';
 import helpers from './helpers';
-// TODO: strip out the mocks when building for production because it drastically bloats the output JS bundle
-import mocks from './mocks/questionMocks';
-import type { ReminderInterface } from './components/QuestionCard/QuestionCard';
 import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
 import DatePicker from './components/DatePicker/DatePicker';
 import { getAllStorageLocalData } from './promises/chromeStorage';
@@ -35,7 +32,7 @@ function setReminderInfo(tabs: chrome.tabs.Tab[]) {
   if (!tabs[0]) return;
 
   if (tabs[0].url?.includes('educative')) {
-    let educativeFormattedTitle = tabs[0].title?.replace(/\((.*)/g, '') ?? '';
+    const educativeFormattedTitle = tabs[0].title?.replace(/\((.*)/g, '') ?? '';
     setTitle(educativeFormattedTitle);
     // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
     let legalKeyToSave = educativeFormattedTitle.toLowerCase().replace(/\s/g, '-');
@@ -44,7 +41,7 @@ function setReminderInfo(tabs: chrome.tabs.Tab[]) {
     }
     setUnformattedTitle(legalKeyToSave);
   } else if (tabs[0].url?.includes('algoexpert.io/questions')) {
-    let algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
+    const algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
     setTitle(algoExpertFormattedTitle);
     let legalKeyToSave = algoExpertFormattedTitle.toLowerCase().replace(/\s/g, '-');
     if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
@@ -106,7 +103,7 @@ const App: Component = () => {
             ) {
               // get rid of things like ` (hard)#` from the h2 heading `Permutation in a String (hard)#`
               const problemTitle = response.headlines[0]?.replace(/\s\((.*)/g, '') || '';
-              let keyToSave = problemTitle.toLowerCase().replace(/\s/g, '-');
+              const keyToSave = problemTitle.toLowerCase().replace(/\s/g, '-');
               setTitle(problemTitle);
               setUnformattedTitle(keyToSave);
             }

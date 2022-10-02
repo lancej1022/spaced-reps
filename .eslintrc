@@ -1,0 +1,17 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "globals": {
+    "chrome": "readonly"
+  },
+  "plugins": ["solid", "jsx-a11y", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:solid/typescript",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "prefer-const": "off",
+    "jsx-a11y/label-has-associated-control": "off"
+  }
+}
