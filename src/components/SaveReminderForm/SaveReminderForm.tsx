@@ -1,5 +1,5 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import { title, unformattedTitle, setCurrentView, setFilteredReminders } from '~/App';
+import { title, unformattedTitle, setCurrentView } from '~/App';
 import helpers from '~/helpers';
 import questionListStyles from '../QuestionsList/QuestionsList.css';
 import styles from './SaveReminderForm.css';
@@ -58,7 +58,6 @@ export default function SaveReminderForm() {
         updatedReminders?.push([key, userResponse]);
         // Optimistically update to the new value
         queryClient.setQueryData(['reminders'], (_oldReminders) => updatedReminders);
-        setFilteredReminders(updatedReminders ?? []);
         // Return a context object with the snapshotted value
         return { previousReminders };
       },
@@ -186,7 +185,6 @@ export default function SaveReminderForm() {
             href="/questions-list"
             onClick={(event) => {
               event.preventDefault();
-              setFilteredReminders(query?.data ?? []);
               setCurrentView('questionList');
             }}
           >

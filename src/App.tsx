@@ -31,15 +31,13 @@ export function loadAllReminders(itemToDelete?: string) {
   let itemsArr: [string, ReminderInterface][] = [];
   if (isLocal) {
     if (itemToDelete) {
-      itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
+      // TODO: update this to work with Solid Query
+      // itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
     } else {
       itemsArr = mocks.questionMocks;
     }
 
     helpers.sortByDaysRemainingBeforeReminder(itemsArr);
-
-    setExistingReminders(itemsArr);
-    setFilteredReminders(itemsArr);
   } else {
     chrome.storage.local.get(null, (items) => {
       // Pass any observed errors down the promise chain.
@@ -50,19 +48,10 @@ export function loadAllReminders(itemToDelete?: string) {
       console.log('saved reminders', Object.entries(items));
       itemsArr = Object.entries(items);
       helpers.sortByDaysRemainingBeforeReminder(itemsArr);
-
-      setExistingReminders(itemsArr);
-      setFilteredReminders(itemsArr);
     });
   }
 }
 
-export const [existingReminders, setExistingReminders] = createSignal<
-  [string, ReminderInterface][]
->([]);
-export const [filteredReminders, setFilteredReminders] = createSignal<
-  [string, ReminderInterface][]
->([]);
 export const [title, setTitle] = createSignal('');
 export const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(PAGES.questionList);
 export const [unformattedTitle, setUnformattedTitle] = createSignal('');
@@ -100,10 +89,7 @@ const App: Component = () => {
   // TODO: split up this logic somehow, its become a monstrosity
   function handleInitialPageLoad() {
     if (isLocal) {
-      getAllStorageLocalData().then((res) => {
-        setExistingReminders(res);
-        setFilteredReminders(res);
-      });
+      getAllStorageLocalData();
       return;
     }
     /**
@@ -121,10 +107,7 @@ const App: Component = () => {
 
         setReminderInfo(tabs);
 
-        getAllStorageLocalData().then((res) => {
-          setExistingReminders(res);
-          setFilteredReminders(res);
-        });
+        getAllStorageLocalData();
 
         let questionUrl = tabs[0].url ?? '';
         if (questionUrl.includes('/submissions')) {

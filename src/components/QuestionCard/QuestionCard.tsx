@@ -1,6 +1,6 @@
 import styles from './QuestionCard.css';
 import helpers from '~/helpers';
-import { setCurrentView, setFilteredReminders } from '~/App';
+import { setCurrentView } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 import { removeReminder } from '~/promises/chromeStorage';
 import { createMutation, useQueryClient } from '@tanstack/solid-query';
@@ -47,7 +47,7 @@ export default function QuestionCard(props: ReminderInterface) {
         });
         // Optimistically update to the new value
         queryClient.setQueryData(['reminders'], (_oldReminders) => updatedReminders);
-        setFilteredReminders(updatedReminders ?? []);
+
         // Return a context object with the snapshotted value
         return { previousReminders };
       },
