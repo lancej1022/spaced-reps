@@ -26,32 +26,6 @@ import { getAllStorageLocalData } from './promises/chromeStorage';
 //   });
 // });
 
-// TODO: delete this in favor of `getAllStorageLocalData`
-export function loadAllReminders(itemToDelete?: string) {
-  let itemsArr: [string, ReminderInterface][] = [];
-  if (isLocal) {
-    if (itemToDelete) {
-      // TODO: update this to work with Solid Query
-      // itemsArr = existingReminders().filter(([name]) => name !== itemToDelete);
-    } else {
-      itemsArr = mocks.questionMocks;
-    }
-
-    helpers.sortByDaysRemainingBeforeReminder(itemsArr);
-  } else {
-    chrome.storage.local.get(null, (items) => {
-      // Pass any observed errors down the promise chain.
-      // if (chrome.runtime.lastError) {
-      //   // return reject(chrome.runtime.lastError);
-      // }
-      helpers.testSize(items);
-      console.log('saved reminders', Object.entries(items));
-      itemsArr = Object.entries(items);
-      helpers.sortByDaysRemainingBeforeReminder(itemsArr);
-    });
-  }
-}
-
 export const [title, setTitle] = createSignal('');
 export const [currentView, setCurrentView] = createSignal<keyof typeof PAGES>(PAGES.questionList);
 export const [unformattedTitle, setUnformattedTitle] = createSignal('');

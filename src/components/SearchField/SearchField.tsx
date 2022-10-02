@@ -11,9 +11,9 @@ export default function SearchField() {
     searchInput?.focus();
   }
 
-  const handleSearch = () => {
+  function handleSearch() {
     setSearchText(searchInput?.value ?? '');
-  };
+  }
 
   return (
     <>

@@ -8,8 +8,10 @@ import SearchField, { searchText } from '../SearchField/SearchField';
 import styles from './QuestionsList.css';
 
 export default function QuestionsList() {
-  const [isHovered, setIsHovered] = createSignal(false);
   const query = createQuery(() => ['reminders'], getAllStorageLocalData);
+
+  const [isHovered, setIsHovered] = createSignal(false);
+
   return (
     <>
       <SearchField />
