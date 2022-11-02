@@ -524,9 +524,14 @@ class Heap {
     this.length += 1;
   }
 
-  remove() {
-    this.swap(0, this.heap.length - 1, this.heap);
-    let returnVal = this.heap.pop();
+  remove(val) {
+    let returnVal;
+    if (val !== undefined) {
+      this.heap.splice(this.heap.indexOf(val), 1);
+    } else {
+      this.swap(0, this.heap.length - 1, this.heap);
+      returnVal = this.heap.pop();
+    }
     this.siftDown(0, this.heap);
     this.length -= 1;
     return returnVal;

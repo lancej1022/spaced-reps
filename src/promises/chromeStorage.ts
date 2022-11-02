@@ -13,7 +13,7 @@ export function getAllStorageLocalData(): Promise<[string, ReminderInterface][]>
   return new Promise((resolve, reject) => {
     let itemsArr: [string, ReminderInterface][] = [];
     if (isLocal) {
-      itemsArr = mocks.questionMocks;
+      itemsArr = mocks.questionMocks.slice(0, 10);
 
       helpers.sortByDaysRemainingBeforeReminder(itemsArr);
 
@@ -54,7 +54,7 @@ export function updateExistingReminder(
       chrome.storage.local.set({ [key]: userResponse }, function () {
         // Pass any observed errors down the promise chain.
         if (chrome.runtime.lastError) {
-          console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+          console.log('chrome.runtime.lastError:', chrome.runtime.lastError);
           return reject(chrome.runtime.lastError);
         }
 
@@ -78,7 +78,7 @@ export function removeReminder(key: string): Promise<void> {
       chrome.storage.local.remove(key, () => {
         // Pass any observed errors down the promise chain.
         if (chrome.runtime.lastError) {
-          console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+          console.log('chrome.runtime.lastError:', chrome.runtime.lastError);
           return reject(chrome.runtime.lastError);
         }
 

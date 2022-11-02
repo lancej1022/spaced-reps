@@ -40,13 +40,28 @@ function setReminderInfo(tabs: chrome.tabs.Tab[]) {
       legalKeyToSave = legalKeyToSave.slice(0, -1);
     }
     setUnformattedTitle(legalKeyToSave);
-  } else if (tabs[0].url?.includes('algoexpert.io/questions')) {
+  } else if (tabs[0].url?.includes('greatfrontend')) {
+    const greatFrontend = tabs[0].title?.split('|')[0]?.trim() ?? '';
+    console.log(greatFrontend);
+    setTitle(greatFrontend);
+    // unformattedTitle eventually gets used to set a `key`, so cannot have empty spaces or illegal characters
+    let legalKeyToSave = greatFrontend.toLowerCase().replace(/\s/g, '-');
+    if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
+      legalKeyToSave = legalKeyToSave.slice(0, -1);
+    }
+    setUnformattedTitle(legalKeyToSave);
+  } else if (
+    tabs[0].url?.includes('algoexpert.io/questions') ||
+    tabs[0].url?.includes('algoexpert.io/frontend/coding-questions/')
+  ) {
     const algoExpertFormattedTitle = tabs[0].title?.split('|')[0]?.trim() ?? '';
+
     setTitle(algoExpertFormattedTitle);
     let legalKeyToSave = algoExpertFormattedTitle.toLowerCase().replace(/\s/g, '-');
     if (legalKeyToSave[legalKeyToSave.length - 1] === '-') {
       legalKeyToSave = legalKeyToSave.slice(0, -1);
     }
+
     setUnformattedTitle(legalKeyToSave);
   } else {
     // this block handles leetcode titles
@@ -120,7 +135,7 @@ const App: Component = () => {
 
   return (
     <main class={`${styles.app} bg-slate-800`}>
-      <div class="flex place-self-start items-center">
+      <div class="flex place-self-start items-center mb-3">
         <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
         <h1 class="text-lg ">Spaced Reps</h1>
       </div>

@@ -29,7 +29,7 @@ export default function QuestionsList() {
         </For>
       </section>
       <a
-        class={`${styles.actionButton} ${styles.anchorBtn} bg-sky-600`}
+        class={`${styles.actionButton} ${styles.anchorBtn} bg-sky-600 text-center w-3/6 m-auto`}
         href="/save-reminder"
         onClick={(event) => {
           event.preventDefault();

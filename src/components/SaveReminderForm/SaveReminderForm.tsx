@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { title, unformattedTitle, setCurrentView } from '~/App';
 import helpers from '~/helpers';
 import questionListStyles from '../QuestionsList/QuestionsList.css';
@@ -108,10 +108,13 @@ export default function SaveReminderForm() {
         Reminder for {currentReminder() ? currentReminder()?.name : title()}
       </h1>
       <form class={styles.saveReminderForm} onSubmit={saveReminderMutation.mutate}>
-        <p>
-          Previous reminder was set for {currentReminder()?.daysBeforeReminder}{' '}
-          {Number(currentReminder()?.daysBeforeReminder) > 1 ? 'days' : 'day'}
-        </p>
+        <Show when={!!currentReminder()?.daysBeforeReminder}>
+          <p>
+            {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- currentReminder is guaranteed to be truthy because of the `Show` component */}
+            Previous reminder was set for {currentReminder()!.daysBeforeReminder}{' '}
+            {Number(currentReminder()?.daysBeforeReminder) > 1 ? 'days' : 'day'}
+          </p>
+        </Show>
         <div class={styles.inputWrapper}>
           <label for="days-before-reminder" id="days-before-reminder-label">
             {/* TODO: insert asterisk pseudoelement for proper a11y, and make it reddish */}

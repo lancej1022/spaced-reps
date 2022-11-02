@@ -15,5 +15,5 @@ render(
       </Router>
     </QueryClientProvider>
   ),
-  document.getElementById('root') as HTMLElement
+  document.querySelector('#root') as HTMLElement
 );

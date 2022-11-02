@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 const app = style({
   display: 'grid',
-  placeItems: 'center',
+  gridTemplateRows: 'repeat(2, auto) 1fr repeat(2, auto)',
   width: '400px',
   height: '100%',
   minHeight: '600px',
