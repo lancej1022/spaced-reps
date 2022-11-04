@@ -1,8 +1,6 @@
 import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { title, unformattedTitle, setCurrentView } from '~/App';
 import helpers from '~/helpers';
-import questionListStyles from '../QuestionsList/QuestionsList.css';
-import styles from './SaveReminderForm.css';
 import type { ReminderInterface } from '../QuestionCard/QuestionCard';
 import { createMutation, createQuery, useQueryClient } from '@tanstack/solid-query';
 import { getAllStorageLocalData, updateExistingReminder } from '~/promises/chromeStorage';
@@ -104,10 +102,8 @@ export default function SaveReminderForm() {
 
   return (
     <>
-      <h1 class={styles.heading1}>
-        Reminder for {currentReminder() ? currentReminder()?.name : title()}
-      </h1>
-      <form class={styles.saveReminderForm} onSubmit={saveReminderMutation.mutate}>
+      <h1 class="text-lg">Reminder for {currentReminder() ? currentReminder()?.name : title()}</h1>
+      <form class="min-h-[90%] w-full" onSubmit={saveReminderMutation.mutate}>
         <Show when={!!currentReminder()?.daysBeforeReminder}>
           <p>
             {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- currentReminder is guaranteed to be truthy because of the `Show` component */}
@@ -115,13 +111,13 @@ export default function SaveReminderForm() {
             {Number(currentReminder()?.daysBeforeReminder) > 1 ? 'days' : 'day'}
           </p>
         </Show>
-        <div class={styles.inputWrapper}>
+        <div class="flex gap-10 mt-4 mb-4">
           <label for="days-before-reminder" id="days-before-reminder-label">
             {/* TODO: insert asterisk pseudoelement for proper a11y, and make it reddish */}
             Number of days until next attempt
           </label>
           <input
-            class={`${styles.numberInput} text-black`}
+            class="text-center rounded-sm w-auto text-black"
             required
             name="daysBeforeReminder"
             id="days-before-reminder"
@@ -136,12 +132,12 @@ export default function SaveReminderForm() {
             }
           />
         </div>
-        <div class={styles.textAreaWrapper}>
+        <div class="flex flex-col mt-4 mb-5">
           <label for="categories" id="categories-label">
             Categorize this problem
           </label>
           <select
-            class={`${styles.categoriesSelect} text-black`}
+            class="rounded-md text-black"
             multiple
             name="categories"
             id="categories"
@@ -167,24 +163,26 @@ export default function SaveReminderForm() {
             <option value="binarySearch">Binary Search</option>
           </select>
         </div>
-        <div class={styles.textAreaWrapper}>
+        <div class="flex flex-col mt-4 mb-5">
           <label for="notes" id="notes-label">
             Save any notes about this algo
           </label>
+
           <textarea
-            class={`${styles.textInput} text-black`}
+            class="w-full rounded-md min-h-[150px] text-black"
             name="notes"
             id="notes"
             placeholder="Relies on two pointer solution and also ... runs in O(n) time and consumes O(k) space ..."
             value={currentReminder()?.notes ?? ''}
           />
         </div>
-        <div class={styles.btnWrapper}>
-          <button class={`${questionListStyles.actionButton} text-white bg-sky-600`} type="submit">
+        <div class="flex gap-3">
+          <button class="w-1/2 rounded-md cursor-pointer text-white bg-sky-600" type="submit">
             Save
           </button>
+
           <a
-            class={styles.returnLink}
+            class="bg-white rounded-md w-1/2 no-underline text-center text-black p-2 text-"
             href="/questions-list"
             onClick={(event) => {
               event.preventDefault();

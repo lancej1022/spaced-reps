@@ -28,6 +28,7 @@ globalStyle('a, p, h1, h2, h3, h4, h5, h6, span, div', {
 });
 globalStyle('#root', {
   height: '100%',
+  width: '400px',
 });
 globalStyle('body::-webkit-scrollbar', {
   width: '0.7em',

@@ -8,7 +8,6 @@ import SaveReminderForm from './components/SaveReminderForm/SaveReminderForm';
 import PAGES from './constants/pages';
 import helpers from './helpers';
 import type { DOMMessage, DOMMessageResponse } from './chrome/DomEvaluator';
-import DatePicker from './components/DatePicker/DatePicker';
 import { getAllStorageLocalData } from './promises/chromeStorage';
 
 // Can be used to repopulate saved questions if you lose them for whatever reason
@@ -141,7 +140,6 @@ const App: Component = () => {
       </div>
       {currentView() === PAGES.questionList && <QuestionsList />}
       {currentView() === PAGES.saveReminderForm && <SaveReminderForm />}
-      {currentView() === PAGES.calendar && <DatePicker />}
     </main>
   );
 };

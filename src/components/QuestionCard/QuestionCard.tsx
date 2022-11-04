@@ -1,4 +1,3 @@
-import styles from './QuestionCard.css';
 import helpers from '~/helpers';
 import { setCurrentView } from '~/App';
 import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
@@ -65,39 +64,48 @@ export default function QuestionCard(props: ReminderInterface) {
   );
 
   return (
-    <div class={styles.questionCardWrapper}>
-      <div class={`${styles.daysRemainingBubble} text-white bg-slate-600`}>
+    <div class="flex w-full items-center gap-2 text-white py-2">
+      <div class="flex justify-center items-center rounded-full w-12 h-12 text-base text-white bg-slate-600">
         {Number(props.daysBeforeReminder) -
           helpers.dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>
-      <h2 class={styles.questionName}>{props.name}</h2>
-      <div role="group" aria-label="button group" class={styles.buttonGroup}>
-        <button class={styles.questionButton} onClick={removeReminderMutation.mutate}>
-          Remove
-        </button>
+      <div class="grow">
+        <h2 class="font-medium text-base text-center">{props.name}</h2>
+        <div
+          role="group"
+          aria-label="button group"
+          class="flex justify-between items-center w-full text-base "
+        >
+          <button
+            class="hover:bg-fuchsia-900 w-full border-r-sky-600 border-r-slate-600 border-r-2 font-normal p-2"
+            onClick={removeReminderMutation.mutate}
+          >
+            Remove
+          </button>
 
-        <a
-          class={styles.questionButton}
-          href="/save-reminder"
-          onClick={(event) => {
-            event.stopPropagation();
-            setReminderToSearchFor(props.name);
-            setCurrentView('saveReminderForm');
-          }}
-        >
-          Edit
-        </a>
-        <a
-          class={styles.questionButton}
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
-          href={props.url}
-          target="_blank"
-          referrerPolicy="no-referrer"
-        >
-          Visit
-        </a>
+          <a
+            class="hover:bg-fuchsia-900 w-full border-r-sky-600 border-r-slate-600 border-r-2 font-normal p-2 text-center"
+            href="/save-reminder"
+            onClick={(event) => {
+              event.stopPropagation();
+              setReminderToSearchFor(props.name);
+              setCurrentView('saveReminderForm');
+            }}
+          >
+            Edit
+          </a>
+          <a
+            class="hover:bg-fuchsia-900 w-full font-normal p-2 text-center"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+            href={props.url}
+            target="_blank"
+            referrerPolicy="no-referrer"
+          >
+            Visit
+          </a>
+        </div>
       </div>
     </div>
   );

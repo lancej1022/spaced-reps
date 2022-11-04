@@ -20,7 +20,7 @@ export default function QuestionsList() {
         onMouseLeave={() => setIsHovered(false)}
         class={`${styles.questionsContainer} ${
           isHovered() && styles.questionsContainerHovered
-        } mb-3`}
+        } flex-grow`}
       >
         <For each={query.data}>
           {(reminder) => (
@@ -31,7 +31,7 @@ export default function QuestionsList() {
         </For>
       </section>
       <a
-        class={`${styles.actionButton} ${styles.anchorBtn} bg-sky-600 text-center w-3/6 m-auto`}
+        class={`${styles.actionButton} p-2 bg-fuchsia-900 text-center w-3/6 mx-auto mt-6`}
         href="/save-reminder"
         onClick={(event) => {
           event.preventDefault();
