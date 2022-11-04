@@ -18,7 +18,9 @@ export default function QuestionsList() {
       <section
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        class={`${styles.questionsContainer} ${isHovered() && styles.questionsContainerHovered}`}
+        class={`${styles.questionsContainer} ${
+          isHovered() && styles.questionsContainerHovered
+        } mb-3`}
       >
         <For each={query.data}>
           {(reminder) => (
