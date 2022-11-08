@@ -77,14 +77,14 @@ export default function QuestionCard(props: ReminderInterface) {
           class="flex justify-between items-center w-full text-base "
         >
           <button
-            class="hover:bg-fuchsia-900 w-full border-r-sky-600 border-r-slate-600 border-r-2 font-normal p-2"
+            class="hover:bg-sky-600 w-full border-r-slate-600 border-r-2 font-normal p-2"
             onClick={removeReminderMutation.mutate}
           >
             Remove
           </button>
 
           <a
-            class="hover:bg-fuchsia-900 w-full border-r-sky-600 border-r-slate-600 border-r-2 font-normal p-2 text-center"
+            class="hover:bg-sky-600 w-full border-r-slate-600 border-r-2 font-normal p-2 text-center"
             href="/save-reminder"
             onClick={(event) => {
               event.stopPropagation();
@@ -95,7 +95,7 @@ export default function QuestionCard(props: ReminderInterface) {
             Edit
           </a>
           <a
-            class="hover:bg-fuchsia-900 w-full font-normal p-2 text-center"
+            class="hover:bg-sky-600 w-full font-normal p-2 text-center"
             onClick={(event) => {
               event.stopPropagation();
             }}

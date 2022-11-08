@@ -20,10 +20,10 @@ export default function SearchField() {
       <label class={rootStyles.visuallyHidden} for="searchfield">
         Search
       </label>
-      <div class={`${styles.searchFieldWrapper} mb-2`}>
+      <div class="relative w-full flex mb-2">
         <input
           ref={searchInput}
-          class={`${styles.input} bg-slate-600`}
+          class={`${styles.input} bg-slate-600 grid w-full text-white p-2 pl-10 rounded-lg`}
           id="searchfield"
           name="searchfield"
           type="search"
@@ -31,7 +31,7 @@ export default function SearchField() {
           onInput={handleSearch}
         />
         <svg
-          class={styles.searchIcon}
+          class="absolute h-6 top-1/4 left-2 fill-black"
           aria-hidden="true"
           onClick={handleIconClick}
           xmlns="http://www.w3.org/2000/svg"

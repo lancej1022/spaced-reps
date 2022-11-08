@@ -36,7 +36,6 @@ globalStyle('body::-webkit-scrollbar', {
 });
 globalStyle('body::-webkit-scrollbar-thumb', {
   background: 'rgb(66, 165, 245)',
-  // background: '#c0392b',
   height: '30px',
 });
 globalStyle('body::-webkit-scrollbar-track-piece', {
@@ -45,6 +44,5 @@ globalStyle('body::-webkit-scrollbar-track-piece', {
   display: 'none',
 });
 globalStyle('*:focus', {
-  // outline: '2px solid hsl(317 100% 54%)',
   outline: '2px solid rgb(66, 165, 245)',
 });
