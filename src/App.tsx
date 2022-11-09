@@ -133,7 +133,8 @@ const App: Component = () => {
   // chrome.storage.local.clear();
 
   return (
-    <main class="flex flex-col w-full h-[600px] overflow-hidden text-white p-5 bg-slate-800">
+    // TODO fix height
+    <main class="flex flex-col w-full h-full overflow-hidden text-white p-5 bg-slate-800">
       <div class="flex place-self-start items-center mb-3">
         <img class="mr-3 w-6 h-6" src="/assets/rocket24.png" alt="rocketship logo" />
         <h1 class="text-lg ">Spaced Reps</h1>

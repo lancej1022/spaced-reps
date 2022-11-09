@@ -98,11 +98,10 @@ export default function Calendar(props: DatePickerProps) {
   }
 
   function handleMonthChange(direction: 'left' | 'right') {
-    if (direction === 'left') {
-      selectedMonth = dayjs(selectedMonth).subtract(1, 'month');
-    } else {
-      selectedMonth = dayjs(selectedMonth).add(1, 'month');
-    }
+    selectedMonth =
+      direction === 'left'
+        ? dayjs(selectedMonth).subtract(1, 'month')
+        : dayjs(selectedMonth).add(1, 'month');
 
     setMonth(selectedMonth.format('M'));
     setYear(selectedMonth.format('YYYY'));
@@ -118,7 +117,7 @@ export default function Calendar(props: DatePickerProps) {
           {/* displays the date */}
           <div class="flex items-center justify-center w-full">
             <div class="text">
-              <div id=":re:-grid-label" class="mr-1.5" style="opacity: 1;">
+              <div id=":re:-grid-label" class="mr-1.5" style={{ opacity: '1' }}>
                 {dayjs(new Date(Number(year()), Number(month()) - 1)).format('MMMM YYYY')}
               </div>
             </div>
@@ -139,11 +138,11 @@ export default function Calendar(props: DatePickerProps) {
                 viewBox="0 0 24 24"
                 data-testid="ArrowLeftIcon"
               >
-                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"></path>
+                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
               </svg>
-              <span class="MuiTouchRipple-root css-w0pj6f"></span>
+              <span class="MuiTouchRipple-root css-w0pj6f" />
             </button>
-            <div class="w-6"></div>
+            <div class="w-6" />
             <button
               aria-label="Next month"
               class="relative p-1 -mr-2 inline-flex items-center bg-transparent rounded-full  justify-center cursor-pointer"
@@ -160,9 +159,9 @@ export default function Calendar(props: DatePickerProps) {
                 viewBox="0 0 24 24"
                 data-testid="ArrowRightIcon"
               >
-                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"></path>
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
               </svg>
-              <span class="MuiTouchRipple-root css-w0pj6f"></span>
+              <span class="MuiTouchRipple-root css-w0pj6f" />
             </button>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { setReminderToSearchFor } from '../SaveReminderForm/SaveReminderForm';
 import { removeReminder } from '~/promises/chromeStorage';
 import { createMutation, useQueryClient } from '@tanstack/solid-query';
 
+import styles from './QuestionCard.css';
 export interface ReminderInterface {
   categories?: string[];
   daysBeforeReminder: string;
@@ -64,7 +65,7 @@ export default function QuestionCard(props: ReminderInterface) {
   );
 
   return (
-    <div class="flex w-full items-center gap-2 text-white py-2">
+    <div class={`flex w-full items-center gap-2 text-white py-2 ${styles.borderBtm}`}>
       <div class="flex justify-center items-center rounded-full w-12 h-12 text-base text-white bg-slate-600">
         {Number(props.daysBeforeReminder) -
           helpers.dateDiffInDays(new Date(props.timeStamp), new Date())}

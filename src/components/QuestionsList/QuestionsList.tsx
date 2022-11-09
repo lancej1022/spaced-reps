@@ -20,7 +20,7 @@ export default function QuestionsList() {
         onMouseLeave={() => setIsHovered(false)}
         class={`${styles.questionsContainer} ${
           isHovered() && styles.questionsContainerHovered
-        } overflow-y-scroll flex-grow w-full pl-2`}
+        } overflow-y-scroll flex-grow w-full max-h-full pl-2`}
       >
         <For each={query.data}>
           {(reminder) => (
