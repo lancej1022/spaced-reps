@@ -12,7 +12,7 @@
     "serve": "vite preview",
     "test": "vite build && serve ./dist && cypress open"
   },
-  "license": "private",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@testing-library/cypress": "^8.0.3",
     "@types/babel__core": "^7.1.19",

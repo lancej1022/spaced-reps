@@ -66,7 +66,7 @@ export default function QuestionCard(props: ReminderInterface) {
 
   return (
     <div class={`flex w-full items-center gap-2 text-white py-2 ${styles.borderBtm}`}>
-      <div class="flex justify-center items-center rounded-full w-12 h-12 text-base text-white bg-slate-600">
+      <div class="flex justify-center items-center rounded-full min-w-[3rem] h-12 text-base text-white bg-slate-600">
         {Number(props.daysBeforeReminder) -
           helpers.dateDiffInDays(new Date(props.timeStamp), new Date())}
       </div>

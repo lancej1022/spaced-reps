@@ -1,5 +1,6 @@
 import { createTheme, globalStyle, style } from '@vanilla-extract/css';
 
+// TODO: delete this stuff
 export const [themeClass, vars] = createTheme({
   color: {
     brand: 'blue',
@@ -27,11 +28,9 @@ globalStyle('a, p, h1, h2, h3, h4, h5, h6, span, div', {
   color: '#ffffff',
 });
 globalStyle('#root', {
-  // height: '100%',
   width: '400px',
 });
 globalStyle('body, html', {
-  // height: '100%',
   overflowX: 'hidden',
   height: '600px',
   maxHeight: '600px',
