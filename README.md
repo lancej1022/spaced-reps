@@ -28,6 +28,12 @@ The source code uses SolidJs for building the UI, Vanilla Extract for styling, a
 
 - do not create an `index.css` file or youll get vanilla-extract error due to `index.css.ts` already existing
 
+## Get Started/Set Up
+
+1. clone the repo.
+2. run commands `npm ci && npm run build `
+3. upload the dist folder to your Chrome extensions. You can check the documentation at the bottom of this section for instructions on uploading a local chrome extension https://developer.chrome.com/docs/extensions/mv3/overview/#hello-extensions.
+
 ## Attributions / Credits
 
 The [rocketship icons](https://www.flaticon.com/free-icons/rocket) are created by Freepik - Flaticon
