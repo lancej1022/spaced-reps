@@ -6,7 +6,7 @@ class Heap {
   }
 
   buildHeap(array) {
-    for (let i = array.length - 1; i >= 0; i -= 1) {
+    for (let i = Math.floor(array.length / 2) - 1; i >= 0; i -= 1) {
       this.siftDown(i, array);
     }
     return array;
